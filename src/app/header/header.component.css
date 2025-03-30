@@ -1,0 +1,69 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Center-align search bar while keeping other elements in place */
+.search {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Center the search bar */
+}
+
+.search mat-form-field {
+    width: 80%; /* Set width for a balanced look */
+    min-width: 250px;
+}
+
+/* Push menu and buttons to the right */
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin-left: auto; /* Moves to the right */
+}
+
+/* Ensure the cart icon stays aligned */
+.cart {
+    position: relative;
+    margin-left: 10px;
+}
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.nav-links button {
+    font-size: 18px; /* Adjust font size for buttons */
+    padding: 12px 20px; 
+}   
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search {
+        width: 100%;
+        justify-content: flex-start; /* Align search to the left on small screens */
+    }
+
+    .search mat-form-field {
+        width: 100%;
+    }
+
+    .nav-links {
+        display: none; /* Hide navigation links on smaller screens */
+    }
+
+    .menu-btn {
+        display: block;
+    }
+}
+@media (min-width: 768px) {
+    .menu-btn {
+        display: none; /* Hide menu button on larger screens */
+    }
+}
