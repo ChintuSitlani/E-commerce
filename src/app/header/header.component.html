@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" class="navbar">
+    <!-- LOGO -->
+    <img  scr="" alt="Logo"  class="logo" width="50" height="50">
+
+    <!-- SEARCH BAR (Hidden on small screens) -->
+    <span class="search">
+        <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput [(ngModel)]="searchText" placeholder="Type to search">
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </span>
+
+    <!-- NAVIGATION LINKS (Hidden on small screens) -->
+    <span class="nav-links">
+        <button mat-button>Home</button>
+        <button mat-button>Products</button>
+        <!-- <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+        <mat-menu #menu="matMenu">
+           
+        </mat-menu> -->
+
+        <button mat-button>Sign-in</button>
+        <button mat-button>Log-in</button>
+    </span>
+
+    <!-- CART ICON -->
+    <span class="cart">
+        <button mat-icon-button >
+            <mat-icon>shopping_cart</mat-icon>
+            <span class="cart-count">{{ cartItems }}</span>
+        </button>
+    </span>
+
+    <!-- MENU BUTTON (Visible on small screens) -->
+    <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #mobileMenu="matMenu">
+      <button mat-menu-item>Home</button>
+      <button mat-menu-item>Products</button>
+      <button mat-menu-item>About</button>
+      <button mat-menu-item>Sign-in</button>
+      <button mat-menu-item>Log-in</button>
+    </mat-menu>
+</mat-toolbar>
