@@ -1,8 +1,7 @@
 <mat-toolbar color="primary" class="navbar">
     <!-- LOGO -->
-    <img  scr="" alt="Logo"  class="logo" width="50" height="50">
-
-    <!-- SEARCH BAR (Hidden on small screens) -->
+    <img src="logo.png" alt="E-Commerce Logo" class="logo">
+    <!-- SEARCH BAR -->
     <span class="search">
         <mat-form-field appearance="outline">
             <mat-label>Search</mat-label>
@@ -10,18 +9,16 @@
             <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
     </span>
-
-    <!-- NAVIGATION LINKS (Hidden on small screens) -->
     <span class="nav-links">
-        <button mat-button>Home</button>
+        <button mat-button routerLink="" >Home</button>
         <button mat-button>Products</button>
         <!-- <button mat-button [matMenuTriggerFor]="menu">Menu</button>
         <mat-menu #menu="matMenu">
            
         </mat-menu> -->
 
-        <button mat-button>Sign-in</button>
-        <button mat-button>Log-in</button>
+        <button mat-button routerLink="/signin">Sign-in</button>
+        <button mat-button routerLink="/login">Log-in</button>
     </span>
 
     <!-- CART ICON -->
@@ -32,7 +29,7 @@
         </button>
     </span>
 
-    <!-- MENU BUTTON (Visible on small screens) -->
+    <!-- MENU BUTTON -->
     <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
       <mat-icon>menu</mat-icon>
     </button>
