@@ -3,6 +3,13 @@
     <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" type="text" placeholder="Enter your name">
+            <mat-error *ngIf="signinForm.get('name')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" type="email" placeholder="Enter your email">
             <mat-error *ngIf="signinForm.get('email')?.hasError('required')">
@@ -12,7 +19,6 @@
                 Enter a valid email
             </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Create Password</mat-label>
             <input matInput formControlName="password" type="password" placeholder="Enter your password">

@@ -1,19 +1,17 @@
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, NgModel, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import e from 'express';
-
+import { SellerService } from '../servies/seller.service';
+import { sellerData } from '../data-type';
 
 @Component({
   selector: 'app-signup',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,16 +25,28 @@ import e from 'express';
 })
 export class SignupComponent {
   signinForm: FormGroup;
-  paramValue: string='';
-  constructor(private fb: FormBuilder,private route: ActivatedRoute) {
+  paramValue: string = '';
+
+  sellerData: sellerData = {
+    name: '',
+    email: '',
+    password: '',
+  };
+  router: any;
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private seller: SellerService
+    ) {
     this.signinForm = this.fb.group({
+      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator }); // ✅ Apply custom validator
+    }, { validators: this.passwordMatchValidator });
   }
 
-  // Custom validator to check if password and confirmPassword match
   passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
@@ -45,23 +55,27 @@ export class SignupComponent {
 
   onSubmit() {
     this.paramValue = this.route.snapshot.paramMap.get('user') || '';
-    console.log('submitted');
     if (this.signinForm.valid) {
-      if(this.paramValue == 'seller'){
-        console.log('Seller Signup:', this.signinForm.value);
-        this.signinForm.reset(); 
-      }
-      else if(this.paramValue == 'buyer'){
-        console.log('Buyer Signup:', this.signinForm.value);
-        this.signinForm.reset(); 
-      }
+      this.sellerData = {
+        ...this.sellerData,
+        name: this.signinForm.value.name,
+        email: this.signinForm.value.email,
+        password: this.signinForm.value.password // Only save the password
+      };
+      
+      this.seller.userSignup(this.sellerData, this.paramValue).subscribe({
+        next: (res) => {
+          console.log(res);
+          // Redirect to sellerHome page only if there's no error
+          this.router.navigate(['/sellerHome']);
+        },
+        error: (err) => console.error('Signup Error:', err) 
+      });
+
+      this.signinForm.reset();
     }
   }
-  ngOnInit() {
-    this.fb = new FormBuilder();
-    this.paramValue = this.route.snapshot.paramMap.get('user') || '';
-    
-    console.log(this.paramValue);
-    
-  }
+
+ 
 }
+

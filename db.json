@@ -1,0 +1,16 @@
+{
+  "seller": [
+    {
+      "id": "c1b2",
+      "name": "ABC",
+      "email": "abc@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": "4f09",
+      "email": "admin@gmail.com",
+      "password": "123456",
+      "confirmPassword": "123456"
+    }
+  ]
+}
