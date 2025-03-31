@@ -1,9 +1,4 @@
-export interface sellerData{
-    name: string,
-    email: string,
-    password: string,
-}
-export interface buyerData{
+export interface userData{
     name: string,
     email: string,
     password: string,

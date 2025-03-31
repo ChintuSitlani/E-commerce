@@ -5,9 +5,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute } from '@angular/router';
-import { SellerService } from '../servies/seller.service';
-import { sellerData } from '../data-type';
+import { ActivatedRoute, Router} from '@angular/router';
+import { SellerService } from '../services/seller.service';
+import { userData} from '../data-type';
+import { BuyerService } from '../services/buyer.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-signup',
@@ -27,17 +29,19 @@ export class SignupComponent {
   signinForm: FormGroup;
   paramValue: string = '';
 
-  sellerData: sellerData = {
+  userData: userData = {
     name: '',
     email: '',
     password: '',
   };
-  router: any;
+
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private seller: SellerService
+    private seller: SellerService,
+    private buyer: BuyerService,
+    private router: Router
     ) {
     this.signinForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
@@ -56,26 +60,38 @@ export class SignupComponent {
   onSubmit() {
     this.paramValue = this.route.snapshot.paramMap.get('user') || '';
     if (this.signinForm.valid) {
-      this.sellerData = {
-        ...this.sellerData,
+      this.userData = {
+        ...this.userData,
         name: this.signinForm.value.name,
         email: this.signinForm.value.email,
         password: this.signinForm.value.password // Only save the password
       };
-      
-      this.seller.userSignup(this.sellerData, this.paramValue).subscribe({
-        next: (res) => {
-          console.log(res);
-          // Redirect to sellerHome page only if there's no error
-          this.router.navigate(['/sellerHome']);
-        },
-        error: (err) => console.error('Signup Error:', err) 
-      });
+      const redirectRoute = this.paramValue+'-home';
+      if(this.paramValue === 'seller')
+      {
+        this.seller.sellerSignup(this.userData, this.paramValue).subscribe({
+          next: (res: any) => {(res);
+            // Redirect to sellerHome page only if there's no error
+            this.router.navigate([redirectRoute]);
+          },
+          error: (err: any) => console.error('Signup Error:', err) 
+        });
+      }
+      else if(this.paramValue === 'buyer')
+      {
+        this.buyer.buyerSignup(this.userData, this.paramValue).subscribe({
+          next: (res: any) => {
+            console.log(res);
+            // Redirect to buyerHome page only if there's no error
+            this.router.navigate([redirectRoute]);
+          },
+          error: (err: any) => console.error('Signup Error:', err) 
+        });
+      }else
+        throw new Error('Invalid user type');
 
       this.signinForm.reset();
     }
-  }
-
- 
+  } 
 }
 
