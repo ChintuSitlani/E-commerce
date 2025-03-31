@@ -7,6 +7,6 @@ import { SignupComponent } from './signup/signup.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent}, // Default route
-    { path: 'login', component: LoginComponent },
-    { path: 'signin', component: SignupComponent } 
+    { path: 'login/:user', component: LoginComponent },
+    { path: 'signin/:user', component: SignupComponent } 
 ];

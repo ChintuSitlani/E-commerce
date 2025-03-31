@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import e from 'express';
 
 
 @Component({
@@ -25,8 +27,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SignupComponent {
   signinForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
+  paramValue: string='';
+  constructor(private fb: FormBuilder,private route: ActivatedRoute) {
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -42,8 +44,24 @@ export class SignupComponent {
   }
 
   onSubmit() {
+    this.paramValue = this.route.snapshot.paramMap.get('user') || '';
+    console.log('submitted');
     if (this.signinForm.valid) {
-      console.log('Form Submitted:', this.signinForm.value);
+      if(this.paramValue == 'seller'){
+        console.log('Seller Signup:', this.signinForm.value);
+        this.signinForm.reset(); 
+      }
+      else if(this.paramValue == 'buyer'){
+        console.log('Buyer Signup:', this.signinForm.value);
+        this.signinForm.reset(); 
+      }
     }
+  }
+  ngOnInit() {
+    this.fb = new FormBuilder();
+    this.paramValue = this.route.snapshot.paramMap.get('user') || '';
+    
+    console.log(this.paramValue);
+    
   }
 }
