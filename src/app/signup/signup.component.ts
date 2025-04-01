@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { SellerService } from '../services/seller.service';
 import { userData} from '../data-type';
 import { BuyerService } from '../services/buyer.service';
@@ -20,14 +20,15 @@ import { error } from 'console';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    RouterModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
   signinForm: FormGroup;
-  paramValue: string = '';
+  paramUserType: string = '';
 
   userData: userData = {
     name: '',
@@ -41,7 +42,7 @@ export class SignupComponent {
     private route: ActivatedRoute,
     private seller: SellerService,
     private buyer: BuyerService,
-    private router: Router
+
     ) {
     this.signinForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
@@ -58,7 +59,7 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    this.paramValue = this.route.snapshot.paramMap.get('user') || '';
+    this.paramUserType = this.route.snapshot.paramMap.get('user') || '';
     if (this.signinForm.valid) {
       this.userData = {
         ...this.userData,
@@ -66,32 +67,29 @@ export class SignupComponent {
         email: this.signinForm.value.email,
         password: this.signinForm.value.password // Only save the password
       };
-      const redirectRoute = this.paramValue+'-home';
-      if(this.paramValue === 'seller')
+      if(this.paramUserType === 'seller')
       {
-        this.seller.sellerSignup(this.userData, this.paramValue).subscribe({
-          next: (res: any) => {(res);
-            // Redirect to sellerHome page only if there's no error
-            this.router.navigate([redirectRoute]);
-          },
-          error: (err: any) => console.error('Signup Error:', err) 
-        });
+        this.seller.sellerSignup(this.userData, this.paramUserType);
       }
-      else if(this.paramValue === 'buyer')
+      else if(this.paramUserType === 'buyer')
       {
-        this.buyer.buyerSignup(this.userData, this.paramValue).subscribe({
-          next: (res: any) => {
-            console.log(res);
-            // Redirect to buyerHome page only if there's no error
-            this.router.navigate([redirectRoute]);
-          },
-          error: (err: any) => console.error('Signup Error:', err) 
-        });
+        this.buyer.buyerSignup(this.userData, this.paramUserType);
       }else
-        throw new Error('Invalid user type');
+        throw new Error('Invalid user type '+ this.paramUserType);
 
       this.signinForm.reset();
     }
   } 
+  ngOnInit() {
+    if (this.paramUserType === null 
+      || this.paramUserType === undefined
+      || this.paramUserType === '') {
+        this.paramUserType = this.paramUserType = this.route.snapshot.paramMap.get('user') ?? '';;
+    }
+    if (this.paramUserType === 'seller') {
+      this.seller.reloadSeller(this.paramUserType);
+    } else if (this.paramUserType === 'buyer') {
+      this.buyer.reloadBuyer(this.paramUserType);
+    }
+  }
 }
-

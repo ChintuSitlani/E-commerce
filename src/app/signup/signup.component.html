@@ -44,5 +44,9 @@
         <button mat-button color="primary" class="full-width" type="submit" [disabled]="signinForm.invalid">
             Sign In
         </button>
+        <p class="login-text">
+            Already have an account?
+            <a [routerLink]="['/login', paramUserType]">Log in</a>
+        </p>
     </form>
 </mat-card>

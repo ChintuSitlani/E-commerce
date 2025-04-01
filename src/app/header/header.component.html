@@ -11,13 +11,8 @@
     </span>
     <span class="nav-links">
         <button mat-button routerLink="" >Home</button>
-        <button mat-button [matMenuTriggerFor]="seller">Seller</button>
-        <mat-menu #seller="matMenu">
-            <button mat-menu-item routerLink="/signin/seller">Sign-in</button>
-            <button mat-menu-item routerLink="/login/seller">Log-in</button>
-        </mat-menu>
+        <button mat-button routerLink="/signin/seller" >Seller</button>
         <button mat-button routerLink="/signin/buyer">Sign-in</button>
-        <button mat-button routerLink="/login/buyer">Log-in</button>
     </span>
 
     <!-- CART ICON -->
