@@ -42,9 +42,8 @@ export class SignupComponent {
     private route: ActivatedRoute,
     private seller: SellerService,
     private buyer: BuyerService,
-
     ) {
-    this.signinForm = this.fb.group({
+      this.signinForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -59,7 +58,9 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    this.paramUserType = this.route.snapshot.paramMap.get('user') || '';
+    this.route.paramMap.subscribe(params => {
+      this.paramUserType = params.get('user') ?? '';
+    });
     if (this.signinForm.valid) {
       this.userData = {
         ...this.userData,
@@ -81,11 +82,9 @@ export class SignupComponent {
     }
   } 
   ngOnInit() {
-    if (this.paramUserType === null 
-      || this.paramUserType === undefined
-      || this.paramUserType === '') {
-        this.paramUserType = this.paramUserType = this.route.snapshot.paramMap.get('user') ?? '';;
-    }
+    this.route.paramMap.subscribe(params => {
+      this.paramUserType = params.get('user') ?? '';
+    });
     if (this.paramUserType === 'seller') {
       this.seller.reloadSeller(this.paramUserType);
     } else if (this.paramUserType === 'buyer') {

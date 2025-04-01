@@ -10,7 +10,7 @@ import { AuthGuard } from './auth.guard';
 export const routes: Routes = [
     {path: '', component: HomeComponent}, // Default rongute
     { path: 'login/:user', component: LoginComponent },
-    { path: 'signin/:user', component: SignupComponent },
+    { path: 'signup/:user', component: SignupComponent },
     { path: 'seller-home', component: SellerHomeComponent, canActivate: [AuthGuard] },
     { path: 'buyer-home', component: BuyerHomeComponent, canActivate: [AuthGuard]},
 ];
