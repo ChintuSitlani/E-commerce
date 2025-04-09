@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { SellerService } from '../services/seller.service';
-import { userData} from '../data-type';
+import { userSignupData} from '../data-type';
 import { BuyerService } from '../services/buyer.service';
 import { error } from 'console';
 
@@ -30,7 +30,7 @@ export class SignupComponent {
   signinForm: FormGroup;
   paramUserType: string = '';
 
-  userData: userData = {
+  userData: userSignupData = {
     name: '',
     email: '',
     password: '',
