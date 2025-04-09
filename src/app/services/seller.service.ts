@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { userData } from '../data-type';
+import { userLoginData, userSignupData } from '../data-type';
 import { environment } from '../../environments/environments';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -28,7 +28,7 @@ export class SellerService {
     }
   }
 
-  sellerSignup(data: userData, param: string) {
+  sellerSignup(data: userSignupData, param: string) {
     if (param !== '') {
       const redirectRoute = param + '-home';
       return this.http
@@ -53,7 +53,30 @@ export class SellerService {
       return throwError(() => new Error('parameter is empty')); // Ensures function always returns a value
     }
   }
+  sellerLogin(data: userLoginData, param: string) {
+    if (param !== '') {
+      const redirectRoute = param + '-home';
+      return this.http
+        .get(`${this.baseUrl}/${param}`, { observe: 'response' })
+        .subscribe(
+          (result) => {
+            this.isSellerLoggedIn.next(true);
+            console.log(result.body);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(param, JSON.stringify(result.body));
+            }
   
+            this.router.navigate([redirectRoute]);
+          },
+          (error) => {
+            console.error('Signup failed:', error);
+            return error; // Ensures function always returns a value
+          }
+        );
+    } else {
+      return throwError(() => new Error('parameter is empty')); // Ensures function always returns a value
+    }
+  }
 
   reloadSeller(param: string) {
     if (isPlatformBrowser(this.platformId)) {

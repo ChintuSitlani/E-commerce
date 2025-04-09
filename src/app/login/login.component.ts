@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
+import { userLoginData } from '../data-type';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   paramUserType: string = '';
 
+   userData: userLoginData = {
+      email: '',
+      password: '',
+    };
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -44,8 +50,26 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.route.paramMap.subscribe(params => {
+      this.paramUserType = params.get('user') ?? '';
+    });
     if (this.loginForm.valid) {
-      console.log('Login Successful', this.loginForm.value);
+      this.userData = {
+        ...this.userData,
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password // Only save the password
+      };
+      if(this.paramUserType === 'seller')
+      {
+        this.seller.sellerLogin(this.userData, this.paramUserType);
+      }
+      else if(this.paramUserType === 'buyer'){
+        this.buyer.buyerlogin(this.userData, this.paramUserType);
+      }
+      else
+        throw new Error('Invalid user type '+ this.paramUserType);
+
+      this.loginForm.reset();
     }
   }
   ngOnInit() {
