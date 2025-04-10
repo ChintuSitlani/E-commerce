@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SellerHomeComponent } from './seller-home/seller-home.component';
 import { BuyerHomeComponent } from './buyer-home/buyer-home.component';
 import { AuthGuard } from './auth.guard';
+import { SellerAddProdComponent } from './seller-add-prod/seller-add-prod.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent}, // Default rongute
@@ -13,4 +14,5 @@ export const routes: Routes = [
     { path: 'signup/:user', component: SignupComponent },
     { path: 'seller-home', component: SellerHomeComponent, canActivate: [AuthGuard] },
     { path: 'buyer-home', component: BuyerHomeComponent, canActivate: [AuthGuard]},
+    { path: 'app-seller-add-prod', component: SellerAddProdComponent},
 ];

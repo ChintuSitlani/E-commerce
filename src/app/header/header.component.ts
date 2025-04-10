@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SellerService } from '../services/seller.service';
 
 
 @Component({
@@ -27,6 +28,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  isSellerLogin = true;
   searchText: string = '';
   cartItems: number = 3; // Simulated dynamic cart count
+ 
+  constructor(
+    private seller: SellerService,
+    )  {
+      //this.isSellerLogin = seller.isSellerLoggedIn;
+      }
 }
