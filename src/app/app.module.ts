@@ -7,6 +7,7 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
+import { SellerAddProdComponent } from "./seller-add-prod/seller-add-prod.component";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { HttpClient } from "@angular/common/http";
     HomeComponent,
     LoginComponent,
     SignupComponent,
+    SellerAddProdComponent
   ],
   imports: [
     BrowserModule,
