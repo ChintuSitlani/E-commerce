@@ -1,7 +1,7 @@
-<div class="container mat-elevation-z4 p-6 rounded-lg bg-white max-w-2xl mx-auto mt-10">
-    <h2 class="text-2xl font-semibold mb-6">Add New Product</h2>
+<div class="container mat-elevation-z4 p-7 rounded-lg bg-white max-w-2xl mx-auto mt-10">
+    <h2 class="text-2xl font-semibold mb-7">Add New Product</h2>
   
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid gap-6">
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="grid gap-7">
   
       <!-- Product Name -->
       <mat-form-field appearance="outline">
@@ -9,6 +9,15 @@
         <input matInput formControlName="productName" />
         <mat-error *ngIf="productForm.get('productName')?.hasError('required')">
           Product name is required.
+        </mat-error>
+      </mat-form-field>
+    
+      <!-- Product Category -->
+      <mat-form-field appearance="outline">
+        <mat-label>Product Category</mat-label>
+        <input matInput formControlName="productCategory" />
+        <mat-error *ngIf="productForm.get('productCategory')?.hasError('required')">
+          Product Category is required.
         </mat-error>
       </mat-form-field>
   

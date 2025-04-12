@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../services/product.service';
 import { Product } from '../data-type';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { SellerService } from '../services/seller.service';
 
 @Component({
   selector: 'app-seller-add-prod',
@@ -23,9 +24,15 @@ export class SellerAddProdComponent {
   productForm: FormGroup;
 
 
-  constructor(private fb: FormBuilder,private productService: ProductService) {
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private sellerService: SellerService // Inject SellerService
+  ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
+      productCategory: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]]
@@ -35,6 +42,11 @@ export class SellerAddProdComponent {
   onSubmit() {
     if (this.productForm.valid) {
       const product: Product = this.productForm.value;
+      const sellerData = this.sellerService.getSellerData();
+      if (sellerData != null) {
+        product.selleremail = sellerData.email;
+        product.sellerId = sellerData.id;
+      }
       this.productService.addProduct(product).subscribe({
         next: (res: any) => {
           console.log('Product added:', res);

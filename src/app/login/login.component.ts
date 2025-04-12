@@ -32,6 +32,7 @@ export class LoginComponent {
   paramUserType: string = '';
 
    userData: userLoginData = {
+      id:'',
       email: '',
       password: '',
     };
