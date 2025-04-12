@@ -17,7 +17,7 @@ export class SellerService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object // Injecting platform ID
+    @Inject(PLATFORM_ID) private platformId: Object 
   ) {
     // Check local storage only if running in the browser
     if (isPlatformBrowser(this.platformId)) {
@@ -82,6 +82,15 @@ export class SellerService {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem(param)) {
         this.isSellerLoggedIn.next(true);
+      }
+    }
+  }
+  getSellerData: () => userLoginData | null = () => {
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('seller')) {
+        return JSON.parse(localStorage.getItem('seller') || '{}')[0];
+      } else {
+        return null;
       }
     }
   }
