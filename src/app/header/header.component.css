@@ -50,7 +50,7 @@
     padding: 12px 20px; 
 }   
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 770px) {
     .search {
         width: 100%;
         justify-content: flex-start; /* Align search to the left on small screens */
@@ -68,7 +68,7 @@
         display: block;
     }
 }
-@media (min-width: 768px) {
+@media (min-width: 771px) {
     .menu-btn {
         display: none; /* Hide menu button on larger screens */
     }

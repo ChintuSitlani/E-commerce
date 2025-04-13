@@ -28,13 +28,16 @@ import { SellerService } from '../services/seller.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  isSellerLogin = true;
+  isSellerLogin = false;
   searchText: string = '';
   cartItems: number = 3; // Simulated dynamic cart count
  
-  constructor(
-    private seller: SellerService,
-    )  {
-      //this.isSellerLogin = seller.isSellerLoggedIn;
-      }
+  
+  constructor(private seller: SellerService) {}
+
+  ngOnInit() {
+    this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
+      this.isSellerLogin = status;
+    });
+  }
 }

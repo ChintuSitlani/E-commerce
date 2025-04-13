@@ -1,1 +1,14 @@
-<p>seller-home works!</p>
+<div class="product-container">
+    <mat-card *ngFor="let product of sellerProducts" class="product-card">
+        <img mat-card-image [src]="product.imageUrl" alt="{{ product.name }}" />
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-content>
+            <p><strong>Price:</strong> ₹{{ product.price }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="editProduct(product)">Edit</button>
+            <button mat-raised-button color="warn" (click)="deleteProduct(product.id)">Delete</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
