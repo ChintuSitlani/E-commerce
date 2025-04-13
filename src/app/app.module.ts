@@ -8,6 +8,8 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { SellerAddProdComponent } from "./seller-add-prod/seller-add-prod.component";
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { SellerAddProdComponent } from "./seller-add-prod/seller-add-prod.compon
     SellerAddProdComponent
   ],
   imports: [
+    MatCardModule,
+    MatButtonModule,
     BrowserModule,
     FormsModule,
     HttpClient

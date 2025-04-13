@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="navbar">
     <!-- LOGO -->
-    <img src="" alt="E-Commerce Logo" class="logo">
+    <img [src]="https://static.vecteezy.com/system/resources/thumbnails/024/824/478/small_2x/e-commerce-logo-design-online-shop-logo-design-idea-vector.jpg" alt="E-Commerce Logo" class="logo">
     <!-- SEARCH BAR -->
     <span class="search">
         <mat-form-field appearance="outline">
@@ -10,9 +10,9 @@
         </mat-form-field>
     </span>
     <span class="nav-links">
-        <button mat-button routerLink="" >Home</button>
-        <button mat-button routerLink="/app-seller-add-prod" >Add product</button>
-        <button mat-button routerLink="/signup/seller" >Seller</button>
+        <button mat-button routerLink="">Home</button>
+        <button *ngIf="isSellerLogin" mat-button routerLink="/app-seller-add-prod">Add product</button>
+        <button mat-button routerLink="/signup/seller">Seller</button>
         <button mat-button routerLink="/signup/buyer">Sign-in</button>
     </span>
 
@@ -26,14 +26,13 @@
 
     <!-- MENU BUTTON -->
     <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
-      <mat-icon>menu</mat-icon>
+        <mat-icon>menu</mat-icon>
     </button>
-
+    
     <mat-menu #mobileMenu="matMenu">
-      <button mat-menu-item>Home</button>
-      <button mat-menu-item>Products</button>
-      <button mat-menu-item>About</button>
-      <button mat-menu-item>Sign-in</button>
-      <button mat-menu-item>Log-in</button>
+        <button mat-menu-item routerLink="">Home</button>
+        <button mat-menu-item routerLink="/app-seller-add-prod">Add product</button>
+        <button mat-menu-item routerLink="/signup/seller">Seller</button>
+        <button mat-menu-item routerLink="/signup/buyer">Sign-in</button>
     </mat-menu>
 </mat-toolbar>
