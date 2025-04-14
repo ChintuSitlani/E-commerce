@@ -21,8 +21,6 @@ export class ProductService {
   }
   getSellerProducts(sellerId: string, sellerEmail: string): Observable<Product[]> {
     const params = { selleremail: sellerEmail, sellerId };
-    console.log('🔍 Requesting products from:', this.baseUrl + '/product'+params);
-    console.log('param ', params);
     return this.http.get<Product[]>(`${this.baseUrl}/product`, { params });
   }
   getProductById(id: string): Observable<Product> {
