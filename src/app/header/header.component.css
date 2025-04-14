@@ -1,0 +1,95 @@
+.logo {
+    width: 160px;
+    height:110px;
+    object-fit: contain; /* Ensures the full image is visible */
+}
+
+.navbar {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Center-align search bar while keeping other elements in place */
+.search {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Center the search bar */
+}
+
+.search mat-form-field {
+    width: 80%; /* Set width for a balanced look */
+    min-width: 160px;
+}
+
+/* Push menu and buttons to the right */
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin-left: auto; /* Moves to the right */
+}
+
+/* Ensure the cart icon stays aligned */
+.cart {
+    position: relative;
+    margin-left: 5px;
+}
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.nav-links button {
+    font-size: 18px; /* Adjust font size for buttons */
+    padding: 12px 20px; 
+}   
+/* Responsive Design */
+@media (max-width: 770px) {
+    .search {
+        width: 60%;
+        justify-content: flex-start; /* Align search to the left on small screens */
+    }
+    .nav-links {
+        display: none; /* Hide navigation links on smaller screens */
+    }
+    .search mat-form-field {
+        width: 100%; /* Set width for a balanced look */
+        min-width: 160px;
+    }
+    .menu-btn {
+        display: block;
+    }
+}
+@media (max-width: 480px) {
+    .search {
+        width: 40%;
+        justify-content: flex-start; /* Align search to the left on small screens */
+    }
+    .search mat-form-field {
+        width: 50%; /* Set width for a balanced look */
+        min-width: 160px;
+    }
+    .nav-links {
+        display: none; /* Hide navigation links on smaller screens */
+    }
+
+    .menu-btn {
+        display: block;
+    }
+    .logo {
+        width: 80px;
+        height:80px;
+        object-fit: contain; /* Ensures the full image is visible */
+    }
+}
+@media (min-width: 771px) {
+    .menu-btn {
+        display: none; /* Hide menu button on larger screens */
+    }
+}

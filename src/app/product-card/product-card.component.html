@@ -1,0 +1,44 @@
+<div class="product-detail-container" *ngIf="product">
+    <div class="product-image">
+        <img [src]="product.imageUrl" alt="{{ product.productName }}" />
+    </div>
+
+    <div class="product-info">
+        <h2>{{ product.productName }}</h2>
+        <p><strong>Category:</strong> {{ product.productCategory }}</p>
+        <p><strong>Price:</strong> ₹{{ product.price }}</p>
+        <p><strong>Description:</strong> {{ product.description }}</p>
+
+        <form #editForm="ngForm" (ngSubmit)="updateProduct()">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Product Name</mat-label>
+                <input matInput [(ngModel)]="product.productName" name="productName" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Category</mat-label>
+                <input matInput [(ngModel)]="product.productCategory" name="productCategory" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Price</mat-label>
+                <input matInput type="number" [(ngModel)]="product.price" name="price" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Description</mat-label>
+                <textarea matInput [(ngModel)]="product.description" name="description"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image URL</mat-label>
+                <input matInput [(ngModel)]="product.imageUrl" name="imageUrl" type="url" required />
+            </mat-form-field>
+
+            <div class="action-buttons">
+                <button mat-raised-button color="primary" type="submit">Update</button>
+                <button mat-raised-button color="warn" type="button" (click)="deleteProduct()">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+.not-found-container {
+    text-align: center;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+  }
+  
+  .not-found-container img {
+    width: 200px;
+    margin-bottom: 30px;
+  }
+  
+  .not-found-container h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .not-found-container p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 30px;
+  }

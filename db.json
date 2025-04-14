@@ -1,0 +1,20 @@
+{
+  "seller": [
+    {
+      "id": "3ed6",
+      "name": "abc",
+      "email": "abc@gmail.com",
+      "password": "123456"
+    }
+  ],
+  "buyer": [],
+  "product": [
+    {
+      "id": "ef6e",
+      "productName": "Timmer",
+      "price": 1100,
+      "description": "Trimer",
+      "imageUrl": "https://5.imimg.com/data5/ANDROID/Default/2024/7/432901743/IZ/GI/MS/83548882/product-jpeg-500x500.jpg"
+    }
+  ]
+}
