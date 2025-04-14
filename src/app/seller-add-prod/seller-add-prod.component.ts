@@ -47,7 +47,7 @@ export class SellerAddProdComponent {
         product.selleremail = sellerData.email;
         product.sellerId = sellerData.id;
       }
-      this.productService.addProduct(product).subscribe({
+      this.productService.saveProduct(product).subscribe({
         next: (res: any) => {
           console.log('Product added:', res);
           alert('Product added successfully!');
