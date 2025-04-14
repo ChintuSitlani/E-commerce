@@ -40,7 +40,7 @@ export class SellerHomeComponent implements OnInit {
   }
 
   editProduct(product: any) {
-    this.router.navigate(['/edit-product', product.id]); // Create edit page
+    this.router.navigate(['/product-card', product.id]);
   }
 
   deleteProduct(productId: string) {

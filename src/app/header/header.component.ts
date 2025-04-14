@@ -28,6 +28,7 @@ import { SellerService } from '../services/seller.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  logoUrl = 'https://static.vecteezy.com/system/resources/thumbnails/024/824/478/small_2x/e-commerce-logo-design-online-shop-logo-design-idea-vector.jpg';
   isSellerLogin = false;
   searchText: string = '';
   cartItems: number = 3; // Simulated dynamic cart count
