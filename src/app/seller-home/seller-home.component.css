@@ -7,8 +7,7 @@
   }
   
   .product-card {
-    width: 100%;
-    max-width: 300px;
+    width: 30%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     transition: transform 0.2s ease-in-out;
@@ -23,15 +22,17 @@
     .product-container {
       gap: 16px;
       padding: 16px;
+      padding-top: 2%;
     }
   
     .product-card {
-      max-width: 90%;
+      width: 30%;
     }
   }
   
   @media (max-width: 480px) {
     .product-card {
+      width: 100%;
       max-width: 100%;
       margin: 0 10px;
     }
