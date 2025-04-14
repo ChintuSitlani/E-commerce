@@ -8,6 +8,7 @@ import { BuyerHomeComponent } from './buyer-home/buyer-home.component';
 import { AuthGuard } from './auth.guard';
 import { SellerAddProdComponent } from './seller-add-prod/seller-add-prod.component';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -17,4 +18,7 @@ export const routes: Routes = [
     { path: 'buyer-home', component: BuyerHomeComponent, canActivate: [AuthGuard]},
     { path: 'app-seller-add-prod', component: SellerAddProdComponent},
     { path: 'product-card/:id', component: ProductCardComponent},
+    { path: 'not-found', component: PageNotFoundComponent },
+    
+    { path: '**', redirectTo: 'page-not-found'} 
 ];
