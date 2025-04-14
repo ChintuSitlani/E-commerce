@@ -1,11 +1,11 @@
 .logo {
     width: 160px;
-    height:160px;
+    height:110px;
     object-fit: contain; /* Ensures the full image is visible */
 }
 
 .navbar {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     padding: 10px;
 }
@@ -19,7 +19,7 @@
 
 .search mat-form-field {
     width: 80%; /* Set width for a balanced look */
-    min-width: 250px;
+    min-width: 160px;
 }
 
 /* Push menu and buttons to the right */
@@ -32,7 +32,7 @@
 /* Ensure the cart icon stays aligned */
 .cart {
     position: relative;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .cart-count {
     position: absolute;
@@ -52,14 +52,29 @@
 /* Responsive Design */
 @media (max-width: 770px) {
     .search {
-        width: 100%;
+        width: 60%;
         justify-content: flex-start; /* Align search to the left on small screens */
     }
-
-    .search mat-form-field {
-        width: 100%;
+    .nav-links {
+        display: none; /* Hide navigation links on smaller screens */
     }
-
+    .search mat-form-field {
+        width: 100%; /* Set width for a balanced look */
+        min-width: 160px;
+    }
+    .menu-btn {
+        display: block;
+    }
+}
+@media (max-width: 480px) {
+    .search {
+        width: 40%;
+        justify-content: flex-start; /* Align search to the left on small screens */
+    }
+    .search mat-form-field {
+        width: 50%; /* Set width for a balanced look */
+        min-width: 160px;
+    }
     .nav-links {
         display: none; /* Hide navigation links on smaller screens */
     }
@@ -67,14 +82,14 @@
     .menu-btn {
         display: block;
     }
+    .logo {
+        width: 80px;
+        height:80px;
+        object-fit: contain; /* Ensures the full image is visible */
+    }
 }
 @media (min-width: 771px) {
     .menu-btn {
         display: none; /* Hide menu button on larger screens */
-    }
-    .logo {
-        width: 100px;
-        height:100px;
-        object-fit: contain; /* Ensures the full image is visible */
     }
 }
