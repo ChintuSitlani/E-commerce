@@ -8,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class PageNotFoundComponent {
 
+  goToHome() {
+    window.location.href = '/';//routerLink was not working so have to use this method
+  }
 }

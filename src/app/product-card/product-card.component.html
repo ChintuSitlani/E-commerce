@@ -30,6 +30,11 @@
                 <textarea matInput [(ngModel)]="product.description" name="description"></textarea>
             </mat-form-field>
 
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image URL</mat-label>
+                <input matInput [(ngModel)]="product.imageUrl" name="imageUrl" type="url" required />
+            </mat-form-field>
+
             <div class="action-buttons">
                 <button mat-raised-button color="primary" type="submit">Update</button>
                 <button mat-raised-button color="warn" type="button" (click)="deleteProduct()">Delete</button>

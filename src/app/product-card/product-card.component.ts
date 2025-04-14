@@ -54,7 +54,7 @@ export class ProductCardComponent {
           // Show a message to the user or redirect
           this.errorMessage = 'Product not found.';
           // Optional: Navigate away
-          this.router.navigate(['/not-found']); 
+          this.router.navigate(['/page-not-found']); 
           return of(null); 
         })
       ).subscribe((res) => {
