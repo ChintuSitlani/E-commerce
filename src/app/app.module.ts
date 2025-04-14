@@ -10,6 +10,7 @@ import { HttpClient } from "@angular/common/http";
 import { SellerAddProdComponent } from "./seller-add-prod/seller-add-prod.component";
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     BrowserModule,
     FormsModule,
-    HttpClient
+    HttpClient,
+    FlexLayoutModule
   ],
     providers: [],
     bootstrap: [AppComponent],
