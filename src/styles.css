@@ -1,11 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
-body{
-    font-family:sans-serif;
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
-.container{
+body {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container,
+.container-fluid,
+.row {
     margin: 5px;
     padding: 5px;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
