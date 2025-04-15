@@ -1,1 +1,13 @@
-<p>buyer-home works!</p>
+<ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
+    @for (product of products; track product; let i = $index) {
+    <ng-template ngbSlide>
+        <div class="picsum-img-wrapper">
+            <img [src]="product.imageUrl" alt="Product image" />
+        </div>
+        <div class="carousel-caption">
+            <h3>{{product.productName}}</h3>
+            <p>{{product.description}}</p>
+        </div>
+    </ng-template>
+    }
+</ngb-carousel>

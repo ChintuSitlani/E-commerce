@@ -19,5 +19,5 @@ export interface Product {
     description: string;
     imageUrl: string;
     sellerId: string;
-    selleremail: string;
+    sellerEmailId: string;
   }

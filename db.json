@@ -8,13 +8,53 @@
     }
   ],
   "buyer": [],
-  "product": [
+  "products": [
+    {
+      "id": "ef6e",
+      "productName": "Samung Galaxy S23 ultra",
+      "price": 125000,
+      "description": "Samsung Galaxy S23 ultra with 256GB storage and 8GB RAM.",
+      "imageUrl": "https://i.gadgets360cdn.com/large/samsung_galaxy_s25_ultra_technizoconcept_inline_1731133022562.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId":"abc@gmail.com"
+
+    },
+    {
+      "id": "c3d4",
+      "productName": "Sony xperia 1 ii store headset",
+      "price": 1500,
+      "description": "Sony xperia 1 ii store headset Noise-cancelling wireless headphones with long battery life.",
+      "imageUrl": "https://m.media-amazon.com/images/I/81F7g6wqhWL.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "e5f6",
+      "productName": "Smart Watch",
+      "price": 3000,
+      "description": "Waterproof smart watch with fitness tracking features.",
+      "imageUrl": "https://www.apple.com/in/watch/images/meta/apple-watch__beyyf7scxu1u_og.png",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "a1b2",
+      "productName": "ear phone",
+      "price": 2500,
+      "description": "ear phone with Bluetooth connectivity and high-quality sound.",
+      "imageUrl": "https://images.samsung.com/is/image/samsung/assets/us/mobile-audio/galaxy-buds3/07222024/JellyMLP-HD01-HomeKVCarousel-Buds3-KV-D-1440x810-V2.jpg?imwidth=1366",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
     {
       "id": "ef6e",
       "productName": "Timmer",
       "price": 1100,
       "description": "Trimer",
-      "imageUrl": "https://5.imimg.com/data5/ANDROID/Default/2024/7/432901743/IZ/GI/MS/83548882/product-jpeg-500x500.jpg"
+      "imageUrl": "https://5.imimg.com/data5/ANDROID/Default/2024/7/432901743/IZ/GI/MS/83548882/product-jpeg-500x500.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId":"abc@gmail.com"
+
     }
   ]
 }
