@@ -7,7 +7,14 @@
       "password": "123456"
     }
   ],
-  "buyer": [],
+  "buyer": [
+    {
+      "id": "9f1c",
+      "name": "xyz",
+      "email": "xyz@gmail.com",
+      "password": "123456"
+    }
+  ],
   "products": [
     {
       "id": "ef6e",
@@ -16,14 +23,13 @@
       "description": "Samsung Galaxy S23 ultra with 256GB storage and 8GB RAM.",
       "imageUrl": "https://i.gadgets360cdn.com/large/samsung_galaxy_s25_ultra_technizoconcept_inline_1731133022562.jpg",
       "sellerId": "3ed6",
-      "sellerEmailId":"abc@gmail.com"
-
+      "sellerEmailId": "abc@gmail.com"
     },
     {
       "id": "c3d4",
       "productName": "Sony xperia 1 ii store headset",
       "price": 1500,
-      "description": "Sony xperia 1 ii store headset Noise-cancelling wireless headphones with long battery life.",
+      "description": "Sony xperia 1 ii store headset Noise-cancelling wireless headphone.",
       "imageUrl": "https://m.media-amazon.com/images/I/81F7g6wqhWL.jpg",
       "sellerId": "3ed6",
       "sellerEmailId": "abc@gmail.com"
@@ -47,14 +53,49 @@
       "sellerEmailId": "abc@gmail.com"
     },
     {
-      "id": "ef6e",
-      "productName": "Timmer",
+      "id": "gh7i",
+      "productName": "Philips Hair Trimmer",
       "price": 1100,
-      "description": "Trimer",
-      "imageUrl": "https://5.imimg.com/data5/ANDROID/Default/2024/7/432901743/IZ/GI/MS/83548882/product-jpeg-500x500.jpg",
+      "description": "Philips Hair Trimmer for precise grooming.",
+      "imageUrl": "https://images.philips.com/is/image/PhilipsConsumer/BT3203_15-IMS-en_IN?$jpglarge$&wid=1250",
       "sellerId": "3ed6",
-      "sellerEmailId":"abc@gmail.com"
-
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "p1001",
+      "productName": "Lenovo Wireless Mouse",
+      "price": 799,
+      "description": "Ergonomic wireless mouse with long battery life.",
+      "imageUrl": "https://m.media-amazon.com/images/I/61LtuGzXeaL._SL1500_.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "p1002",
+      "productName": "Apple iPad 10th Gen",
+      "price": 42999,
+      "description": "10.9-inch Liquid Retina display, A14 Bionic chip.",
+      "imageUrl": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/ipad-10th-gen-finish-select-202212-pink-wifi_AV1?wid=940&hei=1112&fmt=png-alpha&.v=1669156276242",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "p1006",
+      "productName": "Canon DSLR EOS 200D",
+      "price": 53999,
+      "description": "24.1 MP DSLR camera with dual pixel autofocus.",
+      "imageUrl": "https://m.media-amazon.com/images/I/914hFeTU2-L._SL1500_.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
+    },
+    {
+      "id": "p1007",
+      "productName": "Sony PlayStation 5",
+      "price": 55990,
+      "description": "Next-gen gaming console with ultra-fast SSD.",
+      "imageUrl": "https://m.media-amazon.com/images/I/619BkvKW35L._SL1500_.jpg",
+      "sellerId": "3ed6",
+      "sellerEmailId": "abc@gmail.com"
     }
   ]
 }
