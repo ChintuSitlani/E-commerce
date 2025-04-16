@@ -1,8 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { CommonModule } from '@angular/common';
-import { NgbCarousel, NgbCarouselModule, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Product } from '../data-type';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-buyer-home',
@@ -11,21 +15,40 @@ import { FormsModule } from '@angular/forms';
     NgbCarouselModule,
     CommonModule,
     NgbCarouselModule,
-     FormsModule
+    FormsModule,
+    MatCardModule,
+    MatButtonModule
   ],
   templateUrl: './buyer-home.component.html',
   styleUrl: './buyer-home.component.css'
 })
 export class BuyerHomeComponent {
-  products : any[] = [];
+  products: any[] = [];
+  productsCarousel: any[] = [];
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+  ) {
 
-  constructor(private productService: ProductService){
-    
   }
-  ngOnInit(){
+  ngOnInit() {
     this.productService.getProductForCarousel(3).subscribe(data => {
-      this.products = data;
-      console.log('products',this.products);
+      this.productsCarousel = data;
+    });
+    this.fetchProducts();
+  }
+
+  fetchProducts() {
+    this.productService.getProducts().subscribe((res: Product[]) => {
+      this.products = res;
     });
   }
+  viewProduct(product: any) {
+    this.router.navigate(['/product-card', product.id]);
+  }
+
+  addToCart(productId: string) {
+    
+  }
 }
+

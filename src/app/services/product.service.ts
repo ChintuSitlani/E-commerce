@@ -32,4 +32,8 @@ export class ProductService {
   getProductForCarousel(limit: number): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.baseUrl}/products?_limit=${limit}`);
   }
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+  }
+
 }
