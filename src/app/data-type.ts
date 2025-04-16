@@ -12,7 +12,7 @@ export interface userLoginData{
 
 export interface Product {
     id: string;
-    name: string;
+    productName: string;
     category: string;
     subcategory: string;
     price: number;

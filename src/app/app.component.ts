@@ -4,13 +4,23 @@ import { HeaderComponent } from './header/header.component';
 import { SellerService } from './services/seller.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet,HeaderComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private sellerService: SellerService) {
+  title = 'E-commerce App';
+  
+
+  constructor(
+    private sellerService: SellerService,
+  ) {
     this.sellerService.reloadSeller();
   }
+ 
 }

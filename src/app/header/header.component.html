@@ -3,12 +3,23 @@
     <img [src]='logoUrl' routerLink=""  alt="E-Commerce Logo" class="logo">
     <!-- SEARCH BAR -->
     <span class="search">
-        <mat-form-field appearance="outline">
-            <mat-label>Search</mat-label>
-            <input matInput [(ngModel)]="searchText" placeholder="Type to search">
-            <mat-icon matSuffix>search</mat-icon>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search</mat-label>
+          <input type="text" matInput 
+                 [(ngModel)]="searchText"
+                 [matAutocomplete]="auto"
+                 (input)="onSearchInput()"
+                 placeholder="Type to search">
+          <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-    </span>
+      </span>
+      
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
+        <mat-option *ngFor="let product of filteredProducts" [value]="product.id">
+            <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
+            <span>{{ product.productName }}</span>
+        </mat-option>
+      </mat-autocomplete>
     <span class="nav-links">
         <button mat-button routerLink="">Home</button>
         <button *ngIf="isSellerLogin" mat-button routerLink="/app-seller-add-prod">Add product</button>

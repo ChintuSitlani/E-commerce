@@ -10,7 +10,10 @@ import { RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
-
+import { Product } from '../data-type';
+import { ProductService } from '../services/product.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core'; // this is where mat-option comes from
 
 @Component({
   selector: 'app-header',
@@ -23,7 +26,9 @@ import { BuyerService } from '../services/buyer.service';
     MatMenuModule,
     MatFormFieldModule,
     MatInputModule,
-    RouterLink
+    RouterLink,
+    MatAutocompleteModule,
+    MatOptionModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -33,12 +38,16 @@ export class HeaderComponent {
   isSellerLogin = false;
   searchText: string = '';
   cartItems: number = 3; // Simulated dynamic cart count
-  isBuyerLogin = false;
+  allProducts: Product[] = [];
+  filteredProducts: Product[] = [];
+ isBuyerLogin = false;
    
   constructor(
+    
     private seller: SellerService,
     private buyer: BuyerService
-  ) {}
+  ,
+    private productService: ProductService) { }
 
   ngOnInit() {
     this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
@@ -46,6 +55,9 @@ export class HeaderComponent {
     });
     this.buyer.isBuyerLoggedIn.subscribe((status: boolean) => {
       this.isBuyerLogin = status;
+    });
+    this.productService.getProducts().subscribe(products => {
+      this.allProducts = products;
     });
   }
   logout() {
@@ -63,4 +75,16 @@ export class HeaderComponent {
       console.log("Logout canceled by the user.");
     }
   }
+    
+  onSearchInput() {
+    const value = this.searchText?.toLowerCase() || '';
+    this.filteredProducts = this.allProducts.filter(product =>
+      product.productName?.toLowerCase().includes(value)
+    );
+  }
+
+  onOptionSelected(productId: string) {
+    // Handle what happens when an option is selected, e.g., navigating to a product page
+    window.location.href = `/product-card/${productId}`;
+    }
 }

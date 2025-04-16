@@ -4,7 +4,10 @@
     object-fit: fill;
     margin-bottom: 5px;
 }
-
+.search-field {
+    width: 80%;
+    min-width: 200px;
+  }
 .navbar {
     display: flex; /* use flex, not inline-flex */
     align-items: center;
@@ -55,6 +58,28 @@
     font-size: 16px; /* Adjust font size for buttons */
     padding: 12px 15px; 
 }   
+.product-image {
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+    object-fit: cover;
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+mat-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+}
+
+mat-option span {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 /* Responsive Design */
 @media (max-width: 770px) {
     .search {
