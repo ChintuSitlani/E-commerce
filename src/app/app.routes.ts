@@ -21,7 +21,7 @@ export const routes: Routes = [
     { path: 'seller-home', component: SellerHomeComponent, canActivate: [AuthGuard] },
     { path: 'buyer-home', component: BuyerHomeComponent, canActivate: [AuthGuard]},
     { path: 'app-seller-add-prod', component: SellerAddProdComponent},
-    { path: 'product-card/:id', component: ProductCardComponent},
+    { path: 'product-card', component: ProductCardComponent},
     { path: 'page-not-found', component: PageNotFoundComponent },
     
     { path: '**', redirectTo: 'page-not-found'} 
