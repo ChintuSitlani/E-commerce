@@ -17,7 +17,7 @@ export class SellerService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object 
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Check local storage only if running in the browser
     if (isPlatformBrowser(this.platformId)) {
@@ -28,57 +28,52 @@ export class SellerService {
     }
   }
 
-  sellerSignup(data: userSignupData, param: string) {
-    if (param !== '') {
-      const redirectRoute = param + '-home';
-      return this.http
-        .post(`${this.baseUrl}/${param}`, data, { observe: 'response' })
-        .subscribe(
-          (result) => {
-            this.isSellerLoggedIn.next(true);
-  
-            if (typeof window !== 'undefined') {
-              localStorage.setItem(param, JSON.stringify(result.body));
-            }
-  
-            this.router.navigate([redirectRoute]);
-            console.log(result);
-          },
-          (error) => {
-            console.error('Signup failed:', error);
-            return error; // Ensures function always returns a value
+  sellerSignup(data: userSignupData) {
+    const param = 'seller';
+    const redirectRoute = param + '-home';
+    return this.http
+      .post(`${this.baseUrl}/${param}`, data, { observe: 'response' })
+      .subscribe(
+        (result) => {
+          this.isSellerLoggedIn.next(true);
+
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(param, JSON.stringify(result.body));
           }
-        );
-    } else {
-      return throwError(() => new Error('parameter is empty')); // Ensures function always returns a value
-    }
+
+          this.router.navigate([redirectRoute]);
+          console.log(result);
+        },
+        (error) => {
+          console.error('Signup failed:', error);
+          return error; // Ensures function always returns a value
+        }
+      );
   }
-  sellerLogin(data: userLoginData, param: string) {
-    if (param !== '') {
-      const redirectRoute = param + '-home';
-      return this.http
-        .get(`${this.baseUrl}/${param}`, { observe: 'response' })
-        .subscribe(
-          (result) => {
-            this.isSellerLoggedIn.next(true);
-            console.log(result.body);
-            if (typeof window !== 'undefined') {
-              localStorage.setItem(param, JSON.stringify(result.body));
-            }
-  
-            this.router.navigate([redirectRoute]);
-          },
-          (error) => {
-            console.error('Signup failed:', error);
-            return error; // Ensures function always returns a value
+  sellerLogin(data: userLoginData) {
+    const param = 'seller';
+    const redirectRoute = param + '-home';
+    return this.http
+      .get(`${this.baseUrl}/${param}`, { observe: 'response' })
+      .subscribe(
+        (result) => {
+          this.isSellerLoggedIn.next(true);
+          console.log(result.body);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(param, JSON.stringify(result.body));
           }
-        );
-    } else {
-      return throwError(() => new Error('parameter is empty')); // Ensures function always returns a value
-    }
+
+          this.router.navigate([redirectRoute]);
+        },
+        (error) => {
+          console.error('Signup failed:', error);
+          return error; // Ensures function always returns a value
+        }
+      );
   }
 
-  reloadSeller(param: string) {
+  reloadSeller() {
+    const param = 'seller';
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem(param)) {
         this.isSellerLoggedIn.next(true);
@@ -94,8 +89,5 @@ export class SellerService {
       }
     }
   }
-}
-function throwError(arg0: () => Error) {
-  throw new Error('Function not implemented.');
 }
 

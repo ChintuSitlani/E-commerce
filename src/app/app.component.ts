@@ -11,6 +11,6 @@ import { SellerService } from './services/seller.service';
 })
 export class AppComponent {
   constructor(private sellerService: SellerService) {
-    this.sellerService.reloadSeller('seller');
+    this.sellerService.reloadSeller();
   }
 }

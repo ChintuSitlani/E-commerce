@@ -7,11 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BuyerService } from '../services/buyer.service';
+import { SellerService } from '../services/seller.service';
 import { userLoginData } from '../data-type';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-seller-login',
   imports:
     [
       CommonModule,
@@ -19,12 +19,12 @@ import { userLoginData } from '../data-type';
       MatFormFieldModule,
       MatInputModule,
       MatButtonModule,
-      MatCardModule
+      MatCardModule,
     ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './seller-login.component.html',
+  styleUrl: './seller-login.component.css'
 })
-export class LoginComponent {
+export class SellerLoginComponent {
   loginForm: FormGroup;
   paramUserType: string = '';
 
@@ -36,7 +36,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private buyer: BuyerService
+    private seller: SellerService
 
   ) {
     this.loginForm = this.fb.group({
@@ -52,11 +52,12 @@ export class LoginComponent {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password // Only save the password
       };
-      this.buyer.buyerlogin(this.userData);
+
+      this.seller.sellerLogin(this.userData);
       this.loginForm.reset();
     }
   }
   ngOnInit() {
-    this.buyer.reloadBuyer();
+    this.seller.reloadSeller();
   }
 }

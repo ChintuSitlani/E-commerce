@@ -13,6 +13,18 @@
       "name": "xyz",
       "email": "xyz@gmail.com",
       "password": "123456"
+    },
+    {
+      "id": "b473",
+      "name": "xyz",
+      "email": "xyz@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": "b759",
+      "name": "qrs",
+      "email": "qrs@gmail.com",
+      "password": "123456"
     }
   ],
   "products": [
