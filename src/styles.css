@@ -14,3 +14,14 @@ html {
 .row {
     margin: 0 !important;
 }
+
+/* carousel CSS */
+.carousel-caption{
+    background-color: #00000082;
+    border-radius: 5px;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: black;
+    border-radius: 5px;
+}

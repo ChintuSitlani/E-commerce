@@ -41,4 +41,5 @@ export class HeaderComponent {
       this.isSellerLogin = status;
     });
   }
+  
 }

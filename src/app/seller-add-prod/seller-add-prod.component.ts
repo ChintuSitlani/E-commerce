@@ -44,7 +44,7 @@ export class SellerAddProdComponent {
       const product: Product = this.productForm.value;
       const sellerData = this.sellerService.getSellerData();
       if (sellerData != null) {
-        product.selleremail = sellerData.email;
+        product.sellerEmailId = sellerData.email;
         product.sellerId = sellerData.id;
       }
       this.productService.saveProduct(product).subscribe({

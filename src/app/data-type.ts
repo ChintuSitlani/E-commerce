@@ -11,7 +11,7 @@ export interface userLoginData{
 }
 
 export interface Product {
-    id: number;
+    id: string;
     name: string;
     category: string;
     subcategory: string;
@@ -19,5 +19,5 @@ export interface Product {
     description: string;
     imageUrl: string;
     sellerId: string;
-    selleremail: string;
+    sellerEmailId: string;
   }
