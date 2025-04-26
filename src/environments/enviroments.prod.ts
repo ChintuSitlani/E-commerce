@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: '	https://ecomm-backend-pink.vercel.app',
+    apiUrl: 'https://ecomm-backend-pink.vercel.app',
 };
