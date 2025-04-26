@@ -50,28 +50,27 @@ export class BuyerService {
         }
       );
   }
-  buyerlogin(data: userLoginData) {
-    const param = 'buyer';
-    const redirectRoute = param + '-home';
+  buyerLogin(data: userLoginData) {
     return this.http
-      .get(`${this.baseUrl}/${param}`, { observe: 'response' })
+      .get<userLoginData[]>(`${this.baseUrl}/buyer?email=${data.email}&password=${data.password}`)
       .subscribe(
         (result) => {
-          this.isBuyerLoggedIn.next(true);
-
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(param, JSON.stringify(result.body));
+          if (result.length) {
+            this.isBuyerLoggedIn.next(true);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('buyer', JSON.stringify(result[0]));
+            }
+            this.router.navigate(['buyer-home']);
+          } else {
+            alert('Login failed: Invalid email or password.');
           }
-
-          this.router.navigate([redirectRoute]);
         },
         (error) => {
-          console.error('Signup failed:', error);
-          return error; // Ensures function always returns a value
+          console.error('Login failed:', error);
+          alert('Login failed: Server error.');
         }
       );
   }
-
   reloadBuyer() {
     const param = 'buyer';
     if (isPlatformBrowser(this.platformId)) {

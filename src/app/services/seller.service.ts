@@ -50,28 +50,30 @@ export class SellerService {
         }
       );
   }
+  
   sellerLogin(data: userLoginData) {
-    const param = 'seller';
-    const redirectRoute = param + '-home';
     return this.http
-      .get(`${this.baseUrl}/${param}`, { observe: 'response' })
+      .get<userLoginData[]>(`${this.baseUrl}/seller?email=${data.email}&password=${data.password}`)
       .subscribe(
         (result) => {
-          this.isSellerLoggedIn.next(true);
-          console.log(result.body);
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(param, JSON.stringify(result.body));
+          if (result.length) {
+            // Seller found - login successful
+            this.isSellerLoggedIn.next(true);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('seller', JSON.stringify(result[0]));
+            }
+            this.router.navigate(['seller-home']);
+          } else {
+            // No seller found with given email/password
+            alert('Login failed: Invalid email or password.');
           }
-
-          this.router.navigate([redirectRoute]);
         },
         (error) => {
-          console.error('Signup failed:', error);
-          return error; // Ensures function always returns a value
+          console.error('Login failed:', error);
+          alert('Login failed: Server error.');
         }
       );
   }
-
   reloadSeller() {
     const param = 'seller';
     if (isPlatformBrowser(this.platformId)) {

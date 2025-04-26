@@ -52,7 +52,7 @@ export class LoginComponent {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password // Only save the password
       };
-      this.buyer.buyerlogin(this.userData);
+      this.buyer.buyerLogin(this.userData);
       this.loginForm.reset();
     }
   }
