@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { userSignupData } from '../data-type';
 import { BuyerService } from '../services/buyer.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-signup',
@@ -17,7 +18,8 @@ import { BuyerService } from '../services/buyer.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -30,7 +32,7 @@ export class SignupComponent {
     email: '',
     password: '',
   };
-
+  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -63,8 +65,11 @@ export class SignupComponent {
     this.signinForm.reset();
 
   }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   ngOnInit() {
-{
+    {
       this.buyer.reloadBuyer();
     }
   }

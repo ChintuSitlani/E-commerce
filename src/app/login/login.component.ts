@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {  ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatIconModule } from '@angular/material/icon';  
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BuyerService } from '../services/buyer.service';
 import { userLoginData } from '../data-type';
@@ -19,7 +19,8 @@ import { userLoginData } from '../data-type';
       MatFormFieldModule,
       MatInputModule,
       MatButtonModule,
-      MatCardModule
+      MatCardModule,
+      MatIconModule 
     ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -27,6 +28,7 @@ import { userLoginData } from '../data-type';
 export class LoginComponent {
   loginForm: FormGroup;
   paramUserType: string = '';
+  showPassword: boolean = false; 
 
   userData: userLoginData = {
     id: '',
@@ -37,7 +39,6 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private buyer: BuyerService
-
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -50,11 +51,14 @@ export class LoginComponent {
       this.userData = {
         ...this.userData,
         email: this.loginForm.value.email,
-        password: this.loginForm.value.password // Only save the password
+        password: this.loginForm.value.password  // Only save the password
       };
       this.buyer.buyerLogin(this.userData);
       this.loginForm.reset();
     }
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
   ngOnInit() {
     this.buyer.reloadBuyer();

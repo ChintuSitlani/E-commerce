@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SellerService } from '../services/seller.service';
 import { userLoginData } from '../data-type';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-seller-login',
@@ -20,6 +21,7 @@ import { userLoginData } from '../data-type';
       MatInputModule,
       MatButtonModule,
       MatCardModule,
+      MatIconModule
     ],
   templateUrl: './seller-login.component.html',
   styleUrl: './seller-login.component.css'
@@ -33,6 +35,7 @@ export class SellerLoginComponent {
     email: '',
     password: '',
   };
+  showPassword: boolean = false; 
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +59,9 @@ export class SellerLoginComponent {
       this.seller.sellerLogin(this.userData);
       this.loginForm.reset();
     }
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
   ngOnInit() {
     this.seller.reloadSeller();

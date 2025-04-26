@@ -21,7 +21,11 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Create Password</mat-label>
-            <input matInput formControlName="password" type="password" placeholder="Enter your password">
+            <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                placeholder="Enter your password">
+            <mat-icon matSuffix (click)="togglePasswordVisibility()" class="password-icon">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
             <mat-error *ngIf="signinForm.get('password')?.hasError('required')">
                 Password is required
             </mat-error>
@@ -32,7 +36,11 @@
 
         <mat-form-field appearance="outline" class="full-width">
             <mat-label>Confirm Password</mat-label>
-            <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password">
+            <input matInput [type]="showPassword ? 'text' : 'password'" type="password"
+                formControlName="confirmPassword" placeholder="Confirm your password">
+            <mat-icon matSuffix (click)="togglePasswordVisibility()" class="password-icon">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
             <mat-error *ngIf="signinForm.get('confirmPassword')?.hasError('required')">
                 Confirm Password is required
             </mat-error>

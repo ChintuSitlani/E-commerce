@@ -1,32 +1,38 @@
 .logo {
-    width: 160px;
-    height:110px;
-    object-fit: contain; /* Ensures the full image is visible */
+    width: 96px;
+    height:48px;
+    object-fit: fill;
+
 }
 
 .navbar {
-    display: inline-flex;
+    display: flex; /* use flex, not inline-flex */
     align-items: center;
-    padding: 10px;
+    justify-content: space-between;
+    padding: 0 10px;
+    flex-wrap: wrap; /* allows better responsive shrinking */
 }
 
 /* Center-align search bar while keeping other elements in place */
 .search {
     flex-grow: 1;
+    max-width: 400px; /* limit width so it doesn't stretch too much */
     display: flex;
-    justify-content: center; /* Center the search bar */
+    justify-content: center;
+    margin: 0 10px;
+}
+.search mat-form-field {
+    width: 100%;
+    min-width: 200px; /* increase a bit */
 }
 
-.search mat-form-field {
-    width: 80%; /* Set width for a balanced look */
-    min-width: 160px;
-}
 
 /* Push menu and buttons to the right */
 .nav-links {
-    display: flex;
-    gap: 12px;
-    margin-left: auto; /* Moves to the right */
+    display: inline-flex;
+    gap: 8px;
+    margin-left: auto;
+    margin-bottom: 10px;
 }
 
 /* Ensure the cart icon stays aligned */
@@ -47,7 +53,7 @@
 
 .nav-links button {
     font-size: 18px; /* Adjust font size for buttons */
-    padding: 12px 20px; 
+    padding: 12px 15px; 
 }   
 /* Responsive Design */
 @media (max-width: 770px) {
@@ -59,8 +65,8 @@
         display: none; /* Hide navigation links on smaller screens */
     }
     .search mat-form-field {
-        width: 100%; /* Set width for a balanced look */
-        min-width: 160px;
+        width: 100%;
+        min-width: 200px; /* increase a bit */
     }
     .menu-btn {
         display: block;
@@ -84,11 +90,15 @@
     }
     .logo {
         width: 50px;
-        height:50px;
+        height:40px;
         object-fit: fill; /* Ensures the full image is visible */
     }
     .navbar {
-        padding: 4px;
+        display: flex; /* use flex, not inline-flex */
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        flex-wrap: wrap; /* allows better responsive shrinking */
     }
 }
 
