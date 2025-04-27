@@ -79,5 +79,18 @@ export class BuyerService {
       }
     }
   }
+  isBuyerAuthenticated() {
+    const buyerData = localStorage.getItem('buyer');
+    if (buyerData) {
+      this.isBuyerLoggedIn.next(true);
+    } else {
+      this.isBuyerLoggedIn.next(false);
+    }
+  }
+  buyerLogout() {
+      localStorage.removeItem('buyer');
+      this.isBuyerAuthenticated();
+      this.router.navigate(['']);
+  }
 }
 

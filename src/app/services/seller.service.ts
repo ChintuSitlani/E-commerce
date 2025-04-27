@@ -85,11 +85,24 @@ export class SellerService {
   getSellerData: () => userLoginData | null = () => {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('seller')) {
-        return JSON.parse(localStorage.getItem('seller') || '{}')[0];
+        return JSON.parse(localStorage.getItem('seller') || '{}');
       } else {
         return null;
       }
     }
+  }
+  isSellerAuthenticated() {
+    const sellerData = localStorage.getItem('seller');
+    if (sellerData) {
+      this.isSellerLoggedIn.next(true);
+    } else {
+      this.isSellerLoggedIn.next(false);
+    }
+  }
+  sellerLogout() {
+      localStorage.removeItem('seller');
+      this.isSellerAuthenticated();
+      this.router.navigate(['']);
   }
 }
 

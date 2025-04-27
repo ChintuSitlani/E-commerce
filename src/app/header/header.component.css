@@ -2,7 +2,7 @@
     width: 96px;
     height:48px;
     object-fit: fill;
-
+    margin-bottom: 5px;
 }
 
 .navbar {
@@ -16,10 +16,10 @@
 /* Center-align search bar while keeping other elements in place */
 .search {
     flex-grow: 1;
-    max-width: 400px; /* limit width so it doesn't stretch too much */
     display: flex;
     justify-content: center;
     margin: 0 10px;
+    padding-top: 4px;
 }
 .search mat-form-field {
     width: 100%;
@@ -52,7 +52,7 @@
 }
 
 .nav-links button {
-    font-size: 18px; /* Adjust font size for buttons */
+    font-size: 16px; /* Adjust font size for buttons */
     padding: 12px 15px; 
 }   
 /* Responsive Design */
