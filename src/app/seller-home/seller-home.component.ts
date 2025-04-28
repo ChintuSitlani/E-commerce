@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
+
 @Component({
   selector: 'app-seller-home',
   imports: [
@@ -32,11 +33,12 @@ export class SellerHomeComponent implements OnInit {
 
   fetchSellerProducts() {
     const sellerData = this.sellerService.getSellerData();
-    if (sellerData != null) {
+    if (sellerData != null && sellerData != undefined) {
       this.productService.getSellerProducts(sellerData.id, sellerData.email).subscribe((res: Product[]) => {
         this.sellerProducts = res;
       });
-    }
+    }else
+      console.error('Seller data is not available. Please log in again.');
   }
 
   editProduct(product: any) {
