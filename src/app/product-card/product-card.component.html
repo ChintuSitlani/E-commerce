@@ -16,7 +16,7 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Category</mat-label>
+                <mat-label>Product Category</mat-label>
                 <input matInput [(ngModel)]="product.productCategory" name="productCategory" required />
             </mat-form-field>
 
@@ -36,7 +36,7 @@
             </mat-form-field>
 
             <div class="action-buttons">
-                <button mat-raised-button color="primary" type="submit">Update</button>
+                <button mat-raised-button color="primary" type="submit" >Update</button>
                 <button mat-raised-button color="warn" type="button" (click)="deleteProduct()">Delete</button>
             </div>
         </form>

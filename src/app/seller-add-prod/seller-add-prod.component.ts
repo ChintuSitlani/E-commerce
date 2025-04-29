@@ -5,7 +5,7 @@ import { Product } from '../data-type';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { SellerService } from '../services/seller.service';
 
 @Component({

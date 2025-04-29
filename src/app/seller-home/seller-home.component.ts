@@ -42,7 +42,7 @@ export class SellerHomeComponent implements OnInit {
   }
 
   editProduct(product: any) {
-    this.router.navigate(['/product-card', product._id]);
+    this.router.navigate(['/product-card'], { queryParams: { id: product._id } });
   }
 
   deleteProduct(productId: string) {

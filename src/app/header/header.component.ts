@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink} from '@angular/router';
+import { ActivatedRoute, RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
@@ -14,6 +14,7 @@ import { Product } from '../data-type';
 import { ProductService } from '../services/product.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core'; // this is where mat-option comes from
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -45,9 +46,9 @@ export class HeaderComponent {
   constructor(
     
     private seller: SellerService,
-    private buyer: BuyerService
-  ,
-    private productService: ProductService) { }
+    private buyer: BuyerService,
+    private productService: ProductService,
+    private router: Router) { }
 
   ngOnInit() {
     this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
@@ -85,6 +86,6 @@ export class HeaderComponent {
 
   onOptionSelected(productId: string) {
     // Handle what happens when an option is selected, e.g., navigating to a product page
-    window.location.href = `/product-card/${productId}`;
+    this.router.navigate(['/product-card'], { queryParams: { id: productId } });
     }
 }
