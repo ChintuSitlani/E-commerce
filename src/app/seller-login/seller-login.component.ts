@@ -31,7 +31,7 @@ export class SellerLoginComponent {
   paramUserType: string = '';
 
   userData: userLoginData = {
-    id: '',
+    _id: '',
     email: '',
     password: '',
   };

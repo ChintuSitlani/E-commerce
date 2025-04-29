@@ -41,7 +41,7 @@ export class ProductCardComponent {
   }
 
   deleteProduct() {
-    this.productService.deleteProduct(this.product.id).subscribe(() => {
+    this.productService.deleteProduct(this.product._id).subscribe(() => {
       console.log('Product deleted!');
     });
   }

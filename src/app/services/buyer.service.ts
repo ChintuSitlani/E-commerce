@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -17,9 +16,8 @@ export class BuyerService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object // Injecting platform ID
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Check local storage only if running in the browser
     if (isPlatformBrowser(this.platformId)) {
       const buyerData = localStorage.getItem('buyer');
       if (buyerData) {
@@ -31,8 +29,12 @@ export class BuyerService {
   buyerSignup(data: userSignupData) {
     const param = 'buyer';
     const redirectRoute = param + '-home';
+    const url = environment.production
+      ? `${this.baseUrl}/${param}/signup`
+      : `${this.baseUrl}/${param}`;
+
     return this.http
-      .post(`${this.baseUrl}/${param}`, data, { observe: 'response' })
+      .post(url, data, { observe: 'response' })
       .subscribe(
         (result) => {
           this.isBuyerLoggedIn.next(true);
@@ -46,13 +48,18 @@ export class BuyerService {
         },
         (error) => {
           console.error('Signup failed:', error);
-          return error; // Ensures function always returns a value
+          return error;
         }
       );
   }
+
   buyerLogin(data: userLoginData) {
+    const url = environment.production
+      ? `${this.baseUrl}/buyer/login`
+      : `${this.baseUrl}/buyer?email=${data.email}&password=${data.password}`;
+
     return this.http
-      .get<userLoginData[]>(`${this.baseUrl}/buyer?email=${data.email}&password=${data.password}`)
+      .get<userLoginData[]>(url)
       .subscribe(
         (result) => {
           if (result.length) {
@@ -71,6 +78,7 @@ export class BuyerService {
         }
       );
   }
+
   reloadBuyer() {
     const param = 'buyer';
     if (isPlatformBrowser(this.platformId)) {
@@ -79,18 +87,15 @@ export class BuyerService {
       }
     }
   }
+
   isBuyerAuthenticated() {
     const buyerData = localStorage.getItem('buyer');
-    if (buyerData) {
-      this.isBuyerLoggedIn.next(true);
-    } else {
-      this.isBuyerLoggedIn.next(false);
-    }
+    this.isBuyerLoggedIn.next(!!buyerData);
   }
+
   buyerLogout() {
-      localStorage.removeItem('buyer');
-      this.isBuyerAuthenticated();
-      this.router.navigate(['']);
+    localStorage.removeItem('buyer');
+    this.isBuyerAuthenticated();
+    this.router.navigate(['']);
   }
 }
-

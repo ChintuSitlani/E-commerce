@@ -15,7 +15,7 @@
       </span>
       
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
-        <mat-option *ngFor="let product of filteredProducts" [value]="product.id">
+        <mat-option *ngFor="let product of filteredProducts" [value]="product._id">
             <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
             <span>{{ product.productName }}</span>
         </mat-option>

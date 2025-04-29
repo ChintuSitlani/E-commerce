@@ -44,7 +44,7 @@ export class BuyerHomeComponent {
     });
   }
   viewProduct(product: any) {
-    this.router.navigate(['/product-card', product.id]);
+    this.router.navigate(['/product-card', product._id]);
   }
 
   addToCart(productId: string) {

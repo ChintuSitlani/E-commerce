@@ -33,8 +33,8 @@ export class SellerHomeComponent implements OnInit {
 
   fetchSellerProducts() {
     const sellerData = this.sellerService.getSellerData();
-    if (sellerData != null && sellerData != undefined) {
-      this.productService.getSellerProducts(sellerData.id, sellerData.email).subscribe((res: Product[]) => {
+    if (sellerData != null && sellerData != undefined && sellerData.email != null && sellerData.email != undefined && sellerData._id != null && sellerData._id != undefined) {
+      this.productService.getSellerProducts(sellerData._id, sellerData.email).subscribe((res: Product[]) => {
         this.sellerProducts = res;
       });
     }else
@@ -42,7 +42,7 @@ export class SellerHomeComponent implements OnInit {
   }
 
   editProduct(product: any) {
-    this.router.navigate(['/product-card', product.id]);
+    this.router.navigate(['/product-card', product._id]);
   }
 
   deleteProduct(productId: string) {

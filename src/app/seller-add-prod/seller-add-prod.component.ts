@@ -41,23 +41,35 @@ export class SellerAddProdComponent {
 
   onSubmit() {
     if (this.productForm.valid) {
-      const product: Product = this.productForm.value;
+      const formValues = this.productForm.value;
       const sellerData = this.sellerService.getSellerData();
-      if (sellerData != null) {
-        product.sellerEmailId = sellerData.email;
-        product.sellerId = sellerData.id;
+      
+      if (sellerData && sellerData.email && sellerData._id) {
+        const product: Product = {
+          productName: formValues.productName,
+          category: formValues.productCategory,
+          price: formValues.price,
+          description: formValues.description,
+          imageUrl: formValues.imageUrl,
+          sellerEmailId: sellerData.email,
+          sellerId: sellerData._id,
+          subcategory: ''
+        };
+  
+        this.productService.saveProduct(product).subscribe({
+          next: (res: any) => {
+            console.log('Product added:', res);
+            alert('Product added successfully!');
+            this.productForm.reset();
+          },
+          error: (err: any) => {
+            console.error('Error:', err);
+            alert('Error adding product');
+          },
+        });
+      } else {
+        console.error("Seller data is not available. Please log in again.");
       }
-      this.productService.saveProduct(product).subscribe({
-        next: (res: any) => {
-          console.log('Product added:', res);
-          alert('Product added successfully!');
-          this.productForm.reset();
-        },
-        error: (err: any) => {
-          console.error('Error:', err);
-          alert('Error adding product');
-        },
-      });
     }
   }
 }

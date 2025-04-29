@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product } from '../data-type';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
@@ -9,32 +9,42 @@ import { environment } from '../../environments/environments';
 })
 export class ProductService {
 
-  private baseUrl = environment.apiUrl;
+  private baseUrl = `${environment.apiUrl}/products`;
 
   constructor(private http: HttpClient) {}
 
   saveProduct(product: Product): Observable<Product> {
-    if (product.id) {
-      return this.http.put<Product>(`${this.baseUrl}/products/${product.id}`, product);
+    if (product._id) {
+      return this.http.put<Product>(`${this.baseUrl}/${product._id}`, product);
     } else {
-      return this.http.post<Product>(`${this.baseUrl}/products`, product);
+      return this.http.post<Product>(this.baseUrl, product);
     }
   }
+
   getSellerProducts(sellerId: string, sellerEmail: string): Observable<Product[]> {
-    const params = { selleremail: sellerEmail, sellerId };
-    return this.http.get<Product[]>(`${this.baseUrl}/products`, { params });
+    
+    const params = new HttpParams()
+      .set('sellerId', sellerId)
+      .set('sellerEmailId', sellerEmail);
+
+    return this.http.get<Product[]>(this.baseUrl, { params });
   }
+
   getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/products/${id}`);
+    return this.http.get<Product>(`${this.baseUrl}/${id}`);
   }
-  deleteProduct(productId: string) {
-    return this.http.delete(`${this.baseUrl}/products/${productId}`);
+
+  deleteProduct(productId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${productId}`);
   }
+
   getProductForCarousel(limit: number): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products?_limit=${limit}`);
+    const params = new HttpParams().set('_limit', limit.toString());
+    return this.http.get<Product[]>(this.baseUrl, { params });
   }
+
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+    return this.http.get<Product[]>(this.baseUrl);
   }
 
 }

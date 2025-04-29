@@ -5,13 +5,13 @@ export interface userSignupData{
 }
 
 export interface userLoginData{
-    id: string,
+    _id: string,
     email: string,
     password: string,
 }
 
 export interface Product {
-    id: string;
+    _id?: string;
     productName: string;
     category: string;
     subcategory: string;
