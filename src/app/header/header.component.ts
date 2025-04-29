@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, RouterLink} from '@angular/router';
+import { RouterLink} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
@@ -86,6 +86,7 @@ export class HeaderComponent {
 
   onOptionSelected(productId: string) {
     // Handle what happens when an option is selected, e.g., navigating to a product page
+    this.searchText = ''; 
     this.router.navigate(['/product-card'], { queryParams: { id: productId } });
     }
 }

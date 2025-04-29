@@ -29,7 +29,7 @@
     </span>
 
     <!-- CART ICON -->
-    <span class="cart">
+    <span  *ngIf="!isSellerLogin" class="cart">
         <button mat-icon-button >
             <mat-icon>shopping_cart</mat-icon>
             <span class="cart-count">{{ cartItems }}</span>
