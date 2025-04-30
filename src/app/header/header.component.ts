@@ -15,6 +15,7 @@ import { ProductService } from '../services/product.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core'; // this is where mat-option comes from
 import { Router } from '@angular/router';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-header',
@@ -38,13 +39,13 @@ export class HeaderComponent {
   logoUrl = 'https://image.pngaaa.com/550/811550-middle.png'
   isSellerLogin = false;
   searchText: string = '';
-  cartItems: number = 3; // Simulated dynamic cart count
+  cartItems: number = 0; 
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
  isBuyerLogin = false;
    
   constructor(
-    
+    private cartService: CartService,
     private seller: SellerService,
     private buyer: BuyerService,
     private productService: ProductService,
@@ -59,6 +60,9 @@ export class HeaderComponent {
     });
     this.productService.getProducts().subscribe(products => {
       this.allProducts = products;
+    });
+    this.cartService.getCartCount().subscribe(count => {
+      this.cartItems = count;
     });
   }
   logout() {

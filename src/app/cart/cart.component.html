@@ -1,0 +1,92 @@
+<div class="cart-container">
+    <h2 class="cart-title">Your Shopping Cart</h2>
+    
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <mat-icon class="empty-cart-icon">shopping_cart</mat-icon>
+      <h3 class="empty-cart-title">Your cart is empty</h3>
+      <p class="empty-cart-text">Browse our products and add items to your cart</p>
+      <button mat-raised-button color="primary" routerLink="/products" class="continue-shopping-btn">
+        Continue Shopping
+      </button>
+    </div>
+  
+    <div *ngIf="cartItems.length > 0" class="cart-content">
+      <div class="cart-header d-none d-md-flex">
+        <div class="header-product">Product</div>
+        <div class="header-price">Price</div>
+        <div class="header-quantity">Quantity</div>
+        <div class="header-subtotal">Subtotal</div>
+        <div class="header-actions"></div>
+      </div>
+  
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <!-- Product Image & Info -->
+        <div class="item-product">
+          <img [src]="item.productId.imageUrl" alt="{{ item.productId.productName }}" class="product-image">
+          <div class="product-info">
+            <h5 class="product-name">{{ item.productId.productName }}</h5>
+            <div class="mobile-price d-md-none">₹{{ item.productId.price | number }}</div>
+          </div>
+        </div>
+  
+        <!-- Price (hidden on mobile) -->
+        <div class="item-price d-none d-md-block">
+          ₹{{ item.productId.price | number }}
+        </div>
+  
+        <!-- Quantity Controls -->
+        <div class="item-quantity">
+          <div class="quantity-controls">
+            <button mat-icon-button (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="quantity-value">{{ item.quantity }}</span>
+            <button mat-icon-button (click)="updateQuantity(item, item.quantity + 1)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+  
+        <!-- Subtotal -->
+        <div class="item-subtotal">
+          ₹{{ (item.productId.price * item.quantity) | number }}
+        </div>
+  
+        <!-- Remove Button -->
+        <div class="item-actions">
+          <button mat-icon-button color="warn" (click)="removeItem(item._id)" class="remove-btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+  
+      <!-- Cart Summary -->
+      <div class="cart-summary">
+        <mat-card class="summary-card">
+          <mat-card-content>
+            <div class="summary-row">
+              <span class="summary-label">Subtotal:</span>
+              <span class="summary-value">₹{{ totalPrice | number }}</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Shipping:</span>
+              <span class="summary-value">Free</span>
+            </div>
+            <mat-divider class="summary-divider"></mat-divider>
+            <div class="summary-row total-row">
+              <span class="summary-label">Total:</span>
+              <span class="summary-value">₹{{ totalPrice | number }}</span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="summary-actions">
+            <button mat-raised-button color="primary" class="checkout-btn" (click)="checkout()">
+              Proceed to Checkout
+            </button>
+            <button mat-stroked-button color="primary" class="continue-btn" routerLink="/products">
+              Continue Shopping
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>

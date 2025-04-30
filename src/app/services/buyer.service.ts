@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class BuyerService {
   isBuyerLoggedIn = new BehaviorSubject<boolean>(false);
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl; // now includes /api
 
   constructor(
     private http: HttpClient,
@@ -27,11 +27,7 @@ export class BuyerService {
   }
 
   buyerSignup(data: userSignupData) {
-    const param = 'buyer';
-    const redirectRoute = param + '-home';
-    const url = environment.production
-      ? `${this.baseUrl}/${param}/signup`
-      : `${this.baseUrl}/${param}`;
+    const url = `${this.baseUrl}/buyer/signup`;
 
     return this.http
       .post(url, data, { observe: 'response' })
@@ -40,10 +36,10 @@ export class BuyerService {
           this.isBuyerLoggedIn.next(true);
 
           if (typeof window !== 'undefined') {
-            localStorage.setItem(param, JSON.stringify(result.body));
+            localStorage.setItem('buyer', JSON.stringify(result.body));
           }
 
-          this.router.navigate([redirectRoute]);
+          this.router.navigate(['buyer-home']);
           console.log(result);
         },
         (error) => {
@@ -54,22 +50,25 @@ export class BuyerService {
   }
 
   buyerLogin(data: userLoginData) {
-    const url = environment.production
-      ? `${this.baseUrl}/buyer/login`
-      : `${this.baseUrl}/buyer?email=${data.email}&password=${data.password}`;
+    const body = {
+      email: data.email,
+      password: data.password
+    };
+
+    const url = `${this.baseUrl}/buyer/login`;
 
     return this.http
-      .get<userLoginData[]>(url)
+      .post(url, body, { observe: 'response' })
       .subscribe(
-        (result) => {
-          if (result.length) {
+        (result: any) => {
+          if (result.body) {
             this.isBuyerLoggedIn.next(true);
             if (typeof window !== 'undefined') {
-              localStorage.setItem('buyer', JSON.stringify(result[0]));
+              localStorage.setItem('buyer', JSON.stringify(result.body));
             }
             this.router.navigate(['buyer-home']);
           } else {
-            alert('Login failed: Invalid email or password.');
+            alert('Login failed: Invalid credentials.');
           }
         },
         (error) => {
@@ -80,9 +79,8 @@ export class BuyerService {
   }
 
   reloadBuyer() {
-    const param = 'buyer';
     if (isPlatformBrowser(this.platformId)) {
-      if (localStorage.getItem(param)) {
+      if (localStorage.getItem('buyer')) {
         this.isBuyerLoggedIn.next(true);
       }
     }

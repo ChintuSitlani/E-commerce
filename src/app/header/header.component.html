@@ -30,8 +30,8 @@
 
     <!-- CART ICON -->
     <span  *ngIf="!isSellerLogin" class="cart">
-        <button mat-icon-button >
-            <mat-icon>shopping_cart</mat-icon>
+        <button mat-icon-button [routerLink]="'/cart'" aria-label="Cart" >
+            <mat-icon >shopping_cart</mat-icon>
             <span class="cart-count">{{ cartItems }}</span>
         </button>
     </span>
