@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HeaderComponent } from '../header/header.component'; // optional if using shared service
 import { CartService } from '../cart.service';
 import { BuyerService } from '../services/buyer.service';
+import { query } from 'express';
 
 @Component({
   selector: 'app-buyer-home',
@@ -51,7 +52,7 @@ export class BuyerHomeComponent {
     });
   }
   viewProduct(product: any) {
-    this.router.navigate(['/product-card', product._id]);
+    this.router.navigate(['/product-card'], { queryParams: { id: product._id } });
   }
 
   addToCart(productId: string) {
