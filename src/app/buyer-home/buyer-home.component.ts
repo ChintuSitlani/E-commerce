@@ -7,10 +7,7 @@ import { Router } from '@angular/router';
 import { Product, userLoginData } from '../data-type';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { HeaderComponent } from '../header/header.component'; // optional if using shared service
 import { CartService } from '../cart.service';
-import { BuyerService } from '../services/buyer.service';
-import { query } from 'express';
 
 @Component({
   selector: 'app-buyer-home',
@@ -67,8 +64,11 @@ export class BuyerHomeComponent {
   updateCartCount() {
     this.productService.getCartItems(this.buyerData._id).subscribe(items => {
       this.cartCount = items.length;
-      this.cartService.setCartCount(this.cartCount); // if shared service
+      this.cartService.setCartCount(this.cartCount);
     });
+  }
+  getDiscountedPrice(price: number, discountRate: number): number {
+    return Math.round(price - (price * discountRate / 100));
   }
 }
 

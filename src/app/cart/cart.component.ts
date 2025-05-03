@@ -8,6 +8,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { CartSummary } from '../data-type'; 
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-cart',
@@ -18,15 +22,27 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
   userData :  userLoginData =  JSON.parse(localStorage.getItem('buyer') || '{}');
   totalPrice: number = 0;
-
+  couponCode = '';
+  summary: CartSummary = {
+    subTotal: 0,
+    itemDiscountTotal: 0,
+    couponDiscount: 0,
+    taxTotal: 0,
+    total: 0,
+    cartItems: []
+  };
   constructor(
     private productService: ProductService,
     private cartService: CartService
@@ -48,6 +64,7 @@ export class CartComponent implements OnInit {
       this.calculateTotal();
       this.cartService.setCartCount(items.length);
     });
+    this.applyCoupon();
   }
 
   updateQuantity(item: any, newQty: number) {
@@ -68,6 +85,15 @@ export class CartComponent implements OnInit {
   checkout() {
     // Placeholder logic for now
     alert('Order placed successfully!');
-    // Optionally, send a request to create an order and clear the cart
+  }
+  
+  applyCoupon() {
+    this.productService.getCartSummary(this.userData._id, this.couponCode).subscribe((summary: CartSummary) => {
+      this.summary = summary;
+      this.cartItems = summary?.cartItems || [];
+    });
+  }
+  getDiscountedPrice(price: number, discountRate: number): number {
+    return Math.round(price - (price * discountRate / 100));
   }
 }

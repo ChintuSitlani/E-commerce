@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Product } from '../data-type';
+import { CartSummary, Product } from '../data-type';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = `${environment.apiUrl}/products`; // Now correctly points to /api/products
+  private baseUrl = `${environment.apiUrl}/products`;
 
   constructor(private http: HttpClient) { }
 
@@ -58,5 +58,11 @@ export class ProductService {
 
   removeFromCart(itemId: string) {
     return this.http.delete(`${environment.apiUrl}/cart/${itemId}`);
+  }
+
+  getCartSummary(userId: string, couponCode?: string) {
+    let url = `${environment.apiUrl}/cart/summary?userId=${userId}`;
+    if (couponCode) url += `&couponCode=${couponCode}`;
+    return this.http.get<CartSummary>(url);
   }
 }

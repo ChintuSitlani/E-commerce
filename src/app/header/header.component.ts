@@ -89,8 +89,7 @@ export class HeaderComponent {
   }
 
   onOptionSelected(productId: string) {
-    // Handle what happens when an option is selected, e.g., navigating to a product page
     this.searchText = ''; 
     this.router.navigate(['/product-card'], { queryParams: { id: productId } });
-    }
+  }
 }

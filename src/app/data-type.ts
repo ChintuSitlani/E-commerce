@@ -1,10 +1,10 @@
-export interface userSignupData{
+export interface userSignupData {
     name: string,
     email: string,
     password: string,
 }
 
-export interface userLoginData{
+export interface userLoginData {
     _id: string,
     email: string,
     password: string,
@@ -14,10 +14,21 @@ export interface Product {
     _id?: string;
     productName: string;
     category: string;
-    subcategory: string;
+    subcategory?: string;
     price: number;
     description: string;
     imageUrl: string;
     sellerId: string;
     sellerEmailId: string;
-  }
+    taxRate?: number;
+    discountRate?: number;
+}
+
+export interface CartSummary {
+    subTotal: number;
+    itemDiscountTotal: number;
+    couponDiscount: number;
+    taxTotal: number;
+    total: number;
+    cartItems: any[];
+}
