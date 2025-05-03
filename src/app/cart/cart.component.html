@@ -1,10 +1,10 @@
 <div class="container my-4">
   <h2 class="text-center mb-4">Your Shopping Cart</h2>
-  <mat-form-field appearance="outline" class="search-field">
+  <mat-form-field *ngIf="false" appearance="outline" class="search-field">
     <mat-label>apply coupon</mat-label>
     <input  matInput type="text" [(ngModel)]="couponCode" placeholder="Enter coupon code">
   </mat-form-field>
-  <button mat-icon-button color="warn"  (click)="applyCoupon()">Apply</button>
+  <button mat-icon-button color="warn" *ngIf="false" (click)="applyCoupon()">Apply</button>
   <div *ngIf="cartItems!.length > 0; else emptyCart">
     <div class="row mb-3" *ngFor="let item of cartItems">
       <div class="col-md-4 col-12 text-center mb-3 mb-md-0">
@@ -46,7 +46,7 @@
     <div class="cart-summary" *ngIf="summary.total">
       <p>Subtotal: ₹{{ summary.subTotal }}</p>
       <p>Item Discount: − ₹{{ summary.itemDiscountTotal }}</p>
-      <p>Coupon Discount: − ₹{{ summary.couponDiscount }}</p>
+      <p *ngIf="false">Coupon Discount: − ₹{{ summary.couponDiscount }}</p>
       <p>Tax: + ₹{{ summary.taxTotal }}</p>
       <hr>
       <h3>Total: ₹{{ summary.total }}</h3>

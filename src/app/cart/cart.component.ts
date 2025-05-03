@@ -71,6 +71,7 @@ export class CartComponent implements OnInit {
     if (newQty < 1) return;
     this.productService.updateCartQuantity(item._id, newQty).subscribe(() => {
       item.quantity = newQty;
+      this.applyCoupon();
       this.calculateTotal();
     });
   }
@@ -78,6 +79,7 @@ export class CartComponent implements OnInit {
   removeItem(itemId: string) {
     this.productService.removeFromCart(itemId).subscribe(() => {
       this.cartItems = this.cartItems.filter(i => i._id !== itemId);
+      this.applyCoupon();
       this.calculateTotal();
       this.cartService.setCartCount(this.cartItems.length);
     });

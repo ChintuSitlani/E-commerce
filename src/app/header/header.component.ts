@@ -13,7 +13,7 @@ import { BuyerService } from '../services/buyer.service';
 import { Product } from '../data-type';
 import { ProductService } from '../services/product.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatOptionModule } from '@angular/material/core'; // this is where mat-option comes from
+import { MatOptionModule } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
 
@@ -57,6 +57,9 @@ export class HeaderComponent {
     });
     this.buyer.isBuyerLoggedIn.subscribe((status: boolean) => {
       this.isBuyerLogin = status;
+      if (status) {
+        this.updateCartCount();
+      }
     });
     this.productService.getProducts().subscribe(products => {
       this.allProducts = products;
@@ -91,5 +94,14 @@ export class HeaderComponent {
   onOptionSelected(productId: string) {
     this.searchText = ''; 
     this.router.navigate(['/product-card'], { queryParams: { id: productId } });
+  }
+  updateCartCount() {
+    const buyerData = this.buyer.getBuyerData();
+    if (buyerData && buyerData._id) {
+      this.productService.getCartItems(buyerData._id).subscribe(items => {
+        const count = items.length;
+        this.cartService.setCartCount(count);
+      });
+    }
   }
 }

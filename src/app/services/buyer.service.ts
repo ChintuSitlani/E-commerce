@@ -96,4 +96,13 @@ export class BuyerService {
     this.isBuyerAuthenticated();
     this.router.navigate(['']);
   }
+  getBuyerData: () => userLoginData | null = () => {
+    if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('buyer')) {
+        return JSON.parse(localStorage.getItem('buyer') || '{}');
+      } else {
+        return null;
+      }
+    }
+  };
 }
