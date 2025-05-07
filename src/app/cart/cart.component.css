@@ -1,0 +1,32 @@
+.cart-img {
+  max-height: 200px;
+  object-fit: contain;
+}
+
+.mrp {
+  text-decoration: line-through !important;
+  color: #888 !important;
+  margin-right: 8px !important;
+}
+
+.discounted-price {
+  font-weight: bold !important;
+  color: #d32f2f !important; /* red */
+  margin-right: 6px !important;
+}
+
+.offer {
+  color: #388e3c !important; /* green */
+  font-size: 0.9rem   !important;
+}
+
+
+@media (max-width: 768px) {
+  .cart-img {
+    max-width: 80%;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+}

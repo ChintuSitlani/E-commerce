@@ -26,6 +26,16 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Tax Rate (%)</mat-label>
+                <input matInput type="number" [(ngModel)]="product.taxRate" name="taxRate" />
+              </mat-form-field>
+              
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Discount (%)</mat-label>
+                <input matInput type="number" [(ngModel)]="product.discountRate" name="discountRate" />
+              </mat-form-field>
+              
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Description</mat-label>
                 <textarea matInput [(ngModel)]="product.description" name="description"></textarea>
             </mat-form-field>

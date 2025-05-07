@@ -5,20 +5,18 @@ import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environments';
-
 @Injectable({
   providedIn: 'root',
 })
 export class SellerService {
   isSellerLoggedIn = new BehaviorSubject<boolean>(false);
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl; // already ends in /api
 
   constructor(
     private http: HttpClient,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Check local storage only if running in browser
     if (isPlatformBrowser(this.platformId)) {
       const sellerData = localStorage.getItem('seller');
       if (sellerData) {
@@ -28,13 +26,7 @@ export class SellerService {
   }
 
   sellerSignup(data: userSignupData) {
-    const param = 'seller';
-    const redirectRoute = param + '-home';
-
-    // Dynamic URL based on environment
-    const url = environment.production
-      ? `${this.baseUrl}/${param}/signup`
-      : `${this.baseUrl}/${param}`;
+    const url = `${this.baseUrl}/seller/signup`;
 
     return this.http
       .post(url, data, { observe: 'response' })
@@ -42,10 +34,9 @@ export class SellerService {
         (result) => {
           this.isSellerLoggedIn.next(true);
           if (typeof window !== 'undefined') {
-            localStorage.setItem(param, JSON.stringify(result.body));
+            localStorage.setItem('seller', JSON.stringify(result.body));
           }
-          this.router.navigate([redirectRoute]);
-          console.log(result);
+          this.router.navigate(['seller-home']);
         },
         (error) => {
           console.error('Signup failed:', error);
@@ -55,69 +46,39 @@ export class SellerService {
   }
 
   sellerLogin(data: userLoginData) {
-    // Create a body with only email and password
     const body = {
       email: data.email,
       password: data.password
     };
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    const url = environment.production
-      ? `${this.baseUrl}/seller/login`
-      : `${this.baseUrl}/seller?email=${data.email}&password=${data.password}`;
+    const url = `${this.baseUrl}/seller/login`;
 
-    if (environment.production) {
-      // Real backend - POST login
-      return this.http
-        .post(url, body, { headers, observe: 'response' })
-        .subscribe(
-          (result: any) => {
-            if (result.body) {
-              this.isSellerLoggedIn.next(true);
-              if (typeof window !== 'undefined') {
-                localStorage.setItem('seller', JSON.stringify(result.body));
-              }
-              this.router.navigate(['seller-home']);
-            } else {
-              alert('Login failed: Invalid credentials.');
+    return this.http
+      .post(url, body, { headers, observe: 'response' })
+      .subscribe(
+        (result: any) => {
+          if (result.body) {
+            this.isSellerLoggedIn.next(true);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('seller', JSON.stringify(result.body));
             }
-          },
-          (error) => {
-            console.error('Login failed:', error);
-            alert('Login failed: Server error.');
+            this.router.navigate(['seller-home']);
+          } else {
+            alert('Login failed: Invalid credentials.');
           }
-        );
-    } else {
-      // Local - JSON-server - GET method
-      return this.http
-        .get<userLoginData[]>(url)
-        .subscribe(
-          (result) => {
-            if (result.length) {
-              this.isSellerLoggedIn.next(true);
-              if (typeof window !== 'undefined') {
-                localStorage.setItem('seller', JSON.stringify(result[0]));
-              }
-              this.router.navigate(['seller-home']);
-            } else {
-              alert('Login failed: Invalid email or password.');
-            }
-          },
-          (error) => {
-            console.error('Login failed:', error);
-            alert('Login failed: Server error.');
-          }
-        );
-    }
+        },
+        (error) => {
+          console.error('Login failed:', error);
+          alert('Login failed: Server error.');
+        }
+      );
   }
 
   reloadSeller() {
-    const param = 'seller';
     if (isPlatformBrowser(this.platformId)) {
-      if (localStorage.getItem(param)) {
+      if (localStorage.getItem('seller')) {
         this.isSellerLoggedIn.next(true);
       }
     }
@@ -135,11 +96,7 @@ export class SellerService {
 
   isSellerAuthenticated() {
     const sellerData = localStorage.getItem('seller');
-    if (sellerData) {
-      this.isSellerLoggedIn.next(true);
-    } else {
-      this.isSellerLoggedIn.next(false);
-    }
+    this.isSellerLoggedIn.next(!!sellerData);
   }
 
   sellerLogout() {

@@ -35,7 +35,9 @@ export class SellerAddProdComponent {
       productCategory: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       description: ['', Validators.required],
-      imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]]
+      imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+      taxRate: [0],
+      discountRate: [0]
     });
   }
 
@@ -53,7 +55,9 @@ export class SellerAddProdComponent {
           imageUrl: formValues.imageUrl,
           sellerEmailId: sellerData.email,
           sellerId: sellerData._id,
-          subcategory: ''
+          subcategory: '',
+          taxRate: formValues.taxRate,
+          discountRate: formValues.discountRate
         };
   
         this.productService.saveProduct(product).subscribe({

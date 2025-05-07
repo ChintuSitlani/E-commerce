@@ -62,6 +62,30 @@ mat-card-actions {
 .product-card:hover {
   transform: scale(1.02);
 }
+.price-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.mrp {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 14px;
+}
+
+.discounted-price {
+  font-weight: bold;
+  color: #e53935; /* red */
+  font-size: 16px;
+}
+
+.offer {
+  color: green;
+  font-size: 14px;
+  font-weight: 500;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Product } from '../data-type';
+import { Product, userLoginData } from '../data-type';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-buyer-home',
@@ -23,13 +24,17 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './buyer-home.component.css'
 })
 export class BuyerHomeComponent {
+
+  cartCount = 0;
+  buyerData: userLoginData;
   products: any[] = [];
   productsCarousel: any[] = [];
   constructor(
     private productService: ProductService,
     private router: Router,
+    private cartService: CartService
   ) {
-
+    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as userLoginData;
   }
   ngOnInit() {
     this.productService.getProductForCarousel(3).subscribe(data => {
@@ -44,11 +49,26 @@ export class BuyerHomeComponent {
     });
   }
   viewProduct(product: any) {
-    this.router.navigate(['/product-card', product._id]);
+    this.router.navigate(['/product-card'], { queryParams: { id: product._id } });
   }
 
   addToCart(productId: string) {
-    
+    this.productService.addToCart(productId, this.buyerData._id).subscribe({
+      next: (res) => {
+        console.log('Added to cart', res);
+        this.updateCartCount();
+      },
+      error: (err) => console.error('Error adding to cart:', err)
+    });
+  }
+  updateCartCount() {
+    this.productService.getCartItems(this.buyerData._id).subscribe(items => {
+      this.cartCount = items.length;
+      this.cartService.setCartCount(this.cartCount);
+    });
+  }
+  getDiscountedPrice(price: number, discountRate: number): number {
+    return Math.round(price - (price * discountRate / 100));
   }
 }
 
