@@ -78,7 +78,7 @@ export class BuyerHomeComponent {
     return parseFloat((this.priceInclTax - discountAmt).toFixed(2));
   }
   getDiscountPercentage( discountedAmt: number): number {
-    return ((this.priceInclTax - discountedAmt) / this.priceInclTax) * 100;
+    return parseFloat(((discountedAmt / this.priceInclTax) * 100).toFixed(2));
   }
 
 }
