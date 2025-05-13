@@ -15,13 +15,23 @@ export interface Product {
     productName: string;
     category: string;
     subcategory?: string;
-    price: number;
+    priceExclTax?: number;
+    stock?: number;
+    brand?: string;
+    color?: string;
+    weight?: string;
+    warranty?: string;
+    material?: string;
+    features?: string;
+    specifications?: string;
+    videoUrl?: string;
+    ratings?: number;
     description: string;
     imageUrl: string;
     sellerId: string;
     sellerEmailId: string;
     taxRate?: number;
-    discountRate?: number;
+    discountAmt?: number;
 }
 
 export interface CartSummary {

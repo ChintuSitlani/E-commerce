@@ -106,7 +106,9 @@ mat-card-actions {
   .product-container {
     justify-content: space-between;
   }
-
+  .product-card img {
+    height: 192px;
+  }
   .product-card {
     width: 45%;
     max-width: 45%;
@@ -129,13 +131,17 @@ mat-card-actions {
     flex-direction: row;
     padding: 8px;
   }
-
+  .product-card img {
+    height: 128px;
+  }
   .product-card {
     width: 100%;
     max-width: 45%;
     margin: 0;
   }
-
+  mat-card-title{
+    font-size: 9px;
+  }
   mat-card-title,
   mat-card-content p {
     display: block;
@@ -154,7 +160,7 @@ mat-card-actions {
 
   button {
     font-size: 10px;
-    padding: 4px 8px;
+    padding: 4px 6px;
   }
   .offer {
     color: green;

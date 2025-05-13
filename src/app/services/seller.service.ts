@@ -102,6 +102,6 @@ export class SellerService {
   sellerLogout() {
     localStorage.removeItem('seller');
     this.isSellerAuthenticated();
-    this.router.navigate(['']);
+    this.router.navigate(['/sellerLogin']);
   }
 }
