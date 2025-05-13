@@ -16,7 +16,7 @@ export class HomeComponent {
     private buyerService: BuyerService,
   ) {}
   ngOnInit() {
-    let redirectRoute = '';
+    let redirectRoute = 'buyer-home';
     if(this.sellerService.isSellerLoggedIn.value === true) 
       redirectRoute =  'seller-home';
     else if(this.buyerService.isBuyerLoggedIn.value === true)

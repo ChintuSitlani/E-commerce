@@ -1,67 +1,79 @@
 <mat-toolbar color="primary" class="navbar">
-    <div class="logoContainer">
-      <a routerLink="/">
-        <img src="assets/Logo.png" alt="E-Commerce Logo" class="logo" />
-      </a>
-    </div>
-  
-    <span class="search">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Search</mat-label>
-        <input type="text" matInput [(ngModel)]="searchText" [matAutocomplete]="auto" (input)="onSearchInput()" placeholder="Type to search" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-    </span>
-  
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
-      <mat-option *ngFor="let product of filteredProducts" [value]="product._id">
-        <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
-        <span>{{ product.productName }}</span>
-      </mat-option>
-    </mat-autocomplete>
-  
-    <span class="nav-links">
-      <button mat-button routerLink="">Home</button>
-      <button *ngIf="isSellerLogin" mat-button routerLink="/app-seller-add-prod">Add product</button>
-      <button *ngIf="!isSellerLogin" mat-button routerLink="/sellerSignup">Become seller</button>
-      <button *ngIf="isSellerLogin || isBuyerLogin" mat-button (click)="logout()">log-out</button>
-      <button mat-button routerLink="/buyerLogin">login</button>
-    </span>
-  
-    <div class="spacer">
-      <span *ngIf="!isSellerLogin" class="cart">
-        <button mat-icon-button [routerLink]="'/cart'" aria-label="Cart">
-          <mat-icon>shopping_cart</mat-icon>
-          <span class="cart-count">{{ cartItems }}</span>
-        </button>
-      </span>
-  
-      <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </div>
-  
-    <mat-menu #mobileMenu="matMenu">
-      <button mat-menu-item routerLink="">Home</button>
-      <button *ngIf="isSellerLogin" mat-menu-item routerLink="/app-seller-add-prod">Add product</button>
-      <button *ngIf="!isSellerLogin" mat-menu-item routerLink="/sellerSignup">become seller</button>
-      <button *ngIf="isSellerLogin" mat-menu-item (click)="logout()">log-out</button>
-      <button mat-menu-item routerLink="/buyerLogin">login</button>
-    </mat-menu>
-  </mat-toolbar>
-  
-  <div class="mobile-search">
+  <div class="logoContainer">
+    <a routerLink="/">
+      <img src="assets/Logo.png" alt="E-Commerce Logo" class="logo" />
+    </a>
+  </div>
+
+  <span class="search">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Search</mat-label>
-      <input type="text" matInput [(ngModel)]="searchText" [matAutocomplete]="auto" (input)="onSearchInput()" placeholder="Type to search" />
+      <input type="text" matInput [(ngModel)]="searchText" [matAutocomplete]="auto" (input)="onSearchInput()"
+        placeholder="Type to search" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-  
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
-      <mat-option *ngFor="let product of filteredProducts" [value]="product._id">
-        <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
-        <span>{{ product.productName }}</span>
-      </mat-option>
-    </mat-autocomplete>
+  </span>
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
+    <mat-option *ngFor="let product of filteredProducts" [value]="product._id">
+      <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
+      <span>{{ product.productName }}</span>
+    </mat-option>
+  </mat-autocomplete>
+
+  <span class="nav-links">
+    <button mat-button routerLink="">Home</button>
+    <button *ngIf="isSellerLogin" mat-button routerLink="/app-seller-add-prod">Add product</button>
+    <button *ngIf="!isSellerLogin" mat-button routerLink="/sellerSignup">Become seller</button>
+  </span>
+
+  <div class="spacer">
+    <span *ngIf="!isSellerLogin" class="cart">
+      <button mat-icon-button [routerLink]="'/cart'" aria-label="Cart">
+        <mat-icon>shopping_cart</mat-icon>
+        <span class="cart-count">{{ cartItems }}</span>
+      </button>
+    </span>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <ng-container *ngIf="isBuyerLogin; else loginOption">
+        <div class="user-info">
+          <p><strong>{{ userEmail }}</strong></p>
+        </div>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </ng-container>
+
+      <ng-template #loginOption>
+        <button mat-menu-item routerLink="/buyerLogin">Login</button>
+      </ng-template>
+    </mat-menu>
+    <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
   </div>
-  
+
+  <mat-menu #mobileMenu="matMenu">
+    <button mat-menu-item routerLink="">Home</button>
+    <button *ngIf="isSellerLogin" mat-menu-item routerLink="/app-seller-add-prod">Add product</button>
+    <button *ngIf="!isSellerLogin" mat-menu-item routerLink="/sellerSignup">become seller</button>
+  </mat-menu>
+</mat-toolbar>
+
+<div class="mobile-search">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search</mat-label>
+    <input type="text" matInput [(ngModel)]="searchText" [matAutocomplete]="auto" (input)="onSearchInput()"
+      placeholder="Type to search" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
+    <mat-option *ngFor="let product of filteredProducts" [value]="product._id">
+      <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image" />
+      <span>{{ product.productName }}</span>
+    </mat-option>
+  </mat-autocomplete>
+</div>

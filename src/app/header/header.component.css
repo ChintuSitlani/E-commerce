@@ -1,8 +1,15 @@
 .logo {
     width: 96px;
     height: 48px;
-    object-fit: fill;
+    object-fit: cover;
     margin-bottom: 5px;
+}
+
+.user-info {
+    padding: 12px;
+    pointer-events: none;
+    font-size: 14px;
+    color: #333;
 }
 
 .mobile-search {
@@ -110,6 +117,15 @@ mat-option span {
 }
 
 @media (max-width: 770px) {
+
+    .spacer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        flex-wrap: wrap;
+    }
+
     .search,
     .nav-links {
         display: none;
@@ -122,15 +138,6 @@ mat-option span {
 }
 
 @media (max-width: 480px) {
-    .search,
-    .nav-links {
-        display: none;
-    }
-
-    .mobile-search,
-    .menu-btn {
-        display: flex;
-    }
 
     .spacer {
         display: flex;
@@ -168,6 +175,20 @@ mat-option span {
         line-height: 24px;
         padding: 0 0 2px 0 !important;
         font-size: 14px;
+    }
+
+    mat-option {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+    }
+
+    mat-option span {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
