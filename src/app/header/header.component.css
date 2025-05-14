@@ -1,22 +1,57 @@
 .logo {
     width: 96px;
-    height:48px;
-    object-fit: fill;
+    height: 48px;
+    object-fit: cover;
     margin-bottom: 5px;
 }
+
+.user-info {
+    padding: 12px;
+    pointer-events: none;
+    font-size: 14px;
+    color: #333;
+}
+
+.mobile-search {
+    display: none;
+    justify-content: center;
+    padding: 8px 10px;
+    background: white;
+}
+
+.mobile-search .search-field,
+.search-field {
+    width: 100%;
+    max-width: 600px;
+    --mat-form-field-container-height: 36px;
+    font-size: 14px;
+}
+
+.mat-form-field-infix {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+.mat-input-element {
+    height: 24px;
+    line-height: 24px;
+    padding: 0 0 2px 0 !important;
+    font-size: 14px;
+}
+
 .search-field {
     width: 80%;
     min-width: 200px;
-  }
+}
+
 .navbar {
-    display: flex; /* use flex, not inline-flex */
+    display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
-    flex-wrap: wrap; /* allows better responsive shrinking */
+    flex-wrap: wrap;
 }
 
-/* Center-align search bar while keeping other elements in place */
 .search {
     flex-grow: 1;
     display: flex;
@@ -24,13 +59,12 @@
     margin: 0 10px;
     padding-top: 4px;
 }
+
 .search mat-form-field {
     width: 100%;
-    min-width: 200px; /* increase a bit */
+    min-width: 200px;
 }
 
-
-/* Push menu and buttons to the right */
 .nav-links {
     display: inline-flex;
     gap: 8px;
@@ -38,11 +72,11 @@
     margin-bottom: 10px;
 }
 
-/* Ensure the cart icon stays aligned */
 .cart {
     position: relative;
     margin-left: 5px;
 }
+
 .cart-count {
     position: absolute;
     top: -5px;
@@ -55,9 +89,10 @@
 }
 
 .nav-links button {
-    font-size: 16px; /* Adjust font size for buttons */
-    padding: 12px 15px; 
-}   
+    font-size: 16px;
+    padding: 12px 15px;
+}
+
 .product-image {
     width: 48px;
     height: 48px;
@@ -80,55 +115,85 @@ mat-option span {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-/* Responsive Design */
-@media (max-width: 770px) {
-    .search {
-        width: 60%;
-        justify-content: flex-start; /* Align search to the left on small screens */
-    }
-    .nav-links {
-        display: none; /* Hide navigation links on smaller screens */
-    }
-    .search mat-form-field {
-        width: 100%;
-        min-width: 200px; /* increase a bit */
-    }
-    .menu-btn {
-        display: block;
-    }
-}
-@media (max-width: 480px) {
-    .search {
-        width: 32%;
-        justify-content: flex-start; /* Align search to the left on small screens */
-    }
-    .search mat-form-field {
-        width: 100%; /* Set width for a balanced look */
-        min-width: 128px;
-    }
-    .nav-links {
-        display: none; /* Hide navigation links on smaller screens */
-    }
 
-    .menu-btn {
-        display: block;
-    }
-    .logo {
-        width: 50px;
-        height:40px;
-        object-fit: fill; /* Ensures the full image is visible */
-    }
-    .navbar {
-        display: flex; /* use flex, not inline-flex */
+@media (max-width: 770px) {
+
+    .spacer {
+        display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 0 10px;
-        flex-wrap: wrap; /* allows better responsive shrinking */
+        flex-wrap: wrap;
+    }
+
+    .search,
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-search,
+    .menu-btn {
+        display: flex;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .spacer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        width: 50px;
+        height: 40px;
+    }
+
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        flex-wrap: wrap;
+    }
+
+    .mobile-search .search-field {
+        --mat-form-field-container-height: 36px;
+        font-size: 14px;
+    }
+
+    .mat-form-field-infix {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .mat-input-element {
+        height: 24px;
+        line-height: 24px;
+        padding: 0 0 2px 0 !important;
+        font-size: 14px;
+    }
+
+    mat-option {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+    }
+
+    mat-option span {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
 @media (min-width: 771px) {
     .menu-btn {
-        display: none; /* Hide menu button on larger screens */
+        display: none;
     }
 }

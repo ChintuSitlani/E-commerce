@@ -1,52 +1,53 @@
-<div class="product-detail-container" *ngIf="product">
+<div class="product-detail-container" *ngIf="productForm">
     <div class="product-image">
-        <img [src]="product.imageUrl" alt="{{ product.productName }}" />
+        <img [src]="productForm.value.imageUrl" alt="{{ productForm.value.productName }}" />
     </div>
 
     <div class="product-info">
-        <h2>{{ product.productName }}</h2>
-        <p><strong>Category:</strong> {{ product.productCategory }}</p>
-        <p><strong>Price:</strong> ₹{{ product.price }}</p>
-        <p><strong>Description:</strong> {{ product.description }}</p>
-
-        <form #editForm="ngForm" (ngSubmit)="updateProduct()">
+        <h2>{{ productForm.value.productName }}</h2>
+        <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Product Name</mat-label>
-                <input matInput [(ngModel)]="product.productName" name="productName" required />
+                <input matInput formControlName="productName" required />
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Product Category</mat-label>
-                <input matInput [(ngModel)]="product.productCategory" name="productCategory" required />
+                <input matInput formControlName="category" required />
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Price</mat-label>
-                <input matInput type="number" [(ngModel)]="product.price" name="price" required />
+                <mat-label>Price excl. tax</mat-label>
+                <input matInput type="number" formControlName="price" required />
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Tax Rate (%)</mat-label>
-                <input matInput type="number" [(ngModel)]="product.taxRate" name="taxRate" />
-              </mat-form-field>
-              
-              <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Discount (%)</mat-label>
-                <input matInput type="number" [(ngModel)]="product.discountRate" name="discountRate" />
-              </mat-form-field>
-              
+                <input matInput type="number" formControlName="taxRate" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Discount Amt</mat-label>
+                <input matInput type="number" formControlName="discountAmt" min="0" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>MRP (Final Price)</mat-label>
+                <input matInput [value]="MRP" readonly />
+            </mat-form-field>
+
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Description</mat-label>
-                <textarea matInput [(ngModel)]="product.description" name="description"></textarea>
+                <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Image URL</mat-label>
-                <input matInput [(ngModel)]="product.imageUrl" name="imageUrl" type="url" required />
+                <input matInput formControlName="imageUrl" type="url" required />
             </mat-form-field>
 
             <div class="action-buttons">
-                <button mat-raised-button color="primary" type="submit" >Update</button>
+                <button mat-raised-button color="primary" type="submit">Update</button>
                 <button mat-raised-button color="warn" type="button" (click)="deleteProduct()">Delete</button>
             </div>
         </form>

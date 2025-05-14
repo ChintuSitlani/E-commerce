@@ -23,7 +23,7 @@
   
       <!-- Price -->
       <mat-form-field appearance="outline">
-        <mat-label>Price incl. tax</mat-label>
+        <mat-label>Price excl. tax</mat-label>
         <input matInput type="number" formControlName="price" />
         <mat-error *ngIf="productForm.get('price')?.hasError('required')">
           Price is required.
@@ -39,10 +39,14 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Discount (%)</mat-label>
-        <input matInput type="number" formControlName="discountRate" min="0" max="100" />
+        <mat-label>Discount Amt</mat-label>
+        <input matInput type="number" formControlName="discountAmt" min="0"  />
       </mat-form-field>
-      
+
+      <mat-form-field appearance="outline">
+        <mat-label>MRP (Final Price)</mat-label>
+        <input matInput [value]="MRP" readonly />
+      </mat-form-field>
       <!-- Description -->
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>

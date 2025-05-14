@@ -29,6 +29,8 @@ export class BuyerHomeComponent {
   buyerData: userLoginData;
   products: any[] = [];
   productsCarousel: any[] = [];
+  priceInclTax: GLfloat = 0;
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -67,8 +69,17 @@ export class BuyerHomeComponent {
       this.cartService.setCartCount(this.cartCount);
     });
   }
-  getDiscountedPrice(price: number, discountRate: number): number {
-    return Math.round(price - (price * discountRate / 100));
+  getSellingPriceInclTax(priceExclTax: number, taxRate: number): number {
+    const taxAmount = (priceExclTax * taxRate) / 100;
+    this.priceInclTax =  parseFloat((priceExclTax + taxAmount).toFixed(2));
+    return this.priceInclTax;
   }
+  getDiscountedPrice(discountAmt: number): number {
+    return parseFloat((this.priceInclTax - discountAmt).toFixed(2));
+  }
+  getDiscountPercentage( discountedAmt: number): number {
+    return parseFloat(((discountedAmt / this.priceInclTax) * 100).toFixed(2));
+  }
+
 }
 

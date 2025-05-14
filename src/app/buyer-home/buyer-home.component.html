@@ -20,15 +20,15 @@
         <mat-card-title>{{ product.productName}}</mat-card-title>
         <mat-card-content>
             <div class="price-info">
-                <ng-container *ngIf="product.discountRate == 0">
-                    <span>₹{{ product.price }}</span>
+                <ng-container *ngIf="product.discountAmt == 0">
+                    <span> ₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
                 </ng-container>
-                <ng-container *ngIf="product.discountRate > 0">
-                    <span class="mrp">₹{{ product.price }}</span>
+                <ng-container *ngIf="product.discountAmt > 0">
+                    <span class="mrp"> ₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
                     <span class="discounted-price">
-                        ₹{{ getDiscountedPrice(product.price, product.discountRate) }}
+                        ₹{{ getDiscountedPrice(product.discountAmt) }}
                     </span>
-                    <span class="offer">({{ product.discountRate }}% off)</span>
+                    <span class="offer">({{ getDiscountPercentage(product.discountAmt)}}% off)</span>
                 </ng-container>
             </div>
             <p><strong>Description:</strong> {{ product.description }}</p>

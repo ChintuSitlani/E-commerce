@@ -5,11 +5,12 @@ import { Product } from '../data-type';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
 
 @Component({
   selector: 'app-seller-add-prod',
+  standalone: true,
   imports: [
     MatFormFieldModule,
     MatInputModule,
@@ -18,17 +19,17 @@ import { SellerService } from '../services/seller.service';
     CommonModule
   ],
   templateUrl: './seller-add-prod.component.html',
-  styleUrl: './seller-add-prod.component.css'
+  styleUrls: ['./seller-add-prod.component.css']
 })
 export class SellerAddProdComponent {
   productForm: FormGroup;
-
+  MRP: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private sellerService: SellerService // Inject SellerService
+    private sellerService: SellerService
   ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
@@ -37,39 +38,54 @@ export class SellerAddProdComponent {
       description: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
       taxRate: [0],
-      discountRate: [0]
+      discountAmt: [0]
+    });
+
+    this.productForm.valueChanges.subscribe(values => {
+      this.MRP = this.calculateFinalPrice(values.price, values.taxRate, values.discountAmt);
     });
   }
 
-  onSubmit() {
+  ngOnInit(): void {
+    const values = this.productForm.value;
+    this.MRP = this.calculateFinalPrice(values.price, values.taxRate, values.discountAmt);
+  }
+
+  calculateFinalPrice(price: number, taxRate: number, discountAmt: number): number {
+    const taxAmount = (price * taxRate) / 100;
+    return parseFloat((price + taxAmount - discountAmt).toFixed(2));
+  }
+
+  onSubmit(): void {
     if (this.productForm.valid) {
       const formValues = this.productForm.value;
       const sellerData = this.sellerService.getSellerData();
-      
-      if (sellerData && sellerData.email && sellerData._id) {
+
+      if (sellerData?.email && sellerData?._id) {
         const product: Product = {
           productName: formValues.productName,
           category: formValues.productCategory,
-          price: formValues.price,
+          priceExclTax: formValues.price,
           description: formValues.description,
           imageUrl: formValues.imageUrl,
           sellerEmailId: sellerData.email,
           sellerId: sellerData._id,
           subcategory: '',
           taxRate: formValues.taxRate,
-          discountRate: formValues.discountRate
+          discountAmt: formValues.discountAmt
         };
-  
+
         this.productService.saveProduct(product).subscribe({
           next: (res: any) => {
             console.log('Product added:', res);
             alert('Product added successfully!');
             this.productForm.reset();
+            this.MRP = 0; 
           },
           error: (err: any) => {
             console.error('Error:', err);
             alert('Error adding product');
-          },
+          }
         });
       } else {
         console.error("Seller data is not available. Please log in again.");

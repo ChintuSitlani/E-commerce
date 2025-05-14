@@ -20,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class SellerHomeComponent implements OnInit {
   sellerProducts: any[] = [];
+  priceInclTax: GLfloat = 0;
 
   constructor(
     private productService: ProductService,
@@ -47,7 +48,18 @@ export class SellerHomeComponent implements OnInit {
 
   deleteProduct(productId: string) {
     this.productService.deleteProduct(productId).subscribe(() => {
-      this.fetchSellerProducts(); // Refresh the list
+      this.fetchSellerProducts(); 
     });
+  }
+  getSellingPriceInclTax(priceExclTax: number, taxRate: number): number {
+    const taxAmount = (priceExclTax * taxRate) / 100;
+    this.priceInclTax =  parseFloat((priceExclTax + taxAmount).toFixed(2));
+    return this.priceInclTax;
+  }
+  getDiscountedPrice(discountAmt: number): number {
+    return parseFloat((this.priceInclTax - discountAmt).toFixed(2));
+  }
+  getDiscountPercentage( discountedAmt: number): number {
+    return parseFloat((((discountedAmt) / this.priceInclTax) * 100).toFixed(2));
   }
 }

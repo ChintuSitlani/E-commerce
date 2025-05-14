@@ -36,20 +36,26 @@ import { CartService } from '../cart.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  logoUrl = 'https://image.pngaaa.com/550/811550-middle.png'
   isSellerLogin = false;
   searchText: string = '';
   cartItems: number = 0; 
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
- isBuyerLogin = false;
-   
+  isBuyerLogin = false;
+  userName: string = '';
+  userEmail: string = '';
+ 
   constructor(
     private cartService: CartService,
     private seller: SellerService,
     private buyer: BuyerService,
     private productService: ProductService,
-    private router: Router) { }
+    private router: Router
+  ){
+    const buyerData = this.buyer.getBuyerData();
+    if (buyerData)
+      this.userEmail = buyerData.email || '';
+    }
 
   ngOnInit() {
     this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
@@ -67,6 +73,10 @@ export class HeaderComponent {
     this.cartService.getCartCount().subscribe(count => {
       this.cartItems = count;
     });
+    const buyerData = this.buyer.getBuyerData();
+    if (buyerData) {
+      this.userEmail = buyerData.email || '';
+    } 
   }
   logout() {
     const userConfirmed = confirm('Are you sure you want to logout?');

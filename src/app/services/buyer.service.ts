@@ -94,7 +94,7 @@ export class BuyerService {
   buyerLogout() {
     localStorage.removeItem('buyer');
     this.isBuyerAuthenticated();
-    this.router.navigate(['']);
+    this.router.navigate(['/buyerLogin']);
   }
   getBuyerData: () => userLoginData | null = () => {
     if (isPlatformBrowser(this.platformId)) {
