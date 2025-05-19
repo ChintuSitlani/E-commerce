@@ -25,7 +25,7 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule
   ],
   templateUrl: './my-account.component.html',
-  styleUrls: ['./my-account.component.css'] 
+  styleUrls: ['./my-account.component.css']
 })
 export class MyAccountComponent implements OnInit {
   buyer: buyers = {
@@ -101,15 +101,15 @@ export class MyAccountComponent implements OnInit {
   }
   verifyOtp() {
     const otpValue = this.otpForm.get('OTP')?.value;
-  this.otpS.verifyOtp(this.buyer.email, otpValue).subscribe({
-    next: () => {
-      this.message = 'Email verified successfully!';
-      this.buyer.isEmailVerified = true;
-      this.otpForm.reset();
-      this.otpSent = false;
-    },
-    error: err => this.message = err.error.message
-  });
+    this.otpS.verifyOtp(this.buyer.email, otpValue).subscribe({
+      next: () => {
+        this.message = 'Email verified successfully!';
+        this.buyer.isEmailVerified = true;
+        this.otpForm.reset();
+        this.otpSent = false;
+      },
+      error: err => this.message = err.error.message
+    });
   }
 
   updateShippingInfo() {
@@ -128,6 +128,7 @@ export class MyAccountComponent implements OnInit {
       this.buyerS.updateBuyerInfo(updatedShippingInfo).subscribe({
         next: (updatedBuyer: buyers) => {
           this.buyer = updatedBuyer;
+          this.updateBuyerData(updatedBuyer);
           this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
         },
         error: (err: any) => {
@@ -149,16 +150,23 @@ export class MyAccountComponent implements OnInit {
       };
 
       this.buyerS.updateBuyerInfo(updatedPasswordInfo).subscribe({
-      next: () => {
-        this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
-        this.passForm.reset();
-      },
-      error: (err: any) => {
-        this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
-      }
-    });
+        next: (updatedBuyer: buyers) => {
+          this.buyer = updatedBuyer;
+          this.updateBuyerData(updatedBuyer);
+          this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
+          this.passForm.reset();
+        },
+        error: (err: any) => {
+          this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
+        }
+      });
     } else {
       this.snackBar.open('Please enter password.', 'Close', { duration: 3000 });
+    }
+  }
+  updateBuyerData(updatedBuyer: buyers) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('buyer', JSON.stringify(updatedBuyer));
     }
   }
 }
