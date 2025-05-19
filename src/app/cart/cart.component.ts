@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../cart.service';
 import { CommonModule } from '@angular/common';
-import { userLoginData } from '../data-type';
+import { buyers } from '../data-type';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -32,7 +32,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  userData :  userLoginData =  JSON.parse(localStorage.getItem('buyer') || '{}');
+  userData :  buyers =  JSON.parse(localStorage.getItem('buyer') || '{}');
   totalPrice: number = 0;
   couponCode = '';
   summary: CartSummary = {

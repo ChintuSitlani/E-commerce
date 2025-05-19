@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { userLoginData, userSignupData } from '../data-type';
+import { buyers, userSignupData } from '../data-type';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,7 +45,7 @@ export class SellerService {
       );
   }
 
-  sellerLogin(data: userLoginData) {
+  sellerLogin(data: buyers) {
     const body = {
       email: data.email,
       password: data.password
@@ -84,7 +84,7 @@ export class SellerService {
     }
   }
 
-  getSellerData: () => userLoginData | null = () => {
+  getSellerData: () => buyers | null = () => {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('seller')) {
         return JSON.parse(localStorage.getItem('seller') || '{}');

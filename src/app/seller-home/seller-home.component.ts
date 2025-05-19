@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { SellerService } from '../services/seller.service';
 import { Router } from '@angular/router';
-import { Product, userLoginData } from '../data-type';
+import { Product, buyers } from '../data-type';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';

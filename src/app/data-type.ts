@@ -4,10 +4,20 @@ export interface userSignupData {
     password: string,
 }
 
-export interface userLoginData {
+export interface buyers {
     _id: string,
     email: string,
     password: string,
+    shippingAddress?: string,
+    pin?:string,
+    phone?:string,
+    country?:string,
+    state?:string,
+    city?:string,
+    isBlocked?: boolean,
+    isEmailVerified?: boolean,
+    isPhoneVerified?: boolean,
+    emailOTP?:string
 }
 
 export interface Product {

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Product, userLoginData } from '../data-type';
+import { Product, buyers } from '../data-type';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../cart.service';
@@ -26,7 +26,7 @@ import { CartService } from '../cart.service';
 export class BuyerHomeComponent {
 
   cartCount = 0;
-  buyerData: userLoginData;
+  buyerData: buyers;
   products: any[] = [];
   productsCarousel: any[] = [];
   priceInclTax: GLfloat = 0;
@@ -36,7 +36,7 @@ export class BuyerHomeComponent {
     private router: Router,
     private cartService: CartService
   ) {
-    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as userLoginData;
+    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyers;
   }
   ngOnInit() {
     this.productService.getProductForCarousel(3).subscribe(data => {

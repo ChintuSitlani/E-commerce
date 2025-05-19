@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';  
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BuyerService } from '../services/buyer.service';
-import { userLoginData } from '../data-type';
+import { buyers } from '../data-type';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent {
   paramUserType: string = '';
   showPassword: boolean = false; 
 
-  userData: userLoginData = {
+  userData: buyers = {
     _id: '',
     email: '',
     password: '',
