@@ -94,3 +94,4 @@ testem.log
 Thumbs.db
 >>>>>>> 3017fa9 (initialing project)
 .vercel
+.vscode/settings.json
