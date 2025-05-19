@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SellerService } from '../services/seller.service';
-import { userLoginData } from '../data-type';
+import { buyers } from '../data-type';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -30,7 +30,7 @@ export class SellerLoginComponent {
   loginForm: FormGroup;
   paramUserType: string = '';
 
-  userData: userLoginData = {
+  userData: buyers = {
     _id: '',
     email: '',
     password: '',

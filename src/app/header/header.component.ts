@@ -114,4 +114,7 @@ export class HeaderComponent {
       });
     }
   }
+  goToMyAccount(){
+    this.router.navigate(['/my-account']);
+  }
 }

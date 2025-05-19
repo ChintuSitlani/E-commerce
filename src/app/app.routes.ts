@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SellerSignupComponent } from './seller-signup/seller-signup.component';
 import { SellerLoginComponent } from './seller-login/seller-login.component';
 import { CartComponent } from './cart/cart.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -25,6 +26,7 @@ export const routes: Routes = [
     { path: 'product-card', component: ProductCardComponent},
     { path: 'page-not-found', component: PageNotFoundComponent },
     { path: 'cart', component: CartComponent },
-
+    { path: 'my-account' , component: MyAccountComponent},
+    
     { path: '**', redirectTo: 'page-not-found'} 
 ];
