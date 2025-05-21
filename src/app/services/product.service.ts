@@ -65,4 +65,8 @@ export class ProductService {
     if (couponCode) url += `&couponCode=${couponCode}`;
     return this.http.get<CartSummary>(url);
   }
+  updateCartItemSelection(itemId: string, selected: boolean) {
+    return this.http.put(`${environment.apiUrl}/cart/selected/${itemId}`, { selected });
+  }
+
 }

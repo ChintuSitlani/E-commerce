@@ -1,31 +1,48 @@
 <div class="container my-4">
   <h2 class="text-center mb-4">Your Shopping Cart</h2>
+
   <mat-form-field *ngIf="false" appearance="outline" class="search-field">
-    <mat-label>apply coupon</mat-label>
-    <input  matInput type="text" [(ngModel)]="couponCode" placeholder="Enter coupon code">
+    <mat-label>Apply Coupon</mat-label>
+    <input matInput type="text" [(ngModel)]="couponCode" placeholder="Enter coupon code" />
   </mat-form-field>
   <button mat-icon-button color="warn" *ngIf="false" (click)="applyCoupon()">Apply</button>
-  <div *ngIf="cartItems!.length > 0; else emptyCart">
+
+  <div *ngIf="cartItems && cartItems.length > 0; else emptyCart">
+    <mat-checkbox [(ngModel)]="selectAll" (change)="toggleSelectAll()">
+      Select All
+    </mat-checkbox>
+
     <div class="row mb-3" *ngFor="let item of cartItems">
-      <div class="col-md-4 col-12 text-center mb-3 mb-md-0">
+      <div class="col-md-1 col-12 text-center">
+        <mat-checkbox [checked]="item.selected" (change)="item.selected = $event.checked; toggleSelection(item)">
+          Select
+        </mat-checkbox>
+      </div>
+      <div class="col-md-3 col-12 text-center mb-3 mb-md-0">
         <img [src]="item.productId.imageUrl" alt="{{ item.productId.productName }}"
-          class="img-fluid rounded shadow-sm cart-img">
+          class="img-fluid rounded shadow-sm cart-img" />
       </div>
       <div class="col-md-8 col-12">
         <h5>{{ item.productId.productName }}</h5>
         <p class="text-muted">
-          <ng-container *ngIf="item.productId.discountAmt == 0">
-           <span >₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt ) }}</span>
+          <ng-container *ngIf="item.productId.discountAmt === 0">
+            <span>₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt)
+              }}</span>
           </ng-container>
           <ng-container *ngIf="item.productId.discountAmt > 0">
-            <span class="mrp">₹{{ getPriceAfterTax(item.productId.priceExclTax, item.productId.taxRate)}}</span>
-            <span class="discounted-price">
-              ₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt ) }}
+            <span class="mrp">
+              ₹{{ getPriceAfterTax(item.productId.priceExclTax, item.productId.taxRate) }}
             </span>
-            <span class="offer">({{ getDiscountPercentage(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt) }}% off)</span>
+            <span class="discounted-price">
+              ₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt) }}
+            </span>
+            <span class="offer">
+              ({{ getDiscountPercentage(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt)
+              }}% off)
+            </span>
           </ng-container>
         </p>
-      
+
         <div class="d-flex align-items-center gap-2 mb-2">
           <button mat-icon-button color="primary" (click)="updateQuantity(item, item.quantity - 1)">
             <mat-icon>remove</mat-icon>
@@ -40,17 +57,19 @@
           <mat-icon>delete</mat-icon>&nbsp;Remove
         </button>
       </div>
+
+      <mat-divider class="my-4"></mat-divider>
     </div>
 
-    <mat-divider class="my-4"></mat-divider>
     <div class="cart-summary" *ngIf="summary.total">
       <p>Subtotal: ₹{{ summary.subTotal }}</p>
       <p>Item Discount: − ₹{{ summary.itemDiscountTotal }}</p>
       <p *ngIf="false">Coupon Discount: − ₹{{ summary.couponDiscount }}</p>
       <p>Tax: + ₹{{ summary.taxTotal }}</p>
-      <hr>
+      <hr />
       <h3>Total: ₹{{ summary.total }}</h3>
     </div>
+
     <div class="text-end">
       <button mat-raised-button color="accent" class="mt-2" routerLink="">Continue shopping</button>
       <button mat-raised-button color="accent" class="mt-2" (click)="checkout()">Checkout</button>
