@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CartSummary, Product } from '../data-type';
+import { CartSummary, CartItems, Product } from '../data-type';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
 @Injectable({
@@ -49,7 +49,7 @@ export class ProductService {
   }
 
   getCartItems(userId: string) {
-    return this.http.get<any[]>(`${environment.apiUrl}/cart/${userId}`);
+    return this.http.get<CartItems[]>(`${environment.apiUrl}/cart/${userId}`);
   }
 
   updateCartQuantity(itemId: string, quantity: number) {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../cart.service';
 import { CommonModule } from '@angular/common';
-import { buyers } from '../data-type';
+import { buyers, CartItems } from '../data-type';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -31,9 +31,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cartItems: any[] = [];
+  cartItems: CartItems[] = [];
   userData :  buyers =  JSON.parse(localStorage.getItem('buyer') || '{}');
-  totalPrice: number = 0;
   couponCode = '';
   summary: CartSummary = {
     subTotal: 0,
@@ -52,16 +51,11 @@ export class CartComponent implements OnInit {
     this.loadCart();
   }
 
-  calculateTotal() {
-    this.totalPrice = this.cartItems.reduce((sum, item) => {
-      return sum + item.quantity * item.productId.price;
-    }, 0);
-  }
+ 
 
   loadCart() {
     this.productService.getCartItems(this.userData._id).subscribe(items => {
       this.cartItems = items;
-      this.calculateTotal();
       this.cartService.setCartCount(items.length);
     });
     this.applyCoupon();
@@ -72,7 +66,6 @@ export class CartComponent implements OnInit {
     this.productService.updateCartQuantity(item._id, newQty).subscribe(() => {
       item.quantity = newQty;
       this.applyCoupon();
-      this.calculateTotal();
     });
   }
 
@@ -80,7 +73,6 @@ export class CartComponent implements OnInit {
     this.productService.removeFromCart(itemId).subscribe(() => {
       this.cartItems = this.cartItems.filter(i => i._id !== itemId);
       this.applyCoupon();
-      this.calculateTotal();
       this.cartService.setCartCount(this.cartItems.length);
     });
   }
@@ -95,7 +87,14 @@ export class CartComponent implements OnInit {
       this.cartItems = summary?.cartItems || [];
     });
   }
-  getDiscountedPrice(price: number, discountRate: number): number {
-    return Math.round(price - (price * discountRate / 100));
+  
+  getFinalPrice(priceExclTax: number, taxRate: number, disAmt:number): number {
+    return parseFloat((this.getPriceAfterTax(priceExclTax,taxRate)-disAmt).toFixed(2));
+  }
+  getPriceAfterTax(priceExclTax: number, taxRate: number): number {
+    return priceExclTax + (priceExclTax * taxRate / 100);
+  }
+  getDiscountPercentage(priceExclTax: number, taxRate: number, discountAmt: number): number {
+    return parseFloat((discountAmt / this.getPriceAfterTax(priceExclTax,taxRate) * 100).toFixed(2));
   }
 }

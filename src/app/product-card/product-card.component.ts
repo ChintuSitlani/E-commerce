@@ -32,7 +32,10 @@ export class ProductCardComponent implements OnInit {
     description: '',
     imageUrl: '',
     sellerId: '',
-    sellerEmailId: ''
+    sellerEmailId: '',
+    priceExclTax: 0,
+    taxRate: 0,
+    discountAmt: 0
   };
   errorMessage?: string;
   isSellerLogedIn = false;

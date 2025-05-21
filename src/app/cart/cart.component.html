@@ -14,15 +14,15 @@
       <div class="col-md-8 col-12">
         <h5>{{ item.productId.productName }}</h5>
         <p class="text-muted">
-          <ng-container *ngIf="item.productId.discountRate == 0">
-           <span >₹{{ item.productId.price }}</span>
+          <ng-container *ngIf="item.productId.discountAmt == 0">
+           <span >₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt ) }}</span>
           </ng-container>
-          <ng-container *ngIf="item.productId.discountRate > 0">
-            <span class="mrp">₹{{ item.productId.price }}</span>
+          <ng-container *ngIf="item.productId.discountAmt > 0">
+            <span class="mrp">₹{{ getPriceAfterTax(item.productId.priceExclTax, item.productId.taxRate)}}</span>
             <span class="discounted-price">
-              ₹{{ getDiscountedPrice(item.productId.price, item.productId.discountRate) }}
+              ₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt ) }}
             </span>
-            <span class="offer">({{ item.productId.discountRate }}% off)</span>
+            <span class="offer">({{ getDiscountPercentage(item.productId.priceExclTax, item.productId.taxRate, item.productId.discountAmt) }}% off)</span>
           </ng-container>
         </p>
       
