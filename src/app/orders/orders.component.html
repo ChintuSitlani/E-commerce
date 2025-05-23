@@ -33,7 +33,7 @@
             <button mat-button color="warn" (click)="resetFilters()">Reset</button>
         </div>
     </div>
-    <br/>
+    <br />
     <!-- Orders List -->
     <div *ngIf="orders && orders.length > 0; else noOrders">
         <div *ngFor="let order of orders" class="order-card p-3 mb-4 shadow-sm rounded border">
@@ -68,7 +68,9 @@
                         </span>
                     </p>
                 </div>
+
             </div>
+                <button mat-button (click)="cancelOrder(order._id)" [disabled]="order.status == CANCELLED_STATUS">Cancel Order</button>
 
             <mat-divider></mat-divider>
         </div>

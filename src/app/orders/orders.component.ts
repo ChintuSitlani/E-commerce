@@ -39,7 +39,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class OrdersComponent implements OnInit {
   orders: OrderSummary[] = [];
   filteredOrders: OrderSummary[] = [];
-
+  readonly CANCELLED_STATUS = 'cancelled';
   buyerData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
 
   selectedStatus = '';
@@ -54,7 +54,7 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private snackBar: MatSnackBar, 
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -73,8 +73,9 @@ export class OrdersComponent implements OnInit {
           this.filteredOrders = [...this.orders];
         },
         error: err => {
-          this.snackBar.open('Error loading orders: '+ err, 'Close', {
-            duration: 3000});
+          this.snackBar.open('Error loading orders: ' + err, 'Close', {
+            duration: 3000
+          });
         }
       });
     }
@@ -118,5 +119,19 @@ export class OrdersComponent implements OnInit {
   }
   getPriceAfterTax(priceExclTax: number, taxRate: number): number {
     return priceExclTax + (priceExclTax * taxRate / 100);
+  }
+  cancelOrder(orderId: string): void {
+    const confirmed = confirm('Are you sure you want to cancel this order?');
+    if (!confirmed) return;
+
+    this.orderService.changeOrderStatus(orderId, 'cancelled').subscribe({
+      next: () => {
+        this.snackBar.open('Order cancelled successfully!', 'Close', { duration: 3000 });
+        this.loadOrders();
+      },
+      error: err => {
+        this.snackBar.open('Error cancelling order: ' + err.message, 'Close', { duration: 3000 });
+      }
+    });
   }
 }

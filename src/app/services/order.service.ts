@@ -54,4 +54,11 @@ export class OrderService {
 
     return this.http.get<OrderSummary[]>(`${this.baseUrl}/${this.endpoint.sellerOrders}/${sellerId}`, { params });
   }
+
+  changeOrderStatus(orderId: string, varStatus: string): Observable<OrderSummary> {
+    const body = {
+     status:varStatus,
+    };
+    return this.http.put<OrderSummary>(`${this.baseUrl}/${this.endpoint.order}/${orderId}`, body);
+  }
 }
