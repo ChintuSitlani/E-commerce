@@ -13,6 +13,7 @@ import { OrderSummary, buyers } from '../data-type';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-orders',
@@ -51,7 +52,10 @@ export class OrdersComponent implements OnInit {
 
   statusOptions = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
 
-  constructor(private orderService: OrderService) { }
+  constructor(
+    private orderService: OrderService,
+    private snackBar: MatSnackBar, 
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -69,7 +73,8 @@ export class OrdersComponent implements OnInit {
           this.filteredOrders = [...this.orders];
         },
         error: err => {
-          console.error('Error loading orders:', err);
+          this.snackBar.open('Error loading orders: '+ err, 'Close', {
+            duration: 3000});
         }
       });
     }

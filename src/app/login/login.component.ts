@@ -54,7 +54,6 @@ export class LoginComponent {
         password: this.loginForm.value.password  // Only save the password
       };
       this.buyer.buyerLogin(this.userData);
-      this.loginForm.reset();
     }
   }
   togglePasswordVisibility() {

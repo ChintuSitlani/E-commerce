@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class BuyerService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private snackBar: MatSnackBar,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       const buyerData = localStorage.getItem('buyer');
@@ -74,7 +76,10 @@ export class BuyerService {
         },
         (error) => {
           console.error('Login failed:', error);
-          alert('Login failed: Server error.');
+          const errorMessage = error?.error?.message || 'Login failed';
+          this.snackBar.open(errorMessage, 'Close', {
+            duration: 5000
+          });
         }
       );
   }
