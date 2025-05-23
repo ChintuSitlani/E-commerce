@@ -1,0 +1,91 @@
+<div class="container my-4">
+    <h2 class="text-center mb-4">Your Orders</h2>
+
+    <!-- Filter Section -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-12">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Status</mat-label>
+                <mat-select [(ngModel)]="selectedStatus">
+                    <mat-option value="">All</mat-option>
+                    <mat-option *ngFor="let status of statusOptions" [value]="status">{{ status }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 col-6">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 col-6">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-3 col-12 d-flex gap-2">
+            <button mat-raised-button color="primary" (click)="applyFilters()">Apply</button>
+            <button mat-button color="warn" (click)="resetFilters()">Reset</button>
+        </div>
+    </div>
+    <br/>
+    <!-- Orders List -->
+    <div *ngIf="orders && orders.length > 0; else noOrders">
+        <div *ngFor="let order of orders" class="order-card p-3 mb-4 shadow-sm rounded border">
+            <div class="d-flex justify-content-between flex-wrap mb-3">
+                <div>
+                    <strong>Order ID:</strong> {{ order._id }}<br />
+                    <strong>Date:</strong> {{ order.createdAt | date:'medium' }}
+                </div>
+                <div class="text-end">
+                    <strong>Status:</strong>
+                    <span>{{ order.status }}</span><br />
+                    <strong>Total:</strong> ₹{{ order.totalAmount }}
+                </div>
+            </div>
+
+            <!-- Ordered Items -->
+            <div *ngFor="let item of order.items" class="row align-items-center mb-3">
+                <div class="col-md-3 col-12 text-center mb-2 mb-md-0">
+                    <img [src]="item.productId.imageUrl" alt="{{ item.productId.productName }}"
+                        class="img-fluid rounded shadow-sm cart-img" />
+                </div>
+                <div class="col-md-9 col-12">
+                    <h5>{{ item.productId.productName }}</h5>
+                    <p class="text-muted mb-1">
+                        Quantity: {{ item.quantity }}<br />
+                        Price: ₹{{ getFinalPrice(item.productId.priceExclTax, item.productId.taxRate,
+                        item.productId.discountAmt) }} × {{ item.quantity }}
+                    </p>
+                    <p class="text-muted mb-0" *ngIf="item.productId.discountAmt > 0">
+                        <span class="text-danger">
+                            You saved ₹{{ item.productId.discountAmt * item.quantity }}!
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <mat-divider></mat-divider>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-center mt-4">
+            <button mat-button (click)="prevPage()" [disabled]="page <= 1">Previous</button>
+            <span class="mx-3 align-self-center">Page {{ page }}</span>
+            <button mat-button (click)="nextPage()" [disabled]="orders.length < limit">Next</button>
+        </div>
+    </div>
+
+    <!-- No Orders Template -->
+    <ng-template #noOrders>
+        <div class="text-center my-5">
+            <mat-icon style="font-size: 60px; color: #ccc;">receipt_long</mat-icon>
+            <h5>You have not placed any orders yet.</h5>
+        </div>
+    </ng-template>
+</div>

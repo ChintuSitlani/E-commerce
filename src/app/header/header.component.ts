@@ -117,4 +117,7 @@ export class HeaderComponent {
   goToMyAccount(){
     this.router.navigate(['/my-account']);
   }
+  goToMyOrders(){
+    this.router.navigate(['/orders']);
+  }
 }

@@ -87,17 +87,21 @@ export interface ShippingAddress {
 export interface OrderSummary {
   _id: any;
   subTotal: number;
-  itemDiscountTotal: number;
+  discountTotal: number;
   couponDiscount: number;
+  couponCode?: string;
+  shippingCharges?: number;
   taxTotal: number;
-  total: number;
-  cartItems: OrderItem[];
+  totalAmount: number;
+  items: OrderItem[];
   buyerId: string;
   sellerId: string;
   shippingAddress?: ShippingAddress;
+  billingAddress?: ShippingAddress;
+  paymentMethod?: 'credit_card'| 'debit_card'| 'paypal'| 'COD'| 'UPI';
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
   paymentStatus: 'pending' | 'paid' | 'failed';
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 

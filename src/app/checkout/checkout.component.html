@@ -1,0 +1,154 @@
+<div class="container mt-5" *ngIf="items.length > 0">
+    <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()">
+        <div class="row">
+
+            <div class="col-md-6 col-sm-12 mb-4">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Shipping Address</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div formGroupName="shipping">
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Full Name</mat-label>
+                                <input matInput formControlName="fullName" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Address</mat-label>
+                                <input matInput formControlName="address" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="city" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>State</mat-label>
+                                <input matInput formControlName="state" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Zip</mat-label>
+                                <input matInput formControlName="zip" required>
+                            </mat-form-field>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <!-- Billing Address (SECOND) -->
+            <div class="col-md-6 col-sm-12 mb-4">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Billing Address</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-checkbox [(ngModel)]="billingSameAsShipping" (change)="toggleBillingPrefill()"
+                            [ngModelOptions]="{ standalone: true }">
+                            Billing address same as shipping
+                        </mat-checkbox>
+                        <div formGroupName="billing">
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Full Name</mat-label>
+                                <input matInput formControlName="fullName" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Address</mat-label>
+                                <input matInput formControlName="address" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="city" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>State</mat-label>
+                                <input matInput formControlName="state" required>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="w-100 mb-3">
+                                <mat-label>Zip</mat-label>
+                                <input matInput formControlName="zip" required>
+                            </mat-form-field>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </div>
+
+        <!-- Payment Method -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Payment Method</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-form-field appearance="fill" class="w-100 mb-3">
+                            <mat-label>Select Payment Method</mat-label>
+                            <mat-select formControlName="paymentMethod" required>
+                                <mat-option value="credit_Card">Credit Card</mat-option>
+                                <mat-option value="paypal">PayPal</mat-option>
+                                <mat-option value="COD">Cash on Delivery</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <br />
+        <!-- Order Summary -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <mat-accordion>
+                    <mat-expansion-panel [expanded]="isDesktop">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Order Summary</mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <mat-card>
+                            <mat-card-content>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Qty</th>
+                                            <th>Price</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of items">
+                                            <td>{{ item.productId.productName }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>₹{{ item.productId.priceExclTax }}</td>
+                                            <td>₹{{ item.productId.priceExclTax * item.quantity }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="text-end">
+                                    <p><strong>Subtotal:</strong> ₹{{ calculateSubtotal() }}</p>
+                                    <p><strong>Discount:</strong> ₹{{ calculateDiscount() }}</p>
+                                    <p><strong>Tax:</strong> ₹{{ calculateTax() }}</p>
+                                    <p><strong>Total:</strong> ₹{{ calculateTotal() }}</p>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+        <br />
+        <!-- Place Order Button -->
+        <div class="row mt-4">
+            <div class="col-md-12 text-end">
+                <button mat-raised-button color="primary" type="submit" [disabled]="items.length === 0">
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Message if no items -->
+</div>
+
+<div *ngIf="items.length === 0" class="text-center mt-5">
+    <h4>Your cart is empty. <a routerLink="/products">Continue shopping</a></h4>
+</div>

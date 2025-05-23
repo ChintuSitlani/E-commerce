@@ -1,0 +1,117 @@
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
+import { OrderService } from '../services/order.service';
+import { OrderSummary, buyers } from '../data-type';
+import { MatDivider } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+
+@Component({
+  selector: 'app-orders',
+  standalone: true,
+  imports: [
+    FormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatDivider,
+    MatIconModule,
+    MatTableModule
+  ],
+  templateUrl: './orders.component.html',
+  styleUrl: './orders.component.css'
+})
+export class OrdersComponent implements OnInit {
+  orders: OrderSummary[] = [];
+  filteredOrders: OrderSummary[] = [];
+
+  buyerData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
+
+  selectedStatus = '';
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+
+  // Pagination values
+  limit = 5;
+  page = 1;
+
+  statusOptions = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+
+  constructor(private orderService: OrderService) { }
+
+  ngOnInit(): void {
+    this.loadOrders();
+  }
+
+  loadOrders(): void {
+    if (this.buyerData && this.buyerData._id) {
+      const filters = this.buildFilters();
+      filters.limit = this.limit;
+      filters.page = this.page;
+
+      this.orderService.getOrdersForBuyer(this.buyerData._id, filters).subscribe({
+        next: (response: any) => {
+          this.orders = response.orders || [];
+          this.filteredOrders = [...this.orders];
+        },
+        error: err => {
+          console.error('Error loading orders:', err);
+        }
+      });
+    }
+  }
+
+  applyFilters(): void {
+    this.page = 1; // reset to first page
+    this.loadOrders();
+  }
+
+  resetFilters(): void {
+    this.selectedStatus = '';
+    this.startDate = null;
+    this.endDate = null;
+    this.page = 1;
+    this.loadOrders();
+  }
+
+  nextPage(): void {
+    this.page++;
+    this.loadOrders();
+  }
+
+  prevPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.loadOrders();
+    }
+  }
+
+  private buildFilters(): any {
+    const filters: any = {};
+    if (this.selectedStatus) filters.status = this.selectedStatus;
+    if (this.startDate) filters.startDate = this.startDate.toISOString();
+    if (this.endDate) filters.endDate = this.endDate.toISOString();
+    return filters;
+  }
+
+  getFinalPrice(priceExclTax: number, taxRate: number, disAmt: number): number {
+    return parseFloat((this.getPriceAfterTax(priceExclTax, taxRate) - disAmt).toFixed(2));
+  }
+  getPriceAfterTax(priceExclTax: number, taxRate: number): number {
+    return priceExclTax + (priceExclTax * taxRate / 100);
+  }
+}
