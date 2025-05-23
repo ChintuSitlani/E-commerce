@@ -69,7 +69,7 @@ export class MyAccountComponent implements OnInit {
       pin: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      country: ['', Validators.required],
+      
       phone: ['', Validators.required],
     });
   }
@@ -121,7 +121,7 @@ export class MyAccountComponent implements OnInit {
         pin: formValues.pin,
         state: formValues.state,
         city: formValues.city,
-        country: formValues.country,
+       
         phone: formValues.phone,
       };
       console.log('Updated Shipping Info:', updatedShippingInfo);
@@ -129,11 +129,11 @@ export class MyAccountComponent implements OnInit {
         next: (updatedBuyer: buyers) => {
           this.buyer = updatedBuyer;
           this.updateBuyerData(updatedBuyer);
-          this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
+          this.snackBar.open('shipping address updated successfully!', 'Close', { duration: 3000 });
         },
         error: (err: any) => {
           console.error('Error:', err);
-          this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
+          this.snackBar.open('Error updating shippping address', 'Close', { duration: 3000 });
         },
       });
     } else {
