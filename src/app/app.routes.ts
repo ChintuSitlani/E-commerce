@@ -13,6 +13,9 @@ import { SellerSignupComponent } from './seller-signup/seller-signup.component';
 import { SellerLoginComponent } from './seller-login/seller-login.component';
 import { CartComponent } from './cart/cart.component';
 import { MyAccountComponent } from './my-account/my-account.component';
+import { OrdersComponent } from './orders/orders.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -27,6 +30,9 @@ export const routes: Routes = [
     { path: 'page-not-found', component: PageNotFoundComponent },
     { path: 'cart', component: CartComponent },
     { path: 'my-account' , component: MyAccountComponent},
+    { path: 'orders', component: OrdersComponent},
+    { path: 'checkout', component: CheckoutComponent},
+    { path: 'order-confirmation', component: OrderConfirmationComponent},
     
     { path: '**', redirectTo: 'page-not-found'} 
 ];

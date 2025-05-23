@@ -1,0 +1,29 @@
+.cart-img {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+}
+.order-card {
+  background-color: #fff;
+}
+@media (max-width: 576px) {
+    .table {
+        font-size: 9px;
+    }
+
+    .mat-card-title {
+        font-size: 12px;
+    }
+
+    mat-form-field {
+        font-size: 9px;
+    }
+
+    button {
+        max-width: 128px;
+        max-height: 64px;
+        min-width: 64px;
+        font-size: 11px;
+        padding: 3px 3px;
+    }
+}

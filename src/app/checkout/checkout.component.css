@@ -1,0 +1,62 @@
+.checkout-container {
+  max-width: 850px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.order-summary {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.total {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .mat-card {
+    margin-bottom: 20px;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+
+  .table th,
+  .table td {
+    font-size: 14px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-card {
+    margin-bottom: 16px;
+  }
+
+  .text-end {
+    text-align: center !important;
+  }
+
+  .table th,
+  .table td {
+    font-size: 8px;
+  }
+
+  .order-summary {
+    padding: 4px;
+    border-radius: 3px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+}

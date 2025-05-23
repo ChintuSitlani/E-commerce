@@ -1,0 +1,16 @@
+<div class="confirmation-container text-center p-4">
+    <mat-card class="shadow-lg">
+        <mat-card-header>
+            <mat-card-title>
+                <h2 class="text-success">Thank You!</h2>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Your order has been placed successfully.</p>
+            <p><strong>Order ID:</strong> {{ orderId }}</p>
+        </mat-card-content>
+        <mat-card-actions class="justify-center mt-4">
+            <button mat-raised-button color="primary" (click)="backToHome()">Go to Home</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
