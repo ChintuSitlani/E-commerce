@@ -40,10 +40,29 @@ export class ProductService {
     return this.http.get<Product[]>(this.baseUrl, { params });
   }
 
-  getProducts(): Observable<Product[]> {
+  getProducts(searchTerm?: string, filters?: { brand: string; minPrice: number; maxPrice: number; }): Observable<Product[]> {
     return this.http.get<Product[]>(this.baseUrl);
   }
 
+  getResultProducts(
+    searchTerm: string = '',
+    filters: { brand: string; minPrice: number; maxPrice: number } = { brand: '', minPrice: 0, maxPrice: 100000 },
+    skip: number = 0,
+    limit: number = 10
+  ): Observable<{ products: Product[]; total: number }> {
+    let params = new HttpParams()
+      .set('search', searchTerm)
+      .set('minPrice', filters.minPrice.toString())
+      .set('maxPrice', filters.maxPrice.toString())
+      .set('skip', skip.toString())
+      .set('limit', limit.toString());
+
+    if (filters.brand) {
+      params = params.set('brand', filters.brand);
+    }
+
+    return this.http.get<{ products: Product[]; total: number }>(`${this.baseUrl}/filteredProduct`, { params });
+  }
   addToCart(productId: string, userId: string) {
     return this.http.post<any>(`${environment.apiUrl}/cart/add`, { productId, userId });
   }

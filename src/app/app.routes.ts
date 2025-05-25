@@ -16,6 +16,8 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -33,6 +35,7 @@ export const routes: Routes = [
     { path: 'orders', component: OrdersComponent},
     { path: 'checkout', component: CheckoutComponent},
     { path: 'order-confirmation', component: OrderConfirmationComponent},
-    
+    { path: 'search-results', component: SearchResultsComponent},
+
     { path: '**', redirectTo: 'page-not-found'} 
 ];

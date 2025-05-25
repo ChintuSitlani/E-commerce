@@ -9,8 +9,10 @@
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Search</mat-label>
       <input type="text" matInput [(ngModel)]="searchText" [matAutocomplete]="auto" (input)="onSearchInput()"
-        placeholder="Type to search" />
-      <mat-icon matSuffix>search</mat-icon>
+        (keydown.enter)="goToSearchResults()"
+      placeholder="Type to search"
+      />
+      <mat-icon matSuffix (click)="goToSearchResults()">search</mat-icon>
     </mat-form-field>
   </span>
 

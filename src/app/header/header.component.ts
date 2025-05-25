@@ -120,4 +120,11 @@ export class HeaderComponent {
   goToMyOrders(){
     this.router.navigate(['/orders']);
   }
+  goToSearchResults() {
+    if (this.searchText.trim()) {
+      this.router.navigate(['/search-results'], { queryParams: { q: this.searchText } });
+    } else {
+      alert('Please enter a search term.');
+    }
+  }
 }
