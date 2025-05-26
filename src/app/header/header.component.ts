@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
@@ -38,24 +38,31 @@ import { CartService } from '../cart.service';
 export class HeaderComponent {
   isSellerLogin = false;
   searchText: string = '';
-  cartItems: number = 0; 
+  cartItems: number = 0;
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
   isBuyerLogin = false;
   userName: string = '';
   userEmail: string = '';
- 
+  filters: { brand: string; minPrice: number; maxPrice: number } = {
+    brand: '',
+    minPrice: 0,
+    maxPrice: 1000000
+  };
+  totalCount = 0;
+  currentSkip = 0;
+  limit = 10;
   constructor(
     private cartService: CartService,
     private seller: SellerService,
     private buyer: BuyerService,
     private productService: ProductService,
     private router: Router
-  ){
+  ) {
     const buyerData = this.buyer.getBuyerData();
     if (buyerData)
       this.userEmail = buyerData.email || '';
-    }
+  }
 
   ngOnInit() {
     this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
@@ -67,16 +74,14 @@ export class HeaderComponent {
         this.updateCartCount();
       }
     });
-    this.productService.getProducts().subscribe(products => {
-      this.allProducts = products;
-    });
+    
     this.cartService.getCartCount().subscribe(count => {
       this.cartItems = count;
     });
     const buyerData = this.buyer.getBuyerData();
     if (buyerData) {
       this.userEmail = buyerData.email || '';
-    } 
+    }
   }
   logout() {
     const userConfirmed = confirm('Are you sure you want to logout?');
@@ -93,16 +98,29 @@ export class HeaderComponent {
       console.log("Logout canceled by the user.");
     }
   }
-    
+
   onSearchInput() {
-    const value = this.searchText?.toLowerCase() || '';
-    this.filteredProducts = this.allProducts.filter(product =>
-      product.productName?.toLowerCase().includes(value)
-    );
+      
+    const filtersToSend = { ...this.filters };
+
+    this.productService.getResultProducts(
+      this.searchText?.toLowerCase() || '',
+      filtersToSend,
+      this.currentSkip,
+      this.limit
+    ).subscribe(response => {
+      
+      this.allProducts = [...this.allProducts, ...response.products];
+      this.totalCount = response.total;
+      this.currentSkip += this.limit;
+
+    }, () => {
+
+    });
   }
 
   onOptionSelected(productId: string) {
-    this.searchText = ''; 
+    this.searchText = '';
     this.router.navigate(['/product-card'], { queryParams: { id: productId } });
   }
   updateCartCount() {
@@ -114,10 +132,10 @@ export class HeaderComponent {
       });
     }
   }
-  goToMyAccount(){
+  goToMyAccount() {
     this.router.navigate(['/my-account']);
   }
-  goToMyOrders(){
+  goToMyOrders() {
     this.router.navigate(['/orders']);
   }
   goToSearchResults() {

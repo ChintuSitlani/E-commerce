@@ -34,7 +34,7 @@
             <p><strong>Description:</strong> {{ product.description }}</p>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="warn" (click)="addToCart(product._id)">Add To Cart</button>
+            <button mat-raised-button color="warn" (click)="addToCart(product._id!)">Add To Cart</button>
         </mat-card-actions>
     </mat-card>
 </div>

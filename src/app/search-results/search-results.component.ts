@@ -46,7 +46,7 @@ export class SearchResultsComponent implements OnInit {
   filters: { brand: string; minPrice: number; maxPrice: number } = {
     brand: '',
     minPrice: 0,
-    maxPrice: 100000
+    maxPrice: 1000000
   };
 
   constructor(
@@ -74,7 +74,6 @@ export class SearchResultsComponent implements OnInit {
     this.loading = true;
 
     const filtersToSend = { ...this.filters };
-    // No need to delete filtersToSend.brand
 
     this.productService.getResultProducts(
       this.searchTerm,

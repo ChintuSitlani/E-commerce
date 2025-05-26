@@ -40,8 +40,8 @@ export class ProductService {
     return this.http.get<Product[]>(this.baseUrl, { params });
   }
 
-  getProducts(searchTerm?: string, filters?: { brand: string; minPrice: number; maxPrice: number; }): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/getHomeScreenProducts`);
   }
 
   getResultProducts(

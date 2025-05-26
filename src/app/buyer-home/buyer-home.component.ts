@@ -27,7 +27,7 @@ export class BuyerHomeComponent {
 
   cartCount = 0;
   buyerData: buyers;
-  products: any[] = [];
+  products: Product[] = [];
   productsCarousel: any[] = [];
   priceInclTax: GLfloat = 0;
 
