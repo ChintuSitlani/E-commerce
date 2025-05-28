@@ -69,9 +69,10 @@ export class CartComponent implements OnInit {
     this.applyCoupon();
   }
 
-  updateQuantity(item: any, newQty: number) {
+  updateQuantity(item: CartItems, newQty: number) {
     if (newQty < 1) return;
-    this.productService.updateCartQuantity(item._id, newQty).subscribe(() => {
+      item.quantity = newQty;
+      this.productService.updateCartItem(item._id, item).subscribe(() => {
       item.quantity = newQty;
       this.applyCoupon();
     });

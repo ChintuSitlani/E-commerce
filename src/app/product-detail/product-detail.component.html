@@ -1,0 +1,73 @@
+<div class="container my-4" *ngIf="product">
+    <div class="row">
+        <!-- Image Section -->
+        <div class="col-md-6 mb-3">
+            <mat-card class="p-2 text-center">
+                <img [src]="selectedImage" alt="Product" class="img-fluid main-img mb-2" />
+            </mat-card>
+        </div>
+
+        <!-- Info Section -->
+        <div class="col-md-6">
+            <mat-card class="p-3">
+                <h4 class="fw-bold">{{ product.productName }}</h4>
+                <p>{{ product.description }}</p>
+
+                <div *ngIf="product.brand" class="mb-2 text-muted">
+                    Brand: {{ product.brand }}
+                </div>
+
+                <div class="price-section mb-3">
+                    <h5 class="text-danger fw-bold">₹{{getDiscountedPrice(product.priceExclTax , product.taxRate,product.discountAmt)}}</h5>
+                    <span class="text-decoration-line-through text-muted me-2">₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
+                    <span class="badge bg-success">{{  getDiscountPercentage(product.discountAmt) | number:'1.0-0' }}% off</span>
+                </div>
+
+                <div class="mb-3" *ngIf="product.color">
+                    <label>Color:</label>
+                    <span class="badge bg-secondary ms-2">{{ product.color }}</span>
+                </div>
+
+                <div class="mb-3">
+                    <label>Quantity:</label>
+                    <input type="number" class="form-control w-50 d-inline-block ms-2" min="1" [(ngModel)]="quantity" />
+                </div>
+
+                <div class="d-grid gap-2 my-3">
+                    <button class="btn btn-warning" (click)="addToCart(product!)">Add to Cart</button>
+                    <button class="btn btn-primary" (click)="buyNow(product)">Buy Now</button>
+                </div>
+
+                <p class="text-success mt-2"><i class="bi bi-check-circle"></i> In stock, ships fast!</p>
+            </mat-card>
+        </div>
+    </div>
+
+    <!-- Specifications -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <mat-card class="p-3">
+                <h5>Product Details</h5>
+                <ul class="mb-0">
+                    <li *ngIf="product.weight"><strong>Weight:</strong> {{ product.weight }}</li>
+                    <li *ngIf="product.warranty"><strong>Warranty:</strong> {{ product.warranty }}</li>
+                    <li *ngIf="product.material"><strong>Material:</strong> {{ product.material }}</li>
+                    <li *ngIf="product.features"><strong>Features:</strong> {{ product.features }}</li>
+                    <li *ngIf="product.specifications"><strong>Specifications:</strong> {{ product.specifications }}
+                    </li>
+                </ul>
+            </mat-card>
+        </div>
+    </div>
+
+    <!-- Video -->
+    <!-- <div class="row mt-4" *ngIf="product.videoUrl">
+        <div class="col-12">
+            <mat-card class="p-3">
+                <h5>Product Video</h5>
+                <iframe width="100%" height="315" [src]="product.videoUrl | safeUrl" frameborder="0"
+                    allowfullscreen></iframe>
+            </mat-card>
+        </div>
+    </div> -->
+</div>

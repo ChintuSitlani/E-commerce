@@ -63,16 +63,16 @@ export class ProductService {
 
     return this.http.get<{ products: Product[]; total: number }>(`${this.baseUrl}/filteredProduct`, { params });
   }
-  addToCart(productId: string, userId: string) {
-    return this.http.post<any>(`${environment.apiUrl}/cart/add`, { productId, userId });
-  }
+  addToCart(cartItem: any): Observable<CartItems> {
+    return this.http.post<CartItems>(`${environment.apiUrl}/cart/add`,  cartItem );
+  } 
 
   getCartItems(userId: string) {
     return this.http.get<CartItems[]>(`${environment.apiUrl}/cart/${userId}`);
   }
 
-  updateCartQuantity(itemId: string, quantity: number) {
-    return this.http.put(`${environment.apiUrl}/cart/${itemId}`, { quantity });
+  updateCartItem(itemId: string, cartItem: any): Observable<CartItems> {
+    return this.http.put<CartItems>(`${environment.apiUrl}/cart/${itemId}`, { cartItem });
   }
 
   removeFromCart(itemId: string) {

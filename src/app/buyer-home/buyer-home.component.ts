@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Product, buyers } from '../data-type';
+import { Product, buyers, CartItems } from '../data-type';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../cart.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-buyer-home',
   imports: [
@@ -18,7 +18,7 @@ import { CartService } from '../cart.service';
     NgbCarouselModule,
     FormsModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './buyer-home.component.html',
   styleUrl: './buyer-home.component.css'
@@ -34,7 +34,8 @@ export class BuyerHomeComponent {
   constructor(
     private productService: ProductService,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private snackBar: MatSnackBar
   ) {
     this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyers;
   }
@@ -51,16 +52,31 @@ export class BuyerHomeComponent {
     });
   }
   viewProduct(product: any) {
-    this.router.navigate(['/product-card'], { queryParams: { id: product._id } });
+    this.router.navigate(['/product-detail'], { queryParams: { id: product._id } });
   }
+  addToCart(product: Product) {
+    if (!this.buyerData || !this.buyerData._id) {
+      this.snackBar.open('Please login to add to cart.', 'Close', { duration: 3000 });
+      return;
+    }
 
-  addToCart(productId: string) {
-    this.productService.addToCart(productId, this.buyerData._id).subscribe({
+    const payload = {
+      productId: product._id,
+      userId: this.buyerData._id,
+      quantity: 1
+    };
+
+    console.log('Sending to cart API:', payload);
+
+    this.productService.addToCart(payload).subscribe({
       next: (res) => {
-        console.log('Added to cart', res);
+        this.snackBar.open('Added to cart!', 'Close', { duration: 2000 });
         this.updateCartCount();
       },
-      error: (err) => console.error('Error adding to cart:', err)
+      error: (err) => {
+        this.snackBar.open('Error adding to cart.', 'Close', { duration: 2000 });
+        console.error('Error adding to cart:', err);
+      }
     });
   }
   updateCartCount() {
@@ -71,13 +87,13 @@ export class BuyerHomeComponent {
   }
   getSellingPriceInclTax(priceExclTax: number, taxRate: number): number {
     const taxAmount = (priceExclTax * taxRate) / 100;
-    this.priceInclTax =  parseFloat((priceExclTax + taxAmount).toFixed(2));
+    this.priceInclTax = parseFloat((priceExclTax + taxAmount).toFixed(2));
     return this.priceInclTax;
   }
   getDiscountedPrice(discountAmt: number): number {
     return parseFloat((this.priceInclTax - discountAmt).toFixed(2));
   }
-  getDiscountPercentage( discountedAmt: number): number {
+  getDiscountPercentage(discountedAmt: number): number {
     return parseFloat(((discountedAmt / this.priceInclTax) * 100).toFixed(2));
   }
 

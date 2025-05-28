@@ -15,6 +15,7 @@ import { Product } from '../data-type';
 import { ActivatedRoute } from '@angular/router';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LayoutModule } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-results',
@@ -41,7 +42,7 @@ export class SearchResultsComponent implements OnInit {
   currentSkip = 0;
   limit = 10;
   loading = false;
-
+  priceInclTax: number = 0;
   searchTerm = '';
   filters: { brand: string; minPrice: number; maxPrice: number } = {
     brand: '',
@@ -51,7 +52,8 @@ export class SearchResultsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -95,5 +97,23 @@ export class SearchResultsComponent implements OnInit {
   // Reapply filters and reload from start
   applyFilters(): void {
     this.resetAndLoadProducts();
+  }
+  viewProductDetail(id?: string) {
+    if (id) {
+      this.router.navigate(['/product-detail'], { queryParams: { id } });
+    }
+
+  }
+  getSellingPriceInclTax(priceExclTax: number, taxRate: number): number {
+    const taxAmount = (priceExclTax * taxRate) / 100;
+    this.priceInclTax = parseFloat((priceExclTax + taxAmount).toFixed(2));
+    return this.priceInclTax;
+  }
+  getDiscountedPrice(priceExclTax: number, taxRate: number,discountAmt: number): number {
+    this.priceInclTax =  this.getSellingPriceInclTax(priceExclTax, taxRate);
+    return parseFloat((this.priceInclTax - discountAmt).toFixed(2));
+  }
+  getDiscountPercentage(discountedAmt: number): number {
+    return parseFloat(((discountedAmt / this.priceInclTax) * 100).toFixed(2));
   }
 }
