@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar'; // Add this import
 
 @Component({
   selector: 'app-cart',
@@ -51,7 +52,8 @@ export class CartComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar // Inject MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -70,7 +72,11 @@ export class CartComponent implements OnInit {
   }
 
   updateQuantity(item: CartItems, newQty: number) {
-    if (newQty < 1) return;
+    if (newQty === 0)
+      return this.removeItem(item._id);
+    if (newQty < 0)
+      return;
+
       item.quantity = newQty;
       this.productService.updateCartItem(item._id, item).subscribe(() => {
       item.quantity = newQty;
@@ -79,16 +85,21 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(itemId: string) {
-    this.productService.removeFromCart(itemId).subscribe(() => {
-      this.cartItems = this.cartItems.filter(i => i._id !== itemId);
-      this.applyCoupon();
-      this.cartService.setCartCount(this.cartItems.length);
+    const snackBarRef = this.snackBar.open('Are you sure you want to remove this item?', 'Yes', { duration: 3200 });
+    snackBarRef.onAction().subscribe(() => {
+      this.productService.removeFromCart(itemId).subscribe(() => {
+        this.cartItems = this.cartItems.filter(i => i._id !== itemId);
+        this.applyCoupon();
+        this.cartService.setCartCount(this.cartItems.length);
+        this.snackBar.open('Item removed from cart', 'Close', { duration: 2000 });
+      });
     });
   }
+
   checkout() {
     const selectedItems = this.cartItems.filter(item => item.selected);
     if (selectedItems.length === 0) {
-      alert('Please select at least one item to checkout.');
+      this.snackBar.open('Please select at least one item to checkout.', 'Close', { duration: 2500 });
       return;
     }
 

@@ -137,6 +137,29 @@ export class ProductDetailComponent implements OnInit {
   getDiscountPercentage(discountedAmt: number): number {
     return parseFloat(((discountedAmt / this.priceInclTax) * 100).toFixed(2));
   }
-
+  isInCart(product: Product): boolean {
+    return !!this.findCartItemId(product);
+  }
+  removeFromCart(product: Product) {
+    const cartItemId = this.findCartItemId(product);
+    if (cartItemId !== null) {
+      this.productService.removeFromCart(cartItemId).subscribe({
+        next: (res) => {
+          this.snackBar.open('Removed from cart!', 'Close', { duration: 2000 });
+          this.cartItems = this.cartItems.filter(i => i._id !== cartItemId);
+          this.loadCartItemAndUpdateCartCount();
+        },
+        error: (err) => {
+          this.snackBar.open('Error removing item from cart.', 'Close', { duration: 2000 });
+          console.error('Error removing from cart:', err);
+        }
+      });
+    }
+  }
+  findCartItemId(product: Product): string | null {
+    this.loadCartItemAndUpdateCartCount();
+    const cartItem = this.cartItems.find((item: any) => item.productId._id === product._id);
+    return cartItem ? cartItem._id : null;
+  }
 }
 

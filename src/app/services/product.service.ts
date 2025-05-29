@@ -37,7 +37,7 @@ export class ProductService {
 
   getProductForCarousel(limit: number): Observable<Product[]> {
     const params = new HttpParams().set('_limit', limit.toString());
-    return this.http.get<Product[]>(this.baseUrl, { params });
+    return this.http.get<Product[]>(`${this.baseUrl}/getCrausalProduct`, { params });
   }
 
   getProducts(): Observable<Product[]> {
