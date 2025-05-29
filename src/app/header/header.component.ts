@@ -16,6 +16,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
+import { debounceTime, Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-header',
@@ -52,6 +54,8 @@ export class HeaderComponent {
   totalCount = 0;
   currentSkip = 0;
   limit = 10;
+  searchSubject = new Subject<string>();
+
   constructor(
     private cartService: CartService,
     private seller: SellerService,
@@ -62,9 +66,16 @@ export class HeaderComponent {
     const buyerData = this.buyer.getBuyerData();
     if (buyerData)
       this.userEmail = buyerData.email || '';
+
+    this.searchSubject.pipe(debounceTime(300)).subscribe(value => {
+      this.searchText = value;
+      this.onSearchInput();
+    });
   }
 
   ngOnInit() {
+    this.filteredProducts = [];
+
     this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
       this.isSellerLogin = status;
     });
@@ -74,7 +85,7 @@ export class HeaderComponent {
         this.updateCartCount();
       }
     });
-    
+
     this.cartService.getCartCount().subscribe(count => {
       this.cartItems = count;
     });
@@ -100,28 +111,32 @@ export class HeaderComponent {
   }
 
   onSearchInput() {
-      
+    const search = this.searchText?.toLowerCase().trim() || '';
     const filtersToSend = { ...this.filters };
 
+    // Reset pagination
+    this.currentSkip = 0;
     this.productService.getResultProducts(
-      this.searchText?.toLowerCase() || '',
+      search,
       filtersToSend,
       this.currentSkip,
       this.limit
     ).subscribe(response => {
-      
-      this.allProducts = [...this.allProducts, ...response.products];
+      this.allProducts = response.products;
+      this.filteredProducts = this.allProducts.filter(p =>
+        p.productName.toLowerCase().includes(search)
+      );
       this.totalCount = response.total;
       this.currentSkip += this.limit;
-
     }, () => {
-
+      this.filteredProducts = [];
     });
   }
 
+
   onOptionSelected(productId: string) {
     this.searchText = '';
-    this.router.navigate(['/product-card'], { queryParams: { id: productId } });
+    this.router.navigate(['/product-detail'], { queryParams: { id: productId } });
   }
   updateCartCount() {
     const buyerData = this.buyer.getBuyerData();
@@ -142,7 +157,7 @@ export class HeaderComponent {
     if (this.searchText.trim()) {
       this.router.navigate(['/search-results'], { queryParams: { q: this.searchText } });
     } else {
-      alert('Please enter a search term.');
+      alert('Please enter something.');
     }
   }
 }

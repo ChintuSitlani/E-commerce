@@ -21,7 +21,7 @@
 
         <!-- Product List-->
         <div class="col-lg-9 col-md-8">
-            <p *ngIf="allProducts.length === 0">No allProducts found.</p>
+            <p *ngIf="allProducts.length === 0">No Products found.</p>
             <div *ngFor="let product of allProducts" class="product-card d-flex mb-4 p-2 shadow-sm rounded"
                 (click)="product._id && viewProductDetail(product._id)">
                 <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image me-3" />

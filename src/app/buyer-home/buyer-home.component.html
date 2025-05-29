@@ -1,7 +1,7 @@
 <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
     @for (product of productsCarousel; track product; let i = $index) {
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper">
+    <ng-template ngbSlide >
+        <div class="picsum-img-wrapper" (click)="viewProduct(product)">
             <img [src]="product.imageUrl" alt="Product image" />
         </div>
         <div class="carousel-caption">
