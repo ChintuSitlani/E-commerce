@@ -161,6 +161,7 @@ export class HeaderComponent {
   goToSearchResults() {
     if (this.searchText.trim()) {
       this.router.navigate(['/search-results'], { queryParams: { q: this.searchText } });
+      this.filteredProducts = [];
     } else {
       this.snackBar.open('Please enter something.', 'Close', { duration: 2500 });
     }
