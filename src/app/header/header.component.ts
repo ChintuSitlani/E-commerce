@@ -17,7 +17,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
 import { debounceTime, Subject } from 'rxjs';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
@@ -61,13 +61,14 @@ export class HeaderComponent {
     private seller: SellerService,
     private buyer: BuyerService,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     const buyerData = this.buyer.getBuyerData();
     if (buyerData)
       this.userEmail = buyerData.email || '';
 
-    this.searchSubject.pipe(debounceTime(300)).subscribe(value => {
+    this.searchSubject.pipe(debounceTime(500)).subscribe(value => {
       this.searchText = value;
       this.onSearchInput();
     });
@@ -112,10 +113,15 @@ export class HeaderComponent {
 
   onSearchInput() {
     const search = this.searchText?.toLowerCase().trim() || '';
-    const filtersToSend = { ...this.filters };
 
-    // Reset pagination
+    if (!search) {
+      this.filteredProducts = [];
+      return;
+    }
+
+    const filtersToSend = { ...this.filters };
     this.currentSkip = 0;
+
     this.productService.getResultProducts(
       search,
       filtersToSend,
@@ -132,7 +138,6 @@ export class HeaderComponent {
       this.filteredProducts = [];
     });
   }
-
 
   onOptionSelected(productId: string) {
     this.searchText = '';
@@ -157,7 +162,7 @@ export class HeaderComponent {
     if (this.searchText.trim()) {
       this.router.navigate(['/search-results'], { queryParams: { q: this.searchText } });
     } else {
-      alert('Please enter something.');
+      this.snackBar.open('Please enter something.', 'Close', { duration: 2500 });
     }
   }
 }

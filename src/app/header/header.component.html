@@ -10,8 +10,8 @@
       <mat-label>Search</mat-label>
       <input type="text" matInput [(ngModel)]="searchText" (ngModelChange)="searchSubject.next($event)"
         [matAutocomplete]="auto" (keydown.enter)="goToSearchResults()" placeholder="Type to search" />
-      <button mat-icon-button matSuffix (click)="goToSearchResults()">
-        <mat-icon matSuffix style="cursor: pointer;">search</mat-icon>
+        <button mat-icon-button matSuffix (click)="goToSearchResults()" >
+      <mat-icon matSuffix style="cursor: pointer;" >search</mat-icon>
       </button>
     </mat-form-field>
   </span>
@@ -70,10 +70,10 @@
   <mat-form-field appearance="outline" class="search-field">
     <mat-label>Search</mat-label>
     <input type="text" matInput [(ngModel)]="searchText" (ngModelChange)="searchSubject.next($event)"
-      [matAutocomplete]="auto" (keydown.enter)="goToSearchResults()" placeholder="Type to search" />
-    <button mat-icon-button matSuffix (click)="goToSearchResults()">
-      <mat-icon matSuffix style="cursor: pointer;">search</mat-icon>
-    </button>
+        [matAutocomplete]="auto" (keydown.enter)="goToSearchResults()" placeholder="Type to search" />
+    <button mat-icon-button matSuffix (click)="goToSearchResults()" >
+      <mat-icon matSuffix style="cursor: pointer;" >search</mat-icon>
+      </button>
   </mat-form-field>
 
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
