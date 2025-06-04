@@ -14,14 +14,14 @@ export class HomeComponent {
     private router: Router,
     private sellerService: SellerService,
     private buyerService: BuyerService,
-  ) {}
+  ) { }
   ngOnInit() {
     let redirectRoute = 'buyer-home';
-    if(this.sellerService.isSellerLoggedIn.value === true) 
-      redirectRoute =  'seller-home';
-    else if(this.buyerService.isBuyerLoggedIn.value === true)
+    if (this.sellerService.isSellerLoggedIn.value === true)
+      redirectRoute = 'seller-home';
+    else if (this.buyerService.isBuyerLoggedIn.value === true)
       redirectRoute = 'buyer-home';
-  this.router.navigate([redirectRoute]);
+    this.router.navigate([redirectRoute]);
   }
 
 }

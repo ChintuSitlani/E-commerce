@@ -16,6 +16,8 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -24,7 +26,7 @@ export const routes: Routes = [
     { path: 'sellerLogin',  component: SellerLoginComponent },
     { path: 'buyerLogin', component: LoginComponent },
     { path: 'seller-home', component: SellerHomeComponent, canActivate: [AuthGuard] },
-    { path: 'buyer-home', component: BuyerHomeComponent, canActivate: [AuthGuard]},
+    { path: 'buyer-home', component: BuyerHomeComponent},
     { path: 'app-seller-add-prod', component: SellerAddProdComponent},
     { path: 'product-card', component: ProductCardComponent},
     { path: 'page-not-found', component: PageNotFoundComponent },
@@ -33,6 +35,8 @@ export const routes: Routes = [
     { path: 'orders', component: OrdersComponent},
     { path: 'checkout', component: CheckoutComponent},
     { path: 'order-confirmation', component: OrderConfirmationComponent},
-    
+    { path: 'search-results', component: SearchResultsComponent},
+    { path: 'product-detail', component: ProductDetailComponent},
+
     { path: '**', redirectTo: 'page-not-found'} 
 ];

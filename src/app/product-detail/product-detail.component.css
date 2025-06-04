@@ -1,0 +1,14 @@
+.main-img {
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.rmvBtn {
+    flex: 0 0 20%;
+    min-width: 48px;
+    max-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

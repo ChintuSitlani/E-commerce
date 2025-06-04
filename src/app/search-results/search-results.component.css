@@ -1,0 +1,29 @@
+.product-card {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    transition: box-shadow 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 1rem;
+    }
+}

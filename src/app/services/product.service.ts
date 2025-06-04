@@ -37,23 +37,42 @@ export class ProductService {
 
   getProductForCarousel(limit: number): Observable<Product[]> {
     const params = new HttpParams().set('_limit', limit.toString());
-    return this.http.get<Product[]>(this.baseUrl, { params });
+    return this.http.get<Product[]>(`${this.baseUrl}/getCrausalProduct`, { params });
   }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
+    return this.http.get<Product[]>(`${this.baseUrl}/getHomeScreenProducts`);
   }
 
-  addToCart(productId: string, userId: string) {
-    return this.http.post<any>(`${environment.apiUrl}/cart/add`, { productId, userId });
+  getResultProducts(
+    searchTerm: string = '',
+    filters: { brand: string; minPrice: number; maxPrice: number } = { brand: '', minPrice: 0, maxPrice: 100000 },
+    skip: number = 0,
+    limit: number = 10
+  ): Observable<{ products: Product[]; total: number }> {
+    let params = new HttpParams()
+      .set('search', searchTerm)
+      .set('minPrice', filters.minPrice.toString())
+      .set('maxPrice', filters.maxPrice.toString())
+      .set('skip', skip.toString())
+      .set('limit', limit.toString());
+
+    if (filters.brand) {
+      params = params.set('brand', filters.brand);
+    }
+
+    return this.http.get<{ products: Product[]; total: number }>(`${this.baseUrl}/filteredProduct`, { params });
   }
+  addToCart(cartItem: any): Observable<CartItems> {
+    return this.http.post<CartItems>(`${environment.apiUrl}/cart/add`,  cartItem );
+  } 
 
   getCartItems(userId: string) {
     return this.http.get<CartItems[]>(`${environment.apiUrl}/cart/${userId}`);
   }
 
-  updateCartQuantity(itemId: string, quantity: number) {
-    return this.http.put(`${environment.apiUrl}/cart/${itemId}`, { quantity });
+  updateCartItem(itemId: string, cartItem: any): Observable<CartItems> {
+    return this.http.put<CartItems>(`${environment.apiUrl}/cart/${itemId}`, { cartItem });
   }
 
   removeFromCart(itemId: string) {
