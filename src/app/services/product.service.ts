@@ -1,21 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http';
 import { CartSummary, CartItems, Product } from '../data-type';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environments';
+import { SellerService } from './seller.service';
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private baseUrl = `${environment.apiUrl}/products`;
-
-  constructor(private http: HttpClient) { }
+  private token: string;
+  constructor(private http: HttpClient) {
+    this.token = SellerService.getToken();
+  }
 
   saveProduct(product: Product): Observable<Product> {
+    if (!this.token) {
+      throw new Error('No token found. Please log in as a seller.');
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`
+    });
+
     if (product._id) {
-      return this.http.put<Product>(`${this.baseUrl}/${product._id}`, product);
+      return this.http.put<Product>(
+        `${this.baseUrl}/${product._id}`,
+        product,
+        { headers }
+      );
     } else {
-      return this.http.post<Product>(this.baseUrl, product);
+      return this.http.post<Product>(
+        this.baseUrl,
+        product,
+        { headers }
+      );
     }
   }
 
@@ -32,7 +52,14 @@ export class ProductService {
   }
 
   deleteProduct(productId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${productId}`);
+    if (!this.token) {
+      throw new Error('No token found. Please log in as a seller.');
+    }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`
+    });
+    return this.http.delete(`${this.baseUrl}/${productId}`, { headers });
   }
 
   getProductForCarousel(limit: number): Observable<Product[]> {
@@ -64,8 +91,8 @@ export class ProductService {
     return this.http.get<{ products: Product[]; total: number }>(`${this.baseUrl}/filteredProduct`, { params });
   }
   addToCart(cartItem: any): Observable<CartItems> {
-    return this.http.post<CartItems>(`${environment.apiUrl}/cart/add`,  cartItem );
-  } 
+    return this.http.post<CartItems>(`${environment.apiUrl}/cart/add`, cartItem);
+  }
 
   getCartItems(userId: string) {
     return this.http.get<CartItems[]>(`${environment.apiUrl}/cart/${userId}`);

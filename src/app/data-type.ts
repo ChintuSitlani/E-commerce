@@ -9,6 +9,11 @@ export interface sellerLocalStorageData{
   seller: sellers,
   token: string,
 }
+export interface buyerLocalStorageData{
+  message: string,
+  buyer: buyers,
+  token: string,
+}
 
 export interface sellers {
   _id: string,

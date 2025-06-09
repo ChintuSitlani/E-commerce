@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { SellerService } from '../services/seller.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-seller-add-prod',
@@ -29,7 +30,9 @@ export class SellerAddProdComponent {
     private fb: FormBuilder,
     private productService: ProductService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private sellerService: SellerService
+    private sellerService: SellerService,
+    private snackBar: MatSnackBar,
+    
   ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
@@ -38,7 +41,8 @@ export class SellerAddProdComponent {
       description: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
       taxRate: [0],
-      discountAmt: [0]
+      discountAmt: [0],
+      stock: [0, [Validators.required, Validators.min(0)]]
     });
 
     this.productForm.valueChanges.subscribe(values => {
@@ -72,19 +76,20 @@ export class SellerAddProdComponent {
           sellerId: sellerData.seller._id,
           subcategory: '',
           taxRate: formValues.taxRate,
-          discountAmt: formValues.discountAmt
+          discountAmt: formValues.discountAmt,
+          stock: formValues.stock || 0,
         };
 
         this.productService.saveProduct(product).subscribe({
           next: (res: any) => {
             console.log('Product added:', res);
-            alert('Product added successfully!');
+            this.snackBar.open('Product added successfully!', 'Close', { duration: 3000 });
             this.productForm.reset();
             this.MRP = 0; 
           },
           error: (err: any) => {
             console.error('Error:', err);
-            alert('Error adding product');
+            this.snackBar.open('Error adding product', 'Close', { duration: 3000 });
           }
         });
       } else {

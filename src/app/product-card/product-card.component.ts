@@ -56,6 +56,7 @@ export class ProductCardComponent implements OnInit {
       taxRate: [0],
       discountAmt: [0],
       description: [''],
+      stock: [0, Validators.min(0)],
       imageUrl: ['', Validators.required],
     });
 
@@ -87,6 +88,7 @@ export class ProductCardComponent implements OnInit {
                 taxRate: res.taxRate || 0,
                 discountAmt: res.discountAmt || 0,
                 description: res.description,
+                stock: res.stock || 0,
                 imageUrl: res.imageUrl
               });
               this.MRP = this.calculateFinalPrice(res.priceExclTax || 0, res.taxRate || 0, res.discountAmt || 0);
@@ -115,6 +117,7 @@ export class ProductCardComponent implements OnInit {
         priceExclTax: formValues.price,
         taxRate: formValues.taxRate,
         discountAmt: formValues.discountAmt,
+        stock: formValues.stock || 0,
         description: formValues.description,
         imageUrl: formValues.imageUrl,
       };

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Product, buyers, CartItems } from '../data-type';
+import { Product, buyers, CartItems , buyerLocalStorageData } from '../data-type';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../cart.service';
@@ -26,7 +26,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class BuyerHomeComponent {
 
   cartCount = 0;
-  buyerData: buyers;
+  buyerData: buyerLocalStorageData;
   products: Product[] = [];
   productsCarousel: any[] = [];
   priceInclTax: GLfloat = 0;
@@ -37,7 +37,7 @@ export class BuyerHomeComponent {
     private cartService: CartService,
     private snackBar: MatSnackBar
   ) {
-    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyers;
+    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyerLocalStorageData;
   }
   ngOnInit() {
     this.productService.getProductForCarousel(3).subscribe(data => {
@@ -55,14 +55,14 @@ export class BuyerHomeComponent {
     this.router.navigate(['/product-detail'], { queryParams: { id: product._id } });
   }
   addToCart(product: Product) {
-    if (!this.buyerData || !this.buyerData._id) {
+    if (!this.buyerData || !this.buyerData.buyer._id) {
       this.snackBar.open('Please login to add to cart.', 'Close', { duration: 3000 });
       return;
     }
 
     const payload = {
       productId: product._id,
-      userId: this.buyerData._id,
+      userId: this.buyerData.buyer._id,
       quantity: 1
     };
 
@@ -80,7 +80,7 @@ export class BuyerHomeComponent {
     });
   }
   updateCartCount() {
-    this.productService.getCartItems(this.buyerData._id).subscribe(items => {
+    this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
       this.cartCount = items.length;
       this.cartService.setCartCount(this.cartCount);
     });

@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { userSignupData } from '../data-type';
 import { BuyerService } from '../services/buyer.service';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -37,6 +38,7 @@ export class SignupComponent {
   constructor(
     private fb: FormBuilder,
     private buyer: BuyerService,
+    private router: Router,
   ) {
     this.signinForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
@@ -51,20 +53,33 @@ export class SignupComponent {
     const confirmPassword = form.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
+onSubmit() {
+  if (this.signinForm.valid) {
+    this.userData = {
+      ...this.userData,
+      name: this.signinForm.value.name,
+      email: this.signinForm.value.email,
+      password: this.signinForm.value.password
+    };
 
-  onSubmit() {
-    if (this.signinForm.valid) {
-      this.userData = {
-        ...this.userData,
-        name: this.signinForm.value.name,
-        email: this.signinForm.value.email,
-        password: this.signinForm.value.password // Only save the password
-      };
-      this.buyer.buyerSignup(this.userData,);
-    }
-    this.signinForm.reset();
+    this.buyer.buyerSignup(this.userData).subscribe({
+      next: (result) => {
+        this.buyer.isBuyerLoggedIn.next(true);
 
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('buyer', JSON.stringify(result.body));
+        }
+
+        this.router.navigate(['buyer-home']);
+        this.signinForm.reset(); 
+      },
+      error: (error) => {
+        console.error('Signup failed:', error);
+      }
+    });
   }
+}
+
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }

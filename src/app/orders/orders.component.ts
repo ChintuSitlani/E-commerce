@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../services/order.service';
-import { OrderSummary, buyers } from '../data-type';
+import { OrderSummary, buyerLocalStorageData } from '../data-type';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -40,7 +40,7 @@ export class OrdersComponent implements OnInit {
   orders: OrderSummary[] = [];
   filteredOrders: OrderSummary[] = [];
   readonly CANCELLED_STATUS = 'cancelled';
-  buyerData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
+  buyerData: buyerLocalStorageData= JSON.parse(localStorage.getItem('buyer') || '{}');
 
   selectedStatus = '';
   startDate: Date | null = null;
@@ -62,12 +62,12 @@ export class OrdersComponent implements OnInit {
   }
 
   loadOrders(): void {
-    if (this.buyerData && this.buyerData._id) {
+    if (this.buyerData.buyer && this.buyerData.buyer._id) {
       const filters = this.buildFilters();
       filters.limit = this.limit;
       filters.page = this.page;
 
-      this.orderService.getOrdersForBuyer(this.buyerData._id, filters).subscribe({
+      this.orderService.getOrdersForBuyer(this.buyerData.buyer._id, filters).subscribe({
         next: (response: any) => {
           this.orders = response.orders || [];
           this.filteredOrders = [...this.orders];
@@ -76,6 +76,7 @@ export class OrdersComponent implements OnInit {
           this.snackBar.open('Error loading orders: ' + err, 'Close', {
             duration: 3000
           });
+          console.error('Error loading orders:', err);
         }
       });
     }

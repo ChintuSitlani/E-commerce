@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http';
 import { buyers, userSignupData } from '../data-type';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -11,6 +11,7 @@ import { sellerLocalStorageData } from '../data-type';
   providedIn: 'root',
 })
 export class SellerService {
+  
   isSellerLoggedIn = new BehaviorSubject<boolean>(false);
   private baseUrl = environment.apiUrl; // already ends in /api
 
@@ -20,7 +21,7 @@ export class SellerService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      const sellerData = localStorage.getItem('seller');
+      const sellerData = this.getSellerData();
       if (sellerData) {
         this.isSellerLoggedIn.next(true);
       }
@@ -105,5 +106,9 @@ export class SellerService {
     localStorage.removeItem('seller');
     this.isSellerAuthenticated();
     this.router.navigate(['/sellerLogin']);
+  }
+  static getToken(): string {
+    const seller = JSON.parse(localStorage.getItem('seller') || '{}');
+    return seller.token || '';
   }
 }

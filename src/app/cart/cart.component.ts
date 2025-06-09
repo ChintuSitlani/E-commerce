@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../cart.service';
 import { CommonModule } from '@angular/common';
-import { buyers, CartItems } from '../data-type';
+import { CartItems, buyerLocalStorageData } from '../data-type';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -36,7 +36,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'; // Add this import
 })
 export class CartComponent implements OnInit {
   cartItems: CartItems[] = [];
-  userData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
+  buyerData: buyerLocalStorageData = JSON.parse(localStorage.getItem('buyer') || '{}');
   couponCode = '';
   summary: CartSummary = {
     subTotal: 0,
@@ -64,7 +64,7 @@ export class CartComponent implements OnInit {
 
 
   loadCart() {
-    this.productService.getCartItems(this.userData._id).subscribe(items => {
+    this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
       this.cartItems = items.map(item => ({ ...item, selected: true }));
       this.cartService.setCartCount(items.length);
     });
@@ -114,7 +114,7 @@ export class CartComponent implements OnInit {
   }
 
   applyCoupon() {
-    this.productService.getCartSummary(this.userData._id, this.couponCode).subscribe((summary: CartSummary) => {
+    this.productService.getCartSummary(this.buyerData.buyer._id, this.couponCode).subscribe((summary: CartSummary) => {
       this.summary = summary;
       this.cartItems = summary?.cartItems || [];
     });

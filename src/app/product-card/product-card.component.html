@@ -36,6 +36,11 @@
                 <input matInput [value]="MRP" readonly />
             </mat-form-field>
 
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Stock</mat-label>
+                <input matInput type="number" formControlName="stock" min="0"  />
+            </mat-form-field>
+
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Description</mat-label>
                 <textarea matInput formControlName="description"></textarea>
