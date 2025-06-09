@@ -4,6 +4,27 @@ export interface userSignupData {
   password: string,
 }
 
+export interface sellerLocalStorageData{
+  message: string,
+  seller: sellers,
+  token: string,
+}
+
+export interface sellers {
+  _id: string,
+  email: string,
+  password: string,
+  shippingAddress?: string,
+  pin?: string,
+  phone?: string,
+  country?: string,
+  state?: string,
+  city?: string,
+  isBlocked?: boolean,
+  isEmailVerified?: boolean,
+  isPhoneVerified?: boolean,
+  emailOTP?: string
+}
 export interface buyers {
   _id: string,
   email: string,

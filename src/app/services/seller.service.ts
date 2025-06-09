@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environments';
+import { sellerLocalStorageData } from '../data-type';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -84,7 +86,7 @@ export class SellerService {
     }
   }
 
-  getSellerData: () => buyers | null = () => {
+  getSellerData: () => sellerLocalStorageData | null = () => {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('seller')) {
         return JSON.parse(localStorage.getItem('seller') || '{}');

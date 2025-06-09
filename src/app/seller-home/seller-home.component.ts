@@ -32,15 +32,23 @@ export class SellerHomeComponent implements OnInit {
     this.fetchSellerProducts();
   }
 
-  fetchSellerProducts() {
-    const sellerData = this.sellerService.getSellerData();
-    if (sellerData != null && sellerData != undefined && sellerData.email != null && sellerData.email != undefined && sellerData._id != null && sellerData._id != undefined) {
-      this.productService.getSellerProducts(sellerData._id, sellerData.email).subscribe((res: Product[]) => {
-        this.sellerProducts = res;
-      });
-    }else
-      console.error('Seller data is not available. Please log in again.');
+ fetchSellerProducts() {
+  const sellerData = this.sellerService.getSellerData();
+  if (sellerData?.seller?.email && sellerData?.seller?._id && sellerData?.token) {
+    const token = sellerData.token;
+    this.productService.getSellerProducts(sellerData?.seller?._id, sellerData?.seller?.email)
+      .subscribe(
+        (res: Product[]) => {
+          this.sellerProducts = res;
+        },
+        (error) => {
+          console.error('Failed to fetch products:', error);
+        }
+      );
+  } else {
+    console.error('Seller data is not available. Please log in again.');
   }
+}
 
   editProduct(product: any) {
     this.router.navigate(['/product-card'], { queryParams: { id: product._id } });

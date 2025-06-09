@@ -188,7 +188,7 @@ export class CheckoutComponent implements OnInit {
 
   calculateDiscount(): number {
     return this.items.reduce((sum, item) =>
-      sum + (item.productId.discountAmt ?? 0), 0);
+      sum + ((item.productId.discountAmt ?? 0) * item.quantity), 0);
   }
 
   calculateTax(): number {

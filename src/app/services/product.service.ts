@@ -24,7 +24,7 @@ export class ProductService {
       .set('sellerId', sellerId)
       .set('sellerEmailId', sellerEmail);
 
-    return this.http.get<Product[]>(this.baseUrl, { params });
+    return this.http.get<Product[]>(`${this.baseUrl}/getHomeScreenProducts`, { params });
   }
 
   getProductById(id: string): Observable<Product> {

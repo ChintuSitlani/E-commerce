@@ -61,15 +61,15 @@ export class SellerAddProdComponent {
       const formValues = this.productForm.value;
       const sellerData = this.sellerService.getSellerData();
 
-      if (sellerData?.email && sellerData?._id) {
+      if (sellerData?.seller?.email && sellerData?.seller?._id) {
         const product: Product = {
           productName: formValues.productName,
           category: formValues.productCategory,
           priceExclTax: formValues.price,
           description: formValues.description,
           imageUrl: formValues.imageUrl,
-          sellerEmailId: sellerData.email,
-          sellerId: sellerData._id,
+          sellerEmailId: sellerData.seller.email,
+          sellerId: sellerData.seller._id,
           subcategory: '',
           taxRate: formValues.taxRate,
           discountAmt: formValues.discountAmt

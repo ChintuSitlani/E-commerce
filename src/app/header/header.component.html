@@ -33,7 +33,7 @@
     <span *ngIf="!isSellerLogin" class="cart">
       <button mat-icon-button [routerLink]="'/cart'" aria-label="Cart">
         <mat-icon>shopping_cart</mat-icon>
-        <span class="cart-count">{{ cartItems }}</span>
+        <span class="cart-count" *ngIf="cartItems !==0">{{ cartItems }}</span>
       </button>
     </span>
     <button mat-icon-button [matMenuTriggerFor]="userMenu">
@@ -41,7 +41,7 @@
     </button>
 
     <mat-menu #userMenu="matMenu">
-      <ng-container *ngIf="isBuyerLogin; else loginOption">
+      <ng-container *ngIf="isBuyerLogin || isSellerLogin; else loginOption">
         <div class="user-info">
           <p><strong>{{ userEmail }}</strong></p>
         </div>
