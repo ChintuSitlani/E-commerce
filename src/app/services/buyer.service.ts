@@ -1,11 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { buyers, userSignupData } from '../data-type';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { buyers, userSignupData , buyerLocalStorageData } from '../data-type';
 import { environment } from '../../environments/environments';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -27,29 +26,12 @@ export class BuyerService {
         this.isBuyerLoggedIn.next(true);
       }
     }
+
   }
 
-  buyerSignup(data: userSignupData) {
+  buyerSignup(data: userSignupData): Observable<any> {
     const url = `${this.baseUrl}/buyer/signup`;
-
-    return this.http
-      .post(url, data, { observe: 'response' })
-      .subscribe(
-        (result) => {
-          this.isBuyerLoggedIn.next(true);
-
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('buyer', JSON.stringify(result.body));
-          }
-
-          this.router.navigate(['buyer-home']);
-          console.log(result);
-        },
-        (error) => {
-          console.error('Signup failed:', error);
-          return error;
-        }
-      );
+    return this.http.post(url, data, { observe: 'response' });
   }
 
   buyerLogin(data: buyers) {
@@ -91,7 +73,11 @@ export class BuyerService {
       }
     }
   }
-
+  setBuyerData(data: buyerLocalStorageData) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('buyer', JSON.stringify(data));
+    }
+  }
   isBuyerAuthenticated() {
     const buyerData = localStorage.getItem('buyer');
     this.isBuyerLoggedIn.next(!!buyerData);
@@ -115,11 +101,18 @@ export class BuyerService {
 
   updateBuyerInfo(buyer: buyers): Observable<buyers> {
     if (buyer) {
-      return this.http.put<buyers>(`${this.baseUrl}/buyer/update/${buyer._id}`, buyer);
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${BuyerService.getToken()}`
+      });
+      return this.http.put<buyers>(`${this.baseUrl}/buyer/update/${buyer._id}`, buyer, { headers });
     }
     return new Observable<buyers>((observer) => {
       observer.error('Invalid buyer data');
     });
   }
-  
+  static getToken(): string {
+    const buyer = JSON.parse(localStorage.getItem('buyer') || '{}');
+    return buyer.token || '';
+  }
 }

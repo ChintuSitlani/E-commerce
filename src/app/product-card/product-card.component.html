@@ -5,50 +5,145 @@
 
     <div class="product-info">
         <h2>{{ productForm.value.productName }}</h2>
-        <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Product Name</mat-label>
-                <input matInput formControlName="productName" required />
-            </mat-form-field>
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h3 class="section-title">Basic Information</h3>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Product Name</mat-label>
+                    <input matInput formControlName="productName" required />
+                </mat-form-field>
 
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Product Category</mat-label>
-                <input matInput formControlName="category" required />
-            </mat-form-field>
+                <div class="two-column-fields">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Product Category</mat-label>
+                        <input matInput formControlName="category" required />
+                    </mat-form-field>
 
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Price excl. tax</mat-label>
-                <input matInput type="number" formControlName="price" required />
-            </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Product Subcategory</mat-label>
+                        <input matInput formControlName="subcategory" />
+                    </mat-form-field>
+                </div>
 
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Tax Rate (%)</mat-label>
-                <input matInput type="number" formControlName="taxRate" />
-            </mat-form-field>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description" class="textarea-field"></textarea>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Discount Amt</mat-label>
-                <input matInput type="number" formControlName="discountAmt" min="0" />
-            </mat-form-field>
+            <!-- Pricing Section -->
+            <div class="form-section">
+                <h3 class="section-title">Pricing</h3>
+                <div class="two-column-fields">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Price excl. tax</mat-label>
+                        <input matInput type="number" formControlName="price" required />
+                    </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>MRP (Final Price)</mat-label>
-                <input matInput [value]="MRP" readonly />
-            </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Tax Rate (%)</mat-label>
+                        <input matInput type="number" formControlName="taxRate" />
+                    </mat-form-field>
+                </div>
 
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description"></textarea>
-            </mat-form-field>
+                <div class="two-column-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Discount Amt</mat-label>
+                        <input matInput type="number" formControlName="discountAmt" min="0" />
+                    </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Image URL</mat-label>
-                <input matInput formControlName="imageUrl" type="url" required />
-            </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>MRP (Final Price)</mat-label>
+                        <input matInput [value]="MRP" readonly />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div class="form-section">
+                <h3 class="section-title">Inventory</h3>
+                <div class="two-column-fields">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Stock</mat-label>
+                        <input matInput type="number" formControlName="stock" min="0" />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Product Details Section -->
+            <div class="form-section">
+                <h3 class="section-title">Product Details</h3>
+                <div class="two-column-fields">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Brand</mat-label>
+                        <input matInput formControlName="brand" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Color</mat-label>
+                        <input matInput formControlName="color" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Weight</mat-label>
+                        <input matInput formControlName="weight" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Warranty</mat-label>
+                        <input matInput formControlName="warranty" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Material</mat-label>
+                        <input matInput formControlName="material" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Ratings</mat-label>
+                        <input matInput type="number" formControlName="ratings" min="0" max="5" />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Specifications Section -->
+            <div class="form-section">
+                <h3 class="section-title">Specifications</h3>
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Features</mat-label>
+                    <textarea matInput formControlName="features" class="textarea-field"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Specifications</mat-label>
+                    <textarea matInput formControlName="specifications" class="textarea-field"></textarea>
+                </mat-form-field>
+            </div>
+
+            <!-- Media Section -->
+            <div class="form-section">
+                <h3 class="section-title">Media</h3>
+                <div class="section-title">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Image URL</mat-label>
+                        <input matInput formControlName="imageUrl" type="url" required />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width" *ngIf="false">
+                        <mat-label>Video URL</mat-label>
+                        <input matInput formControlName="videoUrl" type="url" />
+                    </mat-form-field>
+                </div>
+            </div>
 
             <div class="action-buttons">
-                <button mat-raised-button color="primary" type="submit">Update</button>
-                <button mat-raised-button color="warn" type="button" (click)="deleteProduct()">Delete</button>
+                <button mat-raised-button color="primary" type="submit">
+                    {{ isEditMode ? 'Update' : 'Add ' }}
+                </button>
+                <button *ngIf="isEditMode" mat-raised-button color="warn" type="button" (click)="deleteProduct()">
+                    Delete
+                </button>
             </div>
         </form>
     </div>

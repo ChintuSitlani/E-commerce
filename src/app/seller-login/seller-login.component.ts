@@ -57,7 +57,6 @@ export class SellerLoginComponent {
       };
 
       this.seller.sellerLogin(this.userData);
-      this.loginForm.reset();
     }
   }
   togglePasswordVisibility() {

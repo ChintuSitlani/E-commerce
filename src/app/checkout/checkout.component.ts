@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { buyers, OrderItem, OrderSummary } from '../data-type';
+import {  OrderItem, OrderSummary, buyerLocalStorageData } from '../data-type';
 import { OrderService } from '../services/order.service';
 import { Router } from '@angular/router';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
@@ -44,7 +44,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 })
 export class CheckoutComponent implements OnInit {
   checkoutForm: FormGroup;
-  buyerData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
+  buyerData: buyerLocalStorageData = JSON.parse(localStorage.getItem('buyer') || '{}');
   items: OrderItem[] = [];
   billingSameAsShipping: boolean = false;
   orderId: string = '';
@@ -94,10 +94,10 @@ export class CheckoutComponent implements OnInit {
       });
     this.checkoutForm.patchValue({
       shipping: {
-        address: this.buyerData.shippingAddress,
-        zip: this.buyerData.pin,
-        state: this.buyerData.state,
-        city: this.buyerData.city,
+        address: this.buyerData.buyer.shippingAddress,
+        zip: this.buyerData.buyer.pin,
+        state: this.buyerData.buyer.state,
+        city: this.buyerData.buyer.city,
       }
     });
 
@@ -125,7 +125,7 @@ export class CheckoutComponent implements OnInit {
   placeOrder(): void {
     if (this.checkoutForm.valid) {
       const orderDetails: OrderSummary = {
-        buyerId: this.buyerData._id,
+        buyerId: this.buyerData.buyer._id,
         sellerId: this.items[0]?.productId?.sellerId ?? '',
         items: this.items,
         totalAmount: this.calculateTotal(),
@@ -188,7 +188,7 @@ export class CheckoutComponent implements OnInit {
 
   calculateDiscount(): number {
     return this.items.reduce((sum, item) =>
-      sum + (item.productId.discountAmt ?? 0), 0);
+      sum + ((item.productId.discountAmt ?? 0) * item.quantity), 0);
   }
 
   calculateTax(): number {

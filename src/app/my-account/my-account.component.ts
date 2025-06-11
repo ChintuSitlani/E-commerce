@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BuyerService } from '../services/buyer.service';
 import { OtpService } from '../services/otp.service';
-import { buyers } from '../data-type';
+import { sellers, buyers, sellerLocalStorageData, buyerLocalStorageData } from '../data-type';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { SellerService } from '../services/seller.service';
 
 @Component({
   selector: 'app-my-account',
@@ -40,6 +41,18 @@ export class MyAccountComponent implements OnInit {
     pin: '',
     state: '',
   };
+  seller: sellers = {
+    _id: '',
+    email: '',
+    password: '',
+    isEmailVerified: false,
+    shippingAddress: '',
+    country: '',
+    city: '',
+    phone: '',
+    pin: '',
+    state: '',
+  };
   orders: any[] = [];
 
   email = '';
@@ -49,11 +62,17 @@ export class MyAccountComponent implements OnInit {
   otpForm: FormGroup;
   passForm: FormGroup;
   shipForm: FormGroup;
+  buyerData: buyerLocalStorageData = JSON.parse(localStorage.getItem('buyer') || '{}');
+  sellerData: sellerLocalStorageData = JSON.parse(localStorage.getItem('seller') || '{}');
+  isSeller = false;
+  currentUser: buyers | sellers | null = null;
+
   constructor(
     private buyerS: BuyerService,
     private otpS: OtpService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sellerS: SellerService
   ) {
     this.otpForm = this.fb.group({
       OTP: ['', Validators.required]
@@ -69,29 +88,45 @@ export class MyAccountComponent implements OnInit {
       pin: ['', Validators.required],
       state: ['', Validators.required],
       city: ['', Validators.required],
-      
+      country: ['', Validators.required],
       phone: ['', Validators.required],
     });
   }
-  ngOnInit() {
-    this.loadUserData();
 
+  ngOnInit() {
+    this.isSeller = !!this.sellerData?.seller?._id;
+    this.loadUserData();
   }
 
   loadUserData() {
-    this.buyer = this.buyerS.getBuyerData();
-    this.shipForm.patchValue({
-      shippingAddress: this.buyer.shippingAddress,
-      pin: this.buyer.pin,
-      state: this.buyer.state,
-      city: this.buyer.city,
-      country: this.buyer.country,
-      phone: this.buyer.phone,
-    });
+    if (this.isSeller) {
+      this.currentUser = this.sellerS.getSellerDataSellerDataType();
+      this.seller = this.currentUser as sellers;
+      this.shipForm.patchValue({
+        shippingAddress: this.seller.shippingAddress,
+        pin: this.seller.pin,
+        state: this.seller.state,
+        city: this.seller.city,
+        country: this.seller.country,
+        phone: this.seller.phone,
+      });
+    } else if (this.buyerData?.buyer?._id) {
+      this.currentUser = this.buyerS.getBuyerData();
+      this.buyer = this.currentUser as buyers;
+      this.shipForm.patchValue({
+        shippingAddress: this.buyer.shippingAddress,
+        pin: this.buyer.pin,
+        state: this.buyer.state,
+        city: this.buyer.city,
+        country: this.buyer.country,
+        phone: this.buyer.phone,
+      });
+    }
   }
 
   sendVerificationEmail() {
-    this.otpS.sendOtp(this.buyer.email).subscribe({
+    const email = this.isSeller ? this.seller.email : this.buyer.email;
+    this.otpS.sendOtp(email).subscribe({
       next: () => {
         this.otpSent = true;
         this.message = 'OTP sent to email.';
@@ -99,12 +134,22 @@ export class MyAccountComponent implements OnInit {
       error: err => this.message = err.error.message
     });
   }
+
   verifyOtp() {
+    const email = this.isSeller ? this.seller.email : this.buyer.email;
     const otpValue = this.otpForm.get('OTP')?.value;
-    this.otpS.verifyOtp(this.buyer.email, otpValue).subscribe({
+    this.otpS.verifyOtp(email, otpValue).subscribe({
       next: () => {
         this.message = 'Email verified successfully!';
-        this.buyer.isEmailVerified = true;
+        if (this.isSeller) {
+          this.seller.isEmailVerified = true;
+          this.sellerData.seller = this.seller;
+          this.sellerS.setSellerData(this.sellerData);
+        } else {
+          this.buyer.isEmailVerified = true;
+          this.buyerData.buyer = this.buyer;
+          this.buyerS.setBuyerData(this.buyerData);
+        }
         this.otpForm.reset();
         this.otpSent = false;
       },
@@ -115,58 +160,110 @@ export class MyAccountComponent implements OnInit {
   updateShippingInfo() {
     if (this.shipForm.valid) {
       const formValues = this.shipForm.value;
-      const updatedShippingInfo = {
-        ...this.buyer,
-        shippingAddress: formValues.shippingAddress,
-        pin: formValues.pin,
-        state: formValues.state,
-        city: formValues.city,
-       
-        phone: formValues.phone,
-      };
-      console.log('Updated Shipping Info:', updatedShippingInfo);
-      this.buyerS.updateBuyerInfo(updatedShippingInfo).subscribe({
-        next: (updatedBuyer: buyers) => {
-          this.buyer = updatedBuyer;
-          this.updateBuyerData(updatedBuyer);
-          this.snackBar.open('shipping address updated successfully!', 'Close', { duration: 3000 });
-        },
-        error: (err: any) => {
-          console.error('Error:', err);
-          this.snackBar.open('Error updating shippping address', 'Close', { duration: 3000 });
-        },
-      });
+
+      if (this.isSeller) {
+        const updatedSeller = {
+          ...this.seller,
+          shippingAddress: formValues.shippingAddress,
+          pin: formValues.pin,
+          state: formValues.state,
+          city: formValues.city,
+          country: formValues.country,
+          phone: formValues.phone,
+        };
+        updatedSeller.password = '';
+        this.sellerS.updateSellerInfo(updatedSeller).subscribe({
+          next: (updatedData: sellers) => {
+            this.seller = updatedData;
+            this.sellerData.seller = updatedData;
+            this.sellerS.setSellerData(this.sellerData);
+            this.snackBar.open('Shipping address updated successfully!', 'Close', { duration: 3000 });
+          },
+          error: (err: any) => {
+            console.error('Error:', err);
+            this.snackBar.open('Error updating shipping address', 'Close', { duration: 3000 });
+          },
+        });
+      } else {
+        const updatedBuyer = {
+          ...this.buyer,
+          shippingAddress: formValues.shippingAddress,
+          pin: formValues.pin,
+          state: formValues.state,
+          city: formValues.city,
+          country: formValues.country,
+          phone: formValues.phone,
+        };
+        updatedBuyer.password = ''
+        this.buyerS.updateBuyerInfo(updatedBuyer).subscribe({
+          next: (updatedData: buyers) => {
+            this.buyer = updatedData;
+            this.buyerData.buyer = updatedData;
+            this.buyerS.setBuyerData(this.buyerData);
+            this.snackBar.open('Shipping address updated successfully!', 'Close', { duration: 3000 });
+          },
+          error: (err: any) => {
+            console.error('Error:', err);
+            this.snackBar.open('Error updating shipping address', 'Close', { duration: 3000 });
+          },
+        });
+      }
     } else {
       this.snackBar.open('Please fill up all the details.', 'Close', { duration: 3000 });
     }
-
   }
+
   updatePassword() {
     if (this.passForm.valid) {
       const formValues = this.passForm.value;
-      const updatedPasswordInfo = {
-        ...this.buyer,
-        password: formValues.new,
-      };
 
-      this.buyerS.updateBuyerInfo(updatedPasswordInfo).subscribe({
-        next: (updatedBuyer: buyers) => {
-          this.buyer = updatedBuyer;
-          this.updateBuyerData(updatedBuyer);
-          this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
-          this.passForm.reset();
-        },
-        error: (err: any) => {
-          this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
-        }
-      });
+      if (this.isSeller) {
+        const updatedSeller = {
+          ...this.seller,
+          password: formValues.new,
+        };
+
+        this.sellerS.updateSellerInfo(updatedSeller).subscribe({
+          next: (updatedData: sellers) => {
+            this.seller = updatedData;
+            this.sellerData.seller = updatedData;
+            this.sellerS.setSellerData(this.sellerData);
+            this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
+            this.passForm.reset();
+          },
+          error: (err: any) => {
+            this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
+          }
+        });
+      } else {
+        const updatedBuyer = {
+          ...this.buyer,
+          password: formValues.new,
+        };
+
+        this.buyerS.updateBuyerInfo(updatedBuyer).subscribe({
+          next: (updatedData: buyers) => {
+            this.buyer = updatedData;
+            this.buyerData.buyer = updatedData;
+            this.buyerS.setBuyerData(this.buyerData);
+            this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
+            this.passForm.reset();
+          },
+          error: (err: any) => {
+            this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
+          }
+        });
+      }
     } else {
       this.snackBar.open('Please enter password.', 'Close', { duration: 3000 });
     }
   }
-  updateBuyerData(updatedBuyer: buyers) {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('buyer', JSON.stringify(updatedBuyer));
-    }
+
+  getCurrentEmail(): string {
+    return this.isSeller ? this.seller.email : this.buyer.email;
+  }
+
+  getIsEmailVerified(): boolean {
+    return this.isSeller ? (this.seller.isEmailVerified ?? false) : (this.buyer.isEmailVerified ?? false);
   }
 }

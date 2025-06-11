@@ -31,7 +31,7 @@ mat-card-actions {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  justify-content: center;
+   justify-content: flex-start;
   object-fit: cover;
 }
 

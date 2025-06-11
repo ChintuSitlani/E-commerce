@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CartItems, Product } from '../data-type';
+import { CartItems, Product , buyerLocalStorageData} from '../data-type';
 import { ProductService } from '../services/product.service';
 import { catchError, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +36,7 @@ export class ProductDetailComponent implements OnInit {
   errorMessage: string = '';
   selectedImage: string = '';
   quantity = 1;
-  buyerData: buyers;
+  buyerData: buyerLocalStorageData;
   cartCount = 0;
   cartItems: CartItems[] = [];
   priceInclTax: number = 0;
@@ -48,7 +48,7 @@ export class ProductDetailComponent implements OnInit {
     private cartService: CartService,
     private snackBar: MatSnackBar
   ) {
-    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyers;
+    this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyerLocalStorageData;
   }
 
   ngOnInit() {
@@ -76,14 +76,14 @@ export class ProductDetailComponent implements OnInit {
 
   }
   addToCart(product: Product) {
-    if (!this.buyerData || !this.buyerData._id) {
+    if (!this.buyerData || !this.buyerData.buyer._id) {
       this.snackBar.open('Please login to add to cart.', 'Close', { duration: 3000 });
       return;
     }
 
     const cartItem: any = {
       productId: product._id,
-      userId: this.buyerData._id,
+      userId: this.buyerData.buyer._id,
       quantity: this.quantity,
       selected: true,
       taxRate: product.taxRate,
@@ -106,7 +106,7 @@ export class ProductDetailComponent implements OnInit {
     });
   }
   loadCartItemAndUpdateCartCount() {
-    this.productService.getCartItems(this.buyerData._id).subscribe(items => {
+    this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
       this.cartCount = items.length;
       this.cartItems = items.map(item => ({ ...item, selected: true }));
       this.cartService.setCartCount(this.cartCount);

@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../services/order.service';
-import { OrderSummary, buyers } from '../data-type';
+import { OrderSummary, buyerLocalStorageData, sellerLocalStorageData } from '../data-type';
 import { MatDivider } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -40,8 +40,9 @@ export class OrdersComponent implements OnInit {
   orders: OrderSummary[] = [];
   filteredOrders: OrderSummary[] = [];
   readonly CANCELLED_STATUS = 'cancelled';
-  buyerData: buyers = JSON.parse(localStorage.getItem('buyer') || '{}');
-
+  buyerData: buyerLocalStorageData = JSON.parse(localStorage.getItem('buyer') || '{}');
+  sellerData: sellerLocalStorageData = JSON.parse(localStorage.getItem('seller') || '{}');
+  isSeller = false;
   selectedStatus = '';
   startDate: Date | null = null;
   endDate: Date | null = null;
@@ -58,28 +59,40 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isSeller = !!this.sellerData?.seller?._id;
     this.loadOrders();
   }
 
   loadOrders(): void {
-    if (this.buyerData && this.buyerData._id) {
-      const filters = this.buildFilters();
-      filters.limit = this.limit;
-      filters.page = this.page;
+    const filters = this.buildFilters();
+    filters.limit = this.limit;
+    filters.page = this.page;
 
-      this.orderService.getOrdersForBuyer(this.buyerData._id, filters).subscribe({
+    if (this.isSeller && this.sellerData.seller?._id) {
+      this.orderService.getOrdersForSeller(this.sellerData.seller._id, filters).subscribe({
         next: (response: any) => {
-          this.orders = response.orders || [];
+          this.orders = response.orders || response || [];
           this.filteredOrders = [...this.orders];
         },
         error: err => {
-          this.snackBar.open('Error loading orders: ' + err, 'Close', {
-            duration: 3000
-          });
+          this.snackBar.open('Error loading orders: ' + err, 'Close', { duration: 3000 });
+          console.error('Error loading seller orders:', err);
+        }
+      });
+    } else if (this.buyerData.buyer?._id) {
+      this.orderService.getOrdersForBuyer(this.buyerData.buyer._id, filters).subscribe({
+        next: (response: any) => {
+          this.orders = response.orders || response || [];
+          this.filteredOrders = [...this.orders];
+        },
+        error: err => {
+          this.snackBar.open('Error loading orders: ' + err, 'Close', { duration: 3000 });
+          console.error('Error loading buyer orders:', err);
         }
       });
     }
   }
+
 
   applyFilters(): void {
     this.page = 1; // reset to first page
@@ -121,6 +134,8 @@ export class OrdersComponent implements OnInit {
     return priceExclTax + (priceExclTax * taxRate / 100);
   }
   cancelOrder(orderId: string): void {
+    if (this.isSeller) return;
+
     const confirmed = confirm('Are you sure you want to cancel this order?');
     if (!confirmed) return;
 
