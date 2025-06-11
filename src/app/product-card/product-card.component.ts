@@ -11,6 +11,8 @@ import { of } from 'rxjs';
 import { SellerService } from '../services/seller.service';
 import { FormGroup } from '@angular/forms';
 import { Product } from '../data-type';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-product-card',
   imports: [
@@ -25,39 +27,40 @@ import { Product } from '../data-type';
   styleUrl: './product-card.component.css'
 })
 export class ProductCardComponent implements OnInit {
-  productId: string = '';
-  product: Product = {
-    productName: '',
-    category: '',
-    description: '',
-    imageUrl: '',
-    sellerId: '',
-    sellerEmailId: '',
-    priceExclTax: 0,
-    taxRate: 0,
-    discountAmt: 0
-  };
-  errorMessage?: string;
-  isSellerLogedIn = false;
-  MRP: number = 0;
   productForm: FormGroup;
+  MRP: number = 0;
+  productId: string = '';
+  isEditMode: boolean = false;
+  isSellerLoggedIn = false;
+  product: Product | null = null;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private productService: ProductService,
-    private router: Router,
     private sellerService: SellerService,
-    private fb: FormBuilder
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.productForm = this.fb.group({
       productName: ['', Validators.required],
       category: ['', Validators.required],
-      price: [0, Validators.required],
+      subcategory: [''],
+      price: [0, [Validators.required, Validators.min(0)]],
       taxRate: [0],
       discountAmt: [0],
-      description: [''],
-      stock: [0, Validators.min(0)],
-      imageUrl: ['', Validators.required],
+      stock: [0, [Validators.required, Validators.min(0)]],
+      brand: [''],
+      color: [''],
+      weight: [''],
+      warranty: [''],
+      material: [''],
+      features: [''],
+      specifications: [''],
+      description: ['', Validators.required],
+      imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+      videoUrl: [''],
+      ratings: [0, [Validators.min(0), Validators.max(5)]]
     });
 
     this.productForm.valueChanges.subscribe(values => {
@@ -66,85 +69,123 @@ export class ProductCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sellerService.isSellerLoggedIn.subscribe(status => this.isSellerLoggedIn = status);
+
     this.route.queryParamMap.subscribe(params => {
       this.productId = params.get('id') || '';
-      if (this.productId) {
-        this.productService.getProductById(this.productId)
-          .pipe(
-            catchError(error => {
-              console.error('Product not found or server error:', error);
-              this.errorMessage = 'Product not found.';
-              this.router.navigate(['/page-not-found']);
-              return of(null);
-            })
-          )
-          .subscribe(res => {
-            if (res) {
-              this.product = res;
-              this.productForm.patchValue({
-                productName: res.productName,
-                category: res.category,
-                price: res.priceExclTax || 0,
-                taxRate: res.taxRate || 0,
-                discountAmt: res.discountAmt || 0,
-                description: res.description,
-                stock: res.stock || 0,
-                imageUrl: res.imageUrl
-              });
-              this.MRP = this.calculateFinalPrice(res.priceExclTax || 0, res.taxRate || 0, res.discountAmt || 0);
-            }
-          });
+      this.isEditMode = !!this.productId;
+
+      if (this.isEditMode) {
+        this.loadProductForEdit(this.productId);
       }
     });
+  }
 
-    this.sellerService.isSellerLoggedIn.subscribe(isLoggedIn => {
-      this.isSellerLogedIn = isLoggedIn;
+  loadProductForEdit(id: string): void {
+    this.productService.getProductById(id).pipe(
+      catchError(err => {
+        console.error(err);
+        this.snackBar.open('Product not found.', 'Close', { duration: 3000 });
+        this.router.navigate(['/']);
+        return of(null);
+      })
+    ).subscribe(product => {
+      if (product) {
+        this.product = product;
+        this.productForm.patchValue({
+          productName: product.productName,
+          category: product.category,
+          subcategory: product.subcategory || '',
+          price: product.priceExclTax,
+          taxRate: product.taxRate,
+          discountAmt: product.discountAmt,
+          stock: product.stock || 0,
+          brand: product.brand || '',
+          color: product.color || '',
+          weight: product.weight || '',
+          warranty: product.warranty || '',
+          material: product.material || '',
+          features: product.features || '',
+          specifications: product.specifications || '',
+          description: product.description,
+          imageUrl: product.imageUrl,
+          videoUrl: product.videoUrl || '',
+          ratings: product.ratings || 0
+        });
+        this.MRP = this.calculateFinalPrice(product.priceExclTax, product.taxRate, product.discountAmt);
+      }
     });
   }
 
   calculateFinalPrice(price: number, taxRate: number, discountAmt: number): number {
-    const taxAmount = (price * taxRate) / 100;
-    return parseFloat((price + taxAmount - discountAmt).toFixed(2));
+    const tax = (price * taxRate) / 100;
+    return parseFloat((price + tax - discountAmt).toFixed(2));
   }
 
-  updateProduct(): void {
-    if (this.isSellerLogedIn && this.productForm.valid) {
-      const formValues = this.productForm.value;
-      const updatedProduct = {
-        ...this.product,
-        productName: formValues.productName,
-        category: formValues.category,
-        priceExclTax: formValues.price,
-        taxRate: formValues.taxRate,
-        discountAmt: formValues.discountAmt,
-        stock: formValues.stock || 0,
-        description: formValues.description,
-        imageUrl: formValues.imageUrl,
-      };
+  onSubmit(): void {
+    if (!this.productForm.valid) return;
 
-      this.productService.saveProduct(updatedProduct).subscribe({
-        next: () => alert('Product updated successfully!'),
-        error: (err) => {
-          console.error('Error:', err);
-          alert('Error updating product');
-        },
+    const formValues = this.productForm.value;
+    const sellerData = this.sellerService.getSellerData();
+
+    if (!sellerData?.seller?.email || !sellerData?.seller?._id) {
+      this.snackBar.open('Seller not authenticated.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const payload: Product = {
+      productName: formValues.productName,
+      category: formValues.category,
+      subcategory: formValues.subcategory,
+      priceExclTax: formValues.price,
+      taxRate: formValues.taxRate,
+      discountAmt: formValues.discountAmt,
+      stock: formValues.stock,
+      brand: formValues.brand,
+      color: formValues.color,
+      weight: formValues.weight,
+      warranty: formValues.warranty,
+      material: formValues.material,
+      features: formValues.features,
+      specifications: formValues.specifications,
+      description: formValues.description,
+      imageUrl: formValues.imageUrl,
+      videoUrl: formValues.videoUrl,
+      ratings: formValues.ratings,
+      sellerEmailId: sellerData.seller.email,
+      sellerId: sellerData.seller._id
+    };
+
+    if (this.isEditMode && this.product?._id) {
+      payload._id = this.product._id;
+      this.productService.saveProduct(payload).subscribe({
+        next: () => this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 }),
+        error: () => this.snackBar.open('Error updating product.', 'Close', { duration: 3000 })
       });
     } else {
-      alert('You must be logged in as a seller to update the product.');
+      this.productService.saveProduct(payload).subscribe({
+        next: () => {
+          this.snackBar.open('Product added successfully!', 'Close', { duration: 3000 });
+          this.productForm.reset();
+          this.MRP = 0;
+        },
+        error: () => this.snackBar.open('Error adding product.', 'Close', { duration: 3000 })
+      });
     }
   }
 
   deleteProduct(): void {
-    if (this.isSellerLogedIn && this.product._id) {
-      const confirmDelete = confirm('Are you sure you want to delete this product?');
-      if (confirmDelete) {
-        this.productService.deleteProduct(this.product._id).subscribe(() => {
-          alert('Product deleted!');
+    if (!this.isEditMode || !this.product?._id) return;
+
+    const confirmDelete = confirm('Are you sure you want to delete this product?');
+    if (confirmDelete) {
+      this.productService.deleteProduct(this.product._id).subscribe({
+        next: () => {
+          this.snackBar.open('Product deleted successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/']);
-        });
-      }
-    } else {
-      alert('You must be logged in as a seller to delete the product.');
+        },
+        error: () => this.snackBar.open('Failed to delete product.', 'Close', { duration: 3000 })
+      });
     }
   }
 }
