@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http';
-import { buyers, userSignupData } from '../data-type';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { buyers, userSignupData , buyerLocalStorageData } from '../data-type';
 import { environment } from '../../environments/environments';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -73,7 +73,11 @@ export class BuyerService {
       }
     }
   }
-
+  setBuyerData(data: buyerLocalStorageData) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('buyer', JSON.stringify(data));
+    }
+  }
   isBuyerAuthenticated() {
     const buyerData = localStorage.getItem('buyer');
     this.isBuyerLoggedIn.next(!!buyerData);
@@ -97,11 +101,11 @@ export class BuyerService {
 
   updateBuyerInfo(buyer: buyers): Observable<buyers> {
     if (buyer) {
-      const headers =  new HttpHeaders({
+      const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${BuyerService.getToken()}`
       });
-      return this.http.put<buyers>(`${this.baseUrl}/buyer/update/${buyer._id}`, buyer, {headers});
+      return this.http.put<buyers>(`${this.baseUrl}/buyer/update/${buyer._id}`, buyer, { headers });
     }
     return new Observable<buyers>((observer) => {
       observer.error('Invalid buyer data');

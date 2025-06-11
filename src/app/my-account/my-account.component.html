@@ -1,25 +1,32 @@
-<mat-card>
+<mat-card *ngIf="currentUser">
+  <mat-card-title>Account Information</mat-card-title>
+  <mat-card-content>
+    <p><strong>Account Type:</strong> {{ isSeller ? 'Seller' : 'Buyer' }}</p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="currentUser">
   <mat-card-title>Email</mat-card-title>
   <mat-card-content>
-    {{ buyer.email }}
-    <mat-icon *ngIf="buyer.isEmailVerified" color="primary">verified</mat-icon>
-    <button mat-stroked-button *ngIf="!buyer.isEmailVerified" (click)="sendVerificationEmail()">Verify Email</button>
+    {{ getCurrentEmail() }}
+    <mat-icon *ngIf="getIsEmailVerified()" color="primary">verified</mat-icon>
+    <button mat-stroked-button *ngIf="!getIsEmailVerified()" (click)="sendVerificationEmail()">Verify Email</button>
     <p *ngIf="message" class="text-success">{{ message }}</p>
     <form *ngIf="otpSent" [formGroup]="otpForm">
       <mat-form-field appearance="fill" class="w-100">
         <mat-label>Enter OTP</mat-label>
         <input matInput formControlName="OTP" placeholder="Enter OTP" required />
-
       </mat-form-field>
-      <button mat-stroked-button *ngIf="!buyer.isEmailVerified" (click)="verifyOtp()" [disabled]="!otpForm.valid">Verify
-        OTP</button>
+      <button mat-stroked-button *ngIf="!getIsEmailVerified()" (click)="verifyOtp()" [disabled]="!otpForm.valid">
+        Verify OTP
+      </button>
     </form>
   </mat-card-content>
 </mat-card>
 
 <br />
 
-<mat-card>
+<mat-card *ngIf="currentUser">
   <mat-card-title>Change Password</mat-card-title>
   <mat-card-content>
     <form [formGroup]="passForm">
@@ -38,19 +45,18 @@
 
 <br />
 
-<mat-card>
-  <mat-card-title>Change Shipping Info</mat-card-title>
+<mat-card *ngIf="currentUser">
+  <mat-card-title>Change {{ isSeller ? 'Business' : 'Shipping' }} Info</mat-card-title>
   <mat-card-content>
     <form [formGroup]="shipForm">
       <mat-form-field appearance="fill" class="w-100">
-        <mat-label>Shipping Address</mat-label>
+        <mat-label>{{ isSeller ? 'Business Address' : 'Shipping Address' }}</mat-label>
         <input matInput formControlName="shippingAddress" required>
       </mat-form-field>
       <mat-form-field appearance="fill" class="w-100">
         <mat-label>Pin</mat-label>
         <input matInput formControlName="pin" required>
       </mat-form-field>
-
       <mat-form-field appearance="fill" class="w-100">
         <mat-label>State</mat-label>
         <input matInput formControlName="state" required>
@@ -60,13 +66,24 @@
         <input matInput formControlName="city" required>
       </mat-form-field>
       <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-100">
         <mat-label>Phone No.</mat-label>
         <input matInput formControlName="phone" required>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="!shipForm.valid"
-        (click)="updateShippingInfo()">Update</button>
+      <button mat-raised-button color="primary" [disabled]="!shipForm.valid" (click)="updateShippingInfo()">
+        Update
+      </button>
     </form>
   </mat-card-content>
 </mat-card>
 
-<br />
+<div *ngIf="!currentUser" class="not-logged-in">
+  <mat-card>
+    <mat-card-content>
+      <p>Please log in to view your account information.</p>
+    </mat-card-content>
+  </mat-card>
+</div>
