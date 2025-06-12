@@ -60,7 +60,7 @@ export class ProductCardComponent implements OnInit {
       description: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
       videoUrl: [''],
-      ratings: [0, [Validators.min(0), Validators.max(5)]]
+      rating: [0, [Validators.min(0), Validators.max(5)]]
     });
 
     this.productForm.valueChanges.subscribe(values => {
@@ -110,7 +110,7 @@ export class ProductCardComponent implements OnInit {
           description: product.description,
           imageUrl: product.imageUrl,
           videoUrl: product.videoUrl || '',
-          ratings: product.ratings || 0
+          rating: product.rating || 0
         });
         this.MRP = this.calculateFinalPrice(product.priceExclTax, product.taxRate, product.discountAmt);
       }
@@ -151,7 +151,7 @@ export class ProductCardComponent implements OnInit {
       description: formValues.description,
       imageUrl: formValues.imageUrl,
       videoUrl: formValues.videoUrl,
-      ratings: formValues.ratings,
+      rating: formValues.rating,
       sellerEmailId: sellerData.seller.email,
       sellerId: sellerData.seller._id
     };

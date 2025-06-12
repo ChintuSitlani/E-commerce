@@ -15,7 +15,7 @@
                     <span class="offer">({{ getDiscountPercentage(product.discountAmt)}}% off)</span>
                 </ng-container>
             </div>
-            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Description:</strong> {{ product.description | slice:0:100 }}</p>
         </mat-card-content>
         <mat-card-actions>
             <button mat-raised-button color="primary" (click)="editProduct(product)">Edit</button>

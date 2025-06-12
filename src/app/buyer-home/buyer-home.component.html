@@ -1,12 +1,12 @@
 <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
     @for (product of productsCarousel; track product; let i = $index) {
-    <ng-template ngbSlide >
+    <ng-template ngbSlide>
         <div class="picsum-img-wrapper" (click)="viewProduct(product)">
             <img [src]="product.imageUrl" alt="Product image" />
         </div>
         <div class="carousel-caption">
             <h3>{{product.name}}</h3>
-            <p>{{product.description}}</p>
+            <p>{{ product.description | slice:0:100 }}</p>
         </div>
     </ng-template>
     }
@@ -31,10 +31,16 @@
                     <span class="offer">({{ getDiscountPercentage(product.discountAmt)}}% off)</span>
                 </ng-container>
             </div>
-            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Description:</strong> {{ product.description | slice:0:100 }}</p>
         </mat-card-content>
         <mat-card-actions>
             <button mat-raised-button color="warn" (click)="addToCart(product!)">Add To Cart</button>
         </mat-card-actions>
     </mat-card>
+</div>
+
+<div class="load-more-container" *ngIf="hasMoreProducts">
+    <button mat-raised-button color="primary" (click)="loadMore()" [disabled]="isLoading">
+        {{ isLoading ? 'Loading...' : 'Load More' }}
+    </button>
 </div>
