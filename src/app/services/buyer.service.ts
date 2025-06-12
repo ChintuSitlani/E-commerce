@@ -88,7 +88,7 @@ export class BuyerService {
     this.isBuyerAuthenticated();
     this.router.navigate(['/buyerLogin']);
   }
-  getBuyerData(): buyers {
+  getBuyerData(): buyerLocalStorageData {
     if (isPlatformBrowser(this.platformId)) {
       const buyer = localStorage.getItem('buyer');
       if (buyer) {
@@ -96,9 +96,16 @@ export class BuyerService {
       }
     }
     // Return a default buyers object or handle as needed
-    return {} as buyers;
+    return {} as buyerLocalStorageData;
   };
-
+  fetchBuyerData(): buyers {
+    const data = this.getBuyerData();
+    return data && data.buyer ? data.buyer : {
+      _id: '',
+      email: '',
+      password: ''
+    };
+  }
   updateBuyerInfo(buyer: buyers): Observable<buyers> {
     if (buyer) {
       const headers = new HttpHeaders({
