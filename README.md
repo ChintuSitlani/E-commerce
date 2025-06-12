@@ -1,59 +1,86 @@
-# EComWeb
+# 🛒 E-Commerce Web App – Frontend (Angular 19)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+This is a responsive e-commerce frontend built with **Angular 19**, featuring separate login flows and dashboards for both **Buyers** and **Sellers**. It integrates seamlessly with a backend API for full-stack functionality.
 
-## Development server
+🔗 **Live Demo:** [https://e-com-web-sigma.vercel.app](https://e-com-web-sigma.vercel.app)
 
-To start a local development server, run:
+---
+
+## 🚀 Features
+
+### 👤 Buyer Module
+- Buyer Signup & Login
+- Product Browsing with Carousel
+- Add to Cart
+- Checkout with Billing & Shipping Address
+- Order Summary
+- Buyer Dashboard (My Orders, My Account)
+
+### 🛍️ Seller Module
+- Seller Signup & Login
+- Add, Edit, and Manage Products
+- My Orders (Buyer Orders Received)
+- Seller Dashboard (Profile, Order Tracking)
+
+### 🧰 General Features
+- OTP-based Email Verification
+- Responsive UI (Mobile, Tablet, Desktop)
+- Angular Material + Bootstrap UI
+- Product Image Carousel
+- Loading indicators for better UX
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology        | Description                   |
+|------------------|-------------------------------|
+| Angular 19       | Frontend framework             |
+| Angular Material | UI components                  |
+| Bootstrap        | Responsive layout/styling      |
+| RxJS             | State management               |
+| Vercel           | Deployment platform            |
+
+---
+
+## 📁 Folder Structure (Simplified)
+src/
+├── app/
+│ ├── components/
+│ ├── services/
+│ ├── pages/
+│ ├── models/
+│ └── app.module.ts
+├── assets/
+├── environments/
+└── index.html
+---
+
+## ⚙️ Setup Instructions
+
+1. **Clone the repository**
 
 ```bash
+git clone https://bitbucket.org/chintusitlani/e-commerce.git
+cd e-commerce
+
+Install dependencies
+npm install
+
+Run the development server
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open your browser and visit:
+http://localhost:4200
 
-## Code scaffolding
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🙋‍♂️ Author
+Chandra Prakash Sitlani
+Bitbucket Profile :- https://bitbucket.org/chintusitlani/
 
-```bash
-ng generate component component-name
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📃 License
 
-```bash
-ng generate --help
-```
+This project is intended for personal use, learning, and job portfolio purposes.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+You are welcome to explore and fork the project. Commercial use or redistribution is not permitted without permission.
