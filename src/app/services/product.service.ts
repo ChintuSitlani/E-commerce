@@ -67,8 +67,8 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.baseUrl}/getCrausalProduct`, { params });
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/getHomeScreenProducts`);
+  getProducts(page: number = 1, limit: number = 6): Observable<any> {
+    return this.http.get(`${this.baseUrl}/getHomeScreenProducts?page=${page}&limit=${limit}`);
   }
 
   getResultProducts(

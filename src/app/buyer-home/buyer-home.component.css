@@ -31,7 +31,7 @@ mat-card-actions {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  justify-content: center;
+  justify-content: flex-start;
   object-fit: cover;
 }
 
@@ -84,7 +84,25 @@ mat-card-actions {
   font-size: 14px;
   font-weight: 500;
 }
+button {
+  width: 100%;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease-in-out;
+}
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
 
+.load-more-container button {
+    padding: 10px 30px;
+}
 @media (max-width: 768px) {
   .product-container {
     gap: 12px;
@@ -174,9 +192,7 @@ mat-card-actions {
   }
 
   button {
-    max-width: 64px;
-    max-height: 25px;
-    min-width: 50px;
+    width: 100%;
     font-size: 9px;
     padding: 2px 2px;
   }

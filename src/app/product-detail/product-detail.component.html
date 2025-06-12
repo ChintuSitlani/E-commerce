@@ -1,4 +1,4 @@
-<div class="container my-4" *ngIf="product">
+<div class="container my-4" *ngIf="product && !isLoading">
     <div class="row">
         <!-- Image Section -->
         <div class="col-md-6 mb-3">
@@ -18,12 +18,16 @@
                 </div>
 
                 <div class="price-section mb-3">
-                    <h5 class="text-danger fw-bold">₹{{getDiscountedPrice(product.priceExclTax ,
-                        product.taxRate,product.discountAmt)}}</h5>
-                    <span class="text-decoration-line-through text-muted me-2">₹{{
-                        getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
-                    <span class="badge bg-success">{{ getDiscountPercentage(product.discountAmt) | number:'1.0-0' }}%
-                        off</span>
+                    <h5 class="text-danger fw-bold">₹{{ priceInclTax - product.discountAmt | number:'1.2-2' }}</h5>
+                    <span class="text-decoration-line-through text-muted me-2">₹{{ priceInclTax | number:'1.2-2'
+                        }}</span>
+                    <span class="badge bg-success">
+                        {{ (product.discountAmt / priceInclTax * 100) | number:'1.0-0' }}% off
+                    </span>
+                    <div>
+                        <span class="badge bg-warning text-dark">★ {{ product.rating || 'N/A' }}</span>
+                        <small class="text-muted ms-2">Brand: {{ product.brand || 'N/A' }}</small>
+                    </div>
                 </div>
 
                 <div class="mb-3" *ngIf="product.color">
@@ -33,22 +37,25 @@
 
                 <div class="mb-3">
                     <label>Quantity:</label>
-                    <input type="number" class="form-control w-50 d-inline-block ms-2" min="1" [(ngModel)]="quantity" />
+                    <input type="number" class="form-control w-50 d-inline-block ms-2" min="1" [(ngModel)]="quantity"
+                        [disabled]="isLoading" />
                 </div>
 
                 <div class="d-grid gap-2 my-3">
                     <div class="d-flex align-items-center mb-2">
                         <button class="btn btn-warning me-2"
-                         [ngStyle]="isInCart(product) ? {'flex': '0 0 80%'} : {'flex': '1 1 100%'}"
-                         (click)="addToCart(product!)">
-                            Add to Cart
+                            [ngStyle]="isInCart(product) ? {'flex': '0 0 80%'} : {'flex': '1 1 100%'}"
+                            (click)="addToCart(product)" [disabled]="isLoading">
+                            {{ isLoading ? 'Processing...' : 'Add to Cart' }}
                         </button>
-                        <button class="rmvBtn"*ngIf="isInCart(product)"mat-icon-button color="warn" (click)="removeFromCart(product)"
-                            matTooltip="Remove from cart">
+                        <button class="rmvBtn" *ngIf="isInCart(product)" mat-icon-button color="warn"
+                            (click)="removeFromCart(product)" matTooltip="Remove from cart" [disabled]="isLoading">
                             <mat-icon style="font-size: 22px;">delete</mat-icon>
                         </button>
                     </div>
-                    <button class="btn btn-primary" (click)="buyNow(product)">Buy Now</button>
+                    <button class="btn btn-primary" (click)="buyNow(product)" [disabled]="isLoading">
+                        Buy Now
+                    </button>
                 </div>
 
                 <p class="text-success mt-2"><i class="bi bi-check-circle"></i> In stock, ships fast!</p>
@@ -72,15 +79,11 @@
             </mat-card>
         </div>
     </div>
+</div>
 
-    <!-- Video -->
-    <!-- <div class="row mt-4" *ngIf="product.videoUrl">
-        <div class="col-12">
-            <mat-card class="p-3">
-                <h5>Product Video</h5>
-                <iframe width="100%" height="315" [src]="product.videoUrl | safeUrl" frameborder="0"
-                    allowfullscreen></iframe>
-            </mat-card>
-        </div>
-    </div> -->
+<!-- Loading Indicator -->
+<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>

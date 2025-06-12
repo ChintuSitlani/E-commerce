@@ -61,7 +61,7 @@ export interface Product {
   features?: string;
   specifications?: string;
   videoUrl?: string;
-  ratings?: number;
+  rating?: number;
   description: string;
   imageUrl: string;
   sellerId: string;
