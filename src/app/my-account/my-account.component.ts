@@ -111,7 +111,7 @@ export class MyAccountComponent implements OnInit {
         phone: this.seller.phone,
       });
     } else if (this.buyerData?.buyer?._id) {
-      this.currentUser = this.buyerS.getBuyerData();
+      this.currentUser = this.buyerS.fetchBuyerData();
       this.buyer = this.currentUser as buyers;
       this.shipForm.patchValue({
         shippingAddress: this.buyer.shippingAddress,
@@ -123,6 +123,7 @@ export class MyAccountComponent implements OnInit {
       });
     }
   }
+
 
   sendVerificationEmail() {
     const email = this.isSeller ? this.seller.email : this.buyer.email;
