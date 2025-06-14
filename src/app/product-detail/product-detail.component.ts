@@ -86,7 +86,7 @@ export class ProductDetailComponent implements OnInit {
     if (!this.buyerData?.buyer?._id) return;
 
     return new Promise((resolve) => {
-      this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
+      this.productService.getCartItems(this.buyerData?.buyer?._id).subscribe(items => {
         this.cartItems = items.map(item => ({ ...item, selected: true }));
         this.cartCount = items.length;
         this.cartService.setCartCount(this.cartCount);
@@ -96,14 +96,14 @@ export class ProductDetailComponent implements OnInit {
   }
 
   async addToCart(product: Product): Promise<boolean> {
-    if (!this.buyerData || !this.buyerData.buyer._id) {
+    if (!this.buyerData || !this.buyerData?.buyer?._id) {
       this.snackBar.open('Please login to add to cart.', 'Close', { duration: 3000 });
       return false;
     }
 
     const cartItem: any = {
       productId: product._id,
-      userId: this.buyerData.buyer._id,
+      userId: this.buyerData?.buyer?._id,
       quantity: this.quantity,
       selected: true,
       taxRate: product.taxRate,
