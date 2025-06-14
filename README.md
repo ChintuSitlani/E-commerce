@@ -2,7 +2,7 @@
 
 This is a responsive e-commerce frontend built with **Angular 19**, featuring separate login flows and dashboards for both **Buyers** and **Sellers**. It integrates seamlessly with a backend API for full-stack functionality.
 
-🔗 **Live Demo:** [https://e-com-web-sigma.vercel.app](https://e-com-web-sigma.vercel.app)
+🔗 **Live Demo:** [https://e-commerce-six-ecru-38.vercel.app](https://e-commerce-six-ecru-38.vercel.app)
 
 ---
 
@@ -61,7 +61,7 @@ src/
 1. **Clone the repository**
 
 ```bash
-git clone https://bitbucket.org/chintusitlani/e-commerce.git
+git clone https://github.com/ChintuSitlani/E-commerce.git
 cd e-commerce
 
 Install dependencies
@@ -76,7 +76,7 @@ http://localhost:4200
 
 🙋‍♂️ Author
 Chandra Prakash Sitlani
-Bitbucket Profile :- https://bitbucket.org/chintusitlani/
+GitHub Profile :- https://github.com/ChintuSitlani/
 
 
 ## 📃 License

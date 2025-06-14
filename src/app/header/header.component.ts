@@ -66,7 +66,7 @@ export class HeaderComponent {
   ) {
     const buyerData = this.buyer.getBuyerData();
     if (buyerData)
-      this.userEmail = buyerData.buyer.email || '';
+      this.userEmail = buyerData?.buyer?.email || '';
 
     this.searchSubject.pipe(debounceTime(500)).subscribe(value => {
       this.searchText = value;
@@ -92,7 +92,7 @@ export class HeaderComponent {
     });
     const buyerData = this.buyer.getBuyerData();
     if (buyerData) {
-      this.userEmail = buyerData.buyer.email || '';
+      this.userEmail = buyerData?.buyer?.email || '';
     }
   }
   logout() {
@@ -145,8 +145,8 @@ export class HeaderComponent {
   }
   updateCartCount() {
     const buyerData = this.buyer.getBuyerData();
-    if (buyerData && buyerData.buyer._id) {
-      this.productService.getCartItems(buyerData.buyer._id).subscribe(items => {
+    if (buyerData && buyerData?.buyer?._id) {
+      this.productService.getCartItems(buyerData?.buyer?._id).subscribe(items => {
         const count = items.length;
         this.cartService.setCartCount(count);
       });
