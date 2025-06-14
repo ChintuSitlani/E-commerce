@@ -4,7 +4,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environments';
+import { environment } from '../../environments/environment';
 import { sellerLocalStorageData } from '../data-type';
 
 @Injectable({

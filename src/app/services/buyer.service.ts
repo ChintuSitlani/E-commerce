@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { buyers, userSignupData , buyerLocalStorageData } from '../data-type';
-import { environment } from '../../environments/environments';
+import { environment } from '../../environments/environment';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
