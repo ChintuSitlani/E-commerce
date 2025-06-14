@@ -69,7 +69,7 @@ export class OrdersComponent implements OnInit {
     filters.page = this.page;
 
     if (this.isSeller && this.sellerData.seller?._id) {
-      this.orderService.getOrdersForSeller(this.sellerData.seller._id, filters).subscribe({
+      this.orderService.getOrdersForSeller(this.sellerData?.seller?._id, filters).subscribe({
         next: (response: any) => {
           this.orders = response.orders || response || [];
           this.filteredOrders = [...this.orders];
@@ -80,7 +80,7 @@ export class OrdersComponent implements OnInit {
         }
       });
     } else if (this.buyerData.buyer?._id) {
-      this.orderService.getOrdersForBuyer(this.buyerData.buyer._id, filters).subscribe({
+      this.orderService.getOrdersForBuyer(this.buyerData?.buyer?._id, filters).subscribe({
         next: (response: any) => {
           this.orders = response.orders || response || [];
           this.filteredOrders = [...this.orders];

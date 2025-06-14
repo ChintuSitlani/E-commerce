@@ -83,14 +83,14 @@ export class BuyerHomeComponent {
     this.router.navigate(['/product-detail'], { queryParams: { id: product._id } });
   }
   addToCart(product: Product) {
-    if (!this.buyerData || !this.buyerData.buyer._id) {
+    if (!this.buyerData || !this.buyerData?.buyer?._id) {
       this.snackBar.open('Please login to add to cart.', 'Close', { duration: 3000 });
       return;
     }
 
     const payload = {
       productId: product._id,
-      userId: this.buyerData.buyer._id,
+      userId: this.buyerData?.buyer?._id,
       quantity: 1
     };
 
@@ -108,7 +108,7 @@ export class BuyerHomeComponent {
     });
   }
   updateCartCount() {
-    this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
+    this.productService.getCartItems(this.buyerData?.buyer?._id).subscribe(items => {
       this.cartCount = items.length;
       this.cartService.setCartCount(this.cartCount);
     });

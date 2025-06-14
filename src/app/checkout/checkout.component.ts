@@ -94,10 +94,10 @@ export class CheckoutComponent implements OnInit {
       });
     this.checkoutForm.patchValue({
       shipping: {
-        address: this.buyerData.buyer.shippingAddress,
-        zip: this.buyerData.buyer.pin,
-        state: this.buyerData.buyer.state,
-        city: this.buyerData.buyer.city,
+        address: this.buyerData?.buyer?.shippingAddress,
+        zip: this.buyerData?.buyer?.pin,
+        state: this.buyerData?.buyer?.state,
+        city: this.buyerData?.buyer?.city,
       }
     });
 
@@ -125,7 +125,7 @@ export class CheckoutComponent implements OnInit {
   placeOrder(): void {
     if (this.checkoutForm.valid) {
       const orderDetails: OrderSummary = {
-        buyerId: this.buyerData.buyer._id,
+        buyerId: this.buyerData?.buyer?._id,
         sellerId: this.items[0]?.productId?.sellerId ?? '',
         items: this.items,
         totalAmount: this.calculateTotal(),

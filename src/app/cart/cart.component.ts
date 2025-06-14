@@ -64,7 +64,7 @@ export class CartComponent implements OnInit {
 
 
   loadCart() {
-    this.productService.getCartItems(this.buyerData.buyer._id).subscribe(items => {
+    this.productService.getCartItems(this.buyerData?.buyer?._id).subscribe(items => {
       this.cartItems = items.map(item => ({ ...item, selected: true }));
       this.cartService.setCartCount(items.length);
     });
@@ -114,7 +114,7 @@ export class CartComponent implements OnInit {
   }
 
   applyCoupon() {
-    this.productService.getCartSummary(this.buyerData.buyer._id, this.couponCode).subscribe((summary: CartSummary) => {
+    this.productService.getCartSummary(this.buyerData?.buyer?._id, this.couponCode).subscribe((summary: CartSummary) => {
       this.summary = summary;
       this.cartItems = summary?.cartItems || [];
     });
