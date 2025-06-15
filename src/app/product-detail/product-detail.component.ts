@@ -4,25 +4,21 @@ import { CartItems, Product, buyerLocalStorageData } from '../data-type';
 import { ProductService } from '../services/product.service';
 import { catchError, of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { CartService } from '../cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-product-detail',
   imports: [
-    BrowserModule,
-    FormsModule,
     MatCardModule,
-    MatButtonModule,
-    MatBadgeModule,
+    CommonModule,
     MatIconModule,
-    MatInputModule,
+    FormsModule,
+    MatButtonModule,
   ],
   standalone: true,
   templateUrl: './product-detail.component.html',
@@ -119,14 +115,14 @@ export class ProductDetailComponent implements OnInit {
       // First add the item to cart
       await this.productService.addToCart(cartItem).toPromise();
       this.snackBar.open('Added to cart!', 'Close', { duration: 2000 });
-      
+
       // Then refresh the cart items
       await this.loadCartItems();
-      
+
       return true;
-    } catch (err) {
-      this.snackBar.open('Error adding to cart.', 'Close', { duration: 2000 });
-      console.error('Error adding to cart:', err);
+    } catch (err: any) {
+      const message = err?.error?.message || 'Error adding to cart.';
+      this.snackBar.open(message, 'Close', { duration: 3000 });
       return false;
     } finally {
       this.isLoading = false;
@@ -141,7 +137,7 @@ export class ProductDetailComponent implements OnInit {
     // Now get fresh cart items
     const selectedItems = this.cartItems.filter(item => item.selected);
 
-    
+
     if (selectedItems.length === 0) {
       this.snackBar.open('Please select at least one item to checkout.', 'Close', { duration: 3000 });
       return;
@@ -149,7 +145,7 @@ export class ProductDetailComponent implements OnInit {
 
     // Store and navigate
     localStorage.setItem('checkoutItems', JSON.stringify(selectedItems));
-    window.location.href = '/checkout';
+    this.router.navigate(['/checkout']);
   }
 
   getSellingPriceInclTax(priceExclTax: number, taxRate: number): number {
