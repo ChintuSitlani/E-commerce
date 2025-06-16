@@ -39,11 +39,12 @@ export class ProductService {
     }
   }
 
-  getSellerProducts(sellerId: string, sellerEmail: string): Observable<Product[]> {
+  getSellerProducts(sellerId: string, sellerEmail: string,page: number = 1, limit: number = 6): Observable<any> {
     const params = new HttpParams()
       .set('sellerId', sellerId)
-      .set('sellerEmailId', sellerEmail);
-
+      .set('sellerEmailId', sellerEmail)
+      .set('page', page.toString())
+      .set('limit', limit.toString());
     return this.http.get<Product[]>(`${this.baseUrl}/getHomeScreenProducts`, { params });
   }
 
