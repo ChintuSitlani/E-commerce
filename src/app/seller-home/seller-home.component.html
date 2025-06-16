@@ -1,25 +1,44 @@
-<div class="product-container">
-    <mat-card *ngFor="let product of sellerProducts" class="product-card" >
-        <img mat-card-image [src]="product.imageUrl" alt="{{ product.productName }}" (click)="editProduct(product)"/>
-        <mat-card-title>{{ product.productName}}</mat-card-title>
+<h1>Your Products</h1>
+
+<div class="product-container" *ngIf="sellerProducts?.length">
+    <mat-card *ngFor="let product of sellerProducts" class="product-card">
+        <img mat-card-image [src]="product.imageUrl" alt="{{ product.productName }}" (click)="editProduct(product)" />
+        <mat-card-title>{{ product.productName }}</mat-card-title>
         <mat-card-content>
             <div class="price-info">
-                <ng-container *ngIf="product.discountAmt == 0">
-                    <span> ₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
+                <ng-container *ngIf="product.discountAmt === 0">
+                    <span>
+                        ₹{{ getSellingPriceInclTax(product.priceExclTax, product.taxRate) }}
+                    </span>
                 </ng-container>
                 <ng-container *ngIf="product.discountAmt > 0">
-                    <span class="mrp"> ₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</span>
+                    <span class="mrp">
+                        ₹{{ getSellingPriceInclTax(product.priceExclTax, product.taxRate) }}
+                    </span>
                     <span class="discounted-price">
                         ₹{{ getDiscountedPrice(product.discountAmt) }}
                     </span>
-                    <span class="offer">({{ getDiscountPercentage(product.discountAmt)}}% off)</span>
+                    <span class="offer">
+                        ({{ getDiscountPercentage(product.discountAmt) }}% off)
+                    </span>
                 </ng-container>
             </div>
-            <p><strong>Description:</strong> {{ product.description | slice:0:100 }}</p>
+            <p><strong>Description:</strong> {{ product.description | slice: 0:100 }}</p>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="editProduct(product)">Edit</button>
-            <button mat-raised-button color="warn" (click)="deleteProduct(product._id)">Delete</button>
+            <button mat-raised-button color="primary" (click)="editProduct(product)">
+                Edit
+            </button>
+            <button mat-raised-button color="warn" (click)="deleteProduct(product._id!)">
+                Delete
+            </button>
         </mat-card-actions>
     </mat-card>
-</div>  
+</div>
+
+<!-- Load More button -->
+<div class="load-more-container" *ngIf="hasMoreProducts">
+    <button mat-raised-button color="accent" (click)="loadMore()" [disabled]="isLoading">
+        {{ isLoading ? 'Loading...' : 'Load More' }}
+    </button>
+</div>

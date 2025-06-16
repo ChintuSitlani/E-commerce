@@ -31,7 +31,7 @@ mat-card-actions {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-   justify-content: flex-start;
+  justify-content: flex-start;
   object-fit: cover;
 }
 
@@ -83,6 +83,16 @@ mat-card-actions {
   color: green;
   font-size: 14px;
   font-weight: 500;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.load-more-container button {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -194,6 +204,7 @@ mat-card-actions {
     gap: 4px;
     margin-bottom: 4px;
   }
+
   .mat-mdc-card-content {
     padding: 0px;
   }
