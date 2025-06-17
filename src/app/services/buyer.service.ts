@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { buyers, userSignupData , buyerLocalStorageData } from '../data-type';
+import { buyers, userSignupData, buyerLocalStorageData } from '../data-type';
 import { environment } from '../../environments/environment';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -118,6 +118,20 @@ export class BuyerService {
       observer.error('Invalid buyer data');
     });
   }
+
+  sendResetLink(email: string) {
+    const body = {
+      email: email,
+      URL: window.location.origin+'/reset-password'
+    };
+
+    return this.http.post(`${this.baseUrl}/buyer/forgot-password`, body);
+  }
+
+  resetPasswordWithToken(token: string, newPassword: string): Observable<buyerLocalStorageData> {
+    return this.http.post<buyerLocalStorageData>(`${this.baseUrl}/buyer/reset-password/${token}`, { newPassword });
+  }
+
   static getToken(): string {
     const buyer = JSON.parse(localStorage.getItem('buyer') || '{}');
     return buyer.token || '';
