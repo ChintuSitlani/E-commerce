@@ -33,8 +33,7 @@
                     <div class="d-flex align-items-center gap-3 mb-1">
                         <span class="fw-bold text-danger fs-5">₹{{ getDiscountedPrice(product.priceExclTax , product.taxRate,product.discountAmt) }}</span>
                         <small class="text-muted text-decoration-line-through">₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</small>
-                        <small class="text-success">{{ getDiscountPercentage(product.discountAmt) |
-                            number:'1.0-0' }}% off</small>
+                        <small class="text-success">{{ getDiscountPercentage(product.discountAmt) }}% off</small>
                     </div>
 
                     <div>
