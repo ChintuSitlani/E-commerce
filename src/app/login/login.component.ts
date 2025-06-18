@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BuyerService } from '../services/buyer.service';
 import { buyers } from '../data-type';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private buyer: BuyerService
+    private buyer: BuyerService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -61,5 +63,9 @@ export class LoginComponent {
   }
   ngOnInit() {
     this.buyer.reloadBuyer();
+  }
+
+  goToForgotPassword(userType: string ){
+    this.router.navigate(['/forgot-password'], { queryParams: { userType: userType } });
   }
 }

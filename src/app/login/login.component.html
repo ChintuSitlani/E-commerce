@@ -29,7 +29,7 @@
             </mat-error>
         </mat-form-field>
         <p class="forgot-text">
-            <a href="/forgot-password">Forgot Password?</a>
+            <a (click)="goToForgotPassword('buyer')"  style="cursor: pointer;">Forgot Password?</a>
         </p>
         <button mat-button color="primary" class="full-width" type="submit" [disabled]="loginForm.invalid">
             Login

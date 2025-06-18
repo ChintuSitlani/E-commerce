@@ -1,169 +1,205 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { RouterLink, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+
 import { MatMenuModule } from '@angular/material/menu';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { SellerService } from '../services/seller.service';
-import { BuyerService } from '../services/buyer.service';
-import { Product } from '../data-type';
-import { ProductService } from '../services/product.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { Subject, Subscription, debounceTime, takeUntil } from 'rxjs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
-import { Router } from '@angular/router';
+import { SellerService } from '../services/seller.service';
+import { BuyerService } from '../services/buyer.service';
+import { ProductService } from '../services/product.service';
 import { CartService } from '../cart.service';
-import { debounceTime, Subject } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Product } from '../data-type';
+
+const DEFAULT_FILTERS = {
+  brand: '',
+  minPrice: 0,
+  maxPrice: 1000000
+};
+
+const MATERIAL_MODULES = [
+  MatToolbarModule,
+  MatButtonModule,
+  MatIconModule,
+  MatMenuModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatAutocompleteModule,
+  MatOptionModule
+];
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatFormFieldModule,
-    MatInputModule,
     RouterLink,
-    MatAutocompleteModule,
-    MatOptionModule
+    ...MATERIAL_MODULES
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private subscriptions: Subscription[] = [];
+
   isSellerLogin = false;
-  searchText: string = '';
-  cartItems: number = 0;
+  isBuyerLogin = false;
+  searchText = '';
+  cartItems = 0;
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
-  isBuyerLogin = false;
-  userName: string = '';
-  userEmail: string = '';
-  filters: { brand: string; minPrice: number; maxPrice: number } = {
-    brand: '',
-    minPrice: 0,
-    maxPrice: 1000000
-  };
+  userEmail = '';
+
+  filters = { ...DEFAULT_FILTERS };
   totalCount = 0;
   currentSkip = 0;
-  limit = 10;
+  readonly limit = 10;
+
   searchSubject = new Subject<string>();
 
   constructor(
     private cartService: CartService,
-    private seller: SellerService,
-    private buyer: BuyerService,
+    private sellerService: SellerService,
+    private buyerService: BuyerService,
     private productService: ProductService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    const buyerData = this.buyer.getBuyerData();
-    if (buyerData)
-      this.userEmail = buyerData?.buyer?.email || '';
+    const buyerData = this.buyerService.getBuyerData();
+    this.userEmail = buyerData?.buyer?.email || '';
 
-    this.searchSubject.pipe(debounceTime(500)).subscribe(value => {
+    this.searchSubject.pipe(
+      debounceTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
       this.searchText = value;
       this.onSearchInput();
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filteredProducts = [];
 
-    this.seller.isSellerLoggedIn.subscribe((status: boolean) => {
-      this.isSellerLogin = status;
-    });
-    this.buyer.isBuyerLoggedIn.subscribe((status: boolean) => {
-      this.isBuyerLogin = status;
-      if (status) {
-        this.updateCartCount();
-      }
-    });
+    this.subscriptions.push(
+      this.sellerService.isSellerLoggedIn.subscribe(status => {
+        this.isSellerLogin = status;
+      })
+    );
 
-    this.cartService.getCartCount().subscribe(count => {
-      this.cartItems = count;
-    });
-    const buyerData = this.buyer.getBuyerData();
-    if (buyerData) {
-      this.userEmail = buyerData?.buyer?.email || '';
-    }
-  }
-  logout() {
-    const userConfirmed = confirm('Are you sure you want to logout?');
-    if (userConfirmed) {
-      if (this.isSellerLogin) {
-        this.seller.sellerLogout();
-      } else if (this.isBuyerLogin) {
-        this.buyer.buyerLogout();
-      } else {
-        console.error("No one is logged in");
-        alert("No user is currently logged in.");
-      }
-    } else {
-      console.log("Logout canceled by the user.");
-    }
+    this.subscriptions.push(
+      this.buyerService.isBuyerLoggedIn.subscribe(status => {
+        this.isBuyerLogin = status;
+        if (status) this.updateCartCount();
+      })
+    );
+
+    this.subscriptions.push(
+      this.cartService.getCartCount().subscribe(count => {
+        this.cartItems = count;
+      })
+    );
   }
 
-  onSearchInput() {
-    const search = this.searchText?.toLowerCase().trim() || '';
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
 
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  logout(): void {
+    if (!this.isSellerLogin && !this.isBuyerLogin) {
+      this.snackBar.open('No user is currently logged in.', 'Close', { duration: 2500 });
+      return;
+    }
+
+    const confirmed = confirm('Are you sure you want to logout?');
+    if (confirmed) {
+      this.isSellerLogin
+        ? this.sellerService.sellerLogout()
+        : this.buyerService.buyerLogout();
+    }
+  }
+
+  onSearchInput(): void {
+    const search = this.searchText.trim().toLowerCase();
     if (!search) {
       this.filteredProducts = [];
       return;
     }
 
-    const filtersToSend = { ...this.filters };
     this.currentSkip = 0;
 
-    this.productService.getResultProducts(
-      search,
-      filtersToSend,
-      this.currentSkip,
-      this.limit
-    ).subscribe(response => {
-      this.allProducts = response.products;
-      this.filteredProducts = this.allProducts.filter(p =>
-        p.productName.toLowerCase().includes(search)
-      );
-      this.totalCount = response.total;
-      this.currentSkip += this.limit;
-    }, () => {
-      this.filteredProducts = [];
+    this.productService.getResultProducts(search, this.filters, this.currentSkip, this.limit)
+      .subscribe({
+        next: response => {
+          this.allProducts = response.products;
+          this.filteredProducts = this.allProducts.filter(p =>
+            p.productName.toLowerCase().includes(search)
+          );
+          this.totalCount = response.total;
+          this.currentSkip += this.limit;
+        },
+        error: () => {
+          this.filteredProducts = [];
+        }
+      });
+  }
+
+  onOptionSelected(product: Product): void {
+    this.searchText = '';
+    this.router.navigate(['/product-detail'], { queryParams: { id: product._id } });
+  }
+
+  updateCartCount(): void {
+    const buyerId = this.buyerService.getBuyerData()?.buyer?._id;
+    if (!buyerId) return;
+
+    this.productService.getCartItems(buyerId).subscribe(items => {
+      this.cartService.setCartCount(items.length);
     });
   }
 
-  onOptionSelected(productId: string) {
-    this.searchText = '';
-    this.router.navigate(['/product-detail'], { queryParams: { id: productId } });
-  }
-  updateCartCount() {
-    const buyerData = this.buyer.getBuyerData();
-    if (buyerData && buyerData?.buyer?._id) {
-      this.productService.getCartItems(buyerData?.buyer?._id).subscribe(items => {
-        const count = items.length;
-        this.cartService.setCartCount(count);
-      });
-    }
-  }
-  goToMyAccount() {
+  goToMyAccount(): void {
     this.router.navigate(['/my-account']);
   }
-  goToMyOrders() {
+
+  goToMyOrders(): void {
     this.router.navigate(['/orders']);
   }
-  goToSearchResults() {
-    if (this.searchText.trim()) {
-      this.router.navigate(['/search-results'], { queryParams: { q: this.searchText } });
-      this.filteredProducts = [];
-    } else {
+
+  goToSearchResults(): void {
+    const searchQuery = this.searchText.trim();
+    if (!searchQuery) {
       this.snackBar.open('Please enter something.', 'Close', { duration: 2500 });
+      return;
     }
+
+    const exactMatch = this.filteredProducts.find(
+      p => p.productName.toLowerCase() === searchQuery.toLowerCase()
+    );
+
+    this.router.navigate(
+      exactMatch
+        ? ['/product-detail']
+        : ['/search-results'],
+      { queryParams: exactMatch ? { id: exactMatch._id } : { q: searchQuery } }
+    );
+
+    this.filteredProducts = [];
+  }
+
+  displayProductName(product: Product): string {
+    return '';
   }
 }

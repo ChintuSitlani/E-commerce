@@ -30,11 +30,20 @@ export class BuyerService {
   }
 
   buyerSignup(data: userSignupData): Observable<any> {
+    this.buyerLogout();
+    localStorage.removeItem('cart');
+    localStorage.removeItem('seller');
+    
     const url = `${this.baseUrl}/buyer/signup`;
     return this.http.post(url, data, { observe: 'response' });
   }
 
   buyerLogin(data: buyers) {
+
+    this.buyerLogout();
+    localStorage.removeItem('cart');
+    localStorage.removeItem('seller');
+
     const body = {
       email: data.email,
       password: data.password
