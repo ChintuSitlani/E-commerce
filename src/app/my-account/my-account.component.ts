@@ -174,9 +174,9 @@ export class MyAccountComponent implements OnInit {
         };
         
         this.sellerS.updateSellerInfo(updatedSeller).subscribe({
-          next: (updatedData: sellers) => {
-            this.seller = updatedData;
-            this.sellerData.seller = updatedData;
+          next: (updatedData: any) => {
+            this.seller = updatedData.seller;
+            this.sellerData.seller = updatedData.seller;
             this.sellerS.setSellerData(this.sellerData);
             this.snackBar.open('Shipping address updated successfully!', 'Close', { duration: 3000 });
           },
@@ -197,9 +197,9 @@ export class MyAccountComponent implements OnInit {
         };
         
         this.buyerS.updateBuyerInfo(updatedBuyer).subscribe({
-          next: (updatedData: buyers) => {
-            this.buyer = updatedData;
-            this.buyerData.buyer = updatedData;
+          next: (updatedData: any) => {
+            this.buyer = updatedData.buyer;
+            this.buyerData.buyer = updatedData.buyer;
             this.buyerS.setBuyerData(this.buyerData);
             this.snackBar.open('Shipping address updated successfully!', 'Close', { duration: 3000 });
           },
