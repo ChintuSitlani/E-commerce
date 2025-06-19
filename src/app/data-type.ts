@@ -131,3 +131,10 @@ export interface OrderSummary {
   updatedAt?: Date;
 }
 
+export interface Category {
+  _id: string;
+  name: string;
+  subcategories: string[];
+}
+
+

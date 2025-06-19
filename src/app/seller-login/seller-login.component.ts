@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SellerService } from '../services/seller.service';
 import { buyers } from '../data-type';
@@ -28,7 +28,6 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class SellerLoginComponent {
   loginForm: FormGroup;
-  paramUserType: string = '';
 
   userData: buyers = {
     _id: '',
@@ -39,7 +38,8 @@ export class SellerLoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private seller: SellerService
+    private seller: SellerService,
+    private router: Router
 
   ) {
     this.loginForm = this.fb.group({
@@ -64,5 +64,9 @@ export class SellerLoginComponent {
   }
   ngOnInit() {
     this.seller.reloadSeller();
+  }
+
+  goToForgotPassword(userType: string) {
+    this.router.navigate(['/forgot-password'], { queryParams: { userType: userType } });
   }
 }

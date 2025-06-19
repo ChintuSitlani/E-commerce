@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders , HttpParams } from '@angular/common/http';
-import { CartSummary, CartItems, Product } from '../data-type';
+import { CartSummary, CartItems, Product, Category } from '../data-type';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { SellerService } from './seller.service';
 @Injectable({
@@ -115,5 +116,14 @@ export class ProductService {
   updateCartItemSelection(itemId: string, selected: boolean) {
     return this.http.put(`${environment.apiUrl}/cart/selected/${itemId}`, { selected });
   }
+
+  
+  
+  //add .pipe(map) to transform the response to array beacause it was giving me NG0900 error on dropdown
+ getCategories(): Observable<Category[]> {
+  return this.http.get<{ success: boolean; count: number; data: Category[] }>(`${environment.apiUrl}/category/getCategories`)
+    .pipe(map(res => res.data));
+}
+
 
 }
