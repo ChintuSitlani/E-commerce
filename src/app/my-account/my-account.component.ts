@@ -172,7 +172,7 @@ export class MyAccountComponent implements OnInit {
           country: formValues.country,
           phone: formValues.phone,
         };
-        updatedSeller.password = '';
+        
         this.sellerS.updateSellerInfo(updatedSeller).subscribe({
           next: (updatedData: sellers) => {
             this.seller = updatedData;
@@ -195,7 +195,7 @@ export class MyAccountComponent implements OnInit {
           country: formValues.country,
           phone: formValues.phone,
         };
-        updatedBuyer.password = ''
+        
         this.buyerS.updateBuyerInfo(updatedBuyer).subscribe({
           next: (updatedData: buyers) => {
             this.buyer = updatedData;
@@ -211,52 +211,6 @@ export class MyAccountComponent implements OnInit {
       }
     } else {
       this.snackBar.open('Please fill up all the details.', 'Close', { duration: 3000 });
-    }
-  }
-
-  updatePassword() {
-    if (this.passForm.valid) {
-      const formValues = this.passForm.value;
-
-      if (this.isSeller) {
-        const updatedSeller = {
-          ...this.seller,
-          password: formValues.new,
-        };
-
-        this.sellerS.updateSellerInfo(updatedSeller).subscribe({
-          next: (updatedData: sellers) => {
-            this.seller = updatedData;
-            this.sellerData.seller = updatedData;
-            this.sellerS.setSellerData(this.sellerData);
-            this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
-            this.passForm.reset();
-          },
-          error: (err: any) => {
-            this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
-          }
-        });
-      } else {
-        const updatedBuyer = {
-          ...this.buyer,
-          password: formValues.new,
-        };
-
-        this.buyerS.updateBuyerInfo(updatedBuyer).subscribe({
-          next: (updatedData: buyers) => {
-            this.buyer = updatedData;
-            this.buyerData.buyer = updatedData;
-            this.buyerS.setBuyerData(this.buyerData);
-            this.snackBar.open('Password updated successfully.', 'Close', { duration: 3000 });
-            this.passForm.reset();
-          },
-          error: (err: any) => {
-            this.snackBar.open(err.error.message || 'Password update failed.', 'Close', { duration: 3000 });
-          }
-        });
-      }
-    } else {
-      this.snackBar.open('Please enter password.', 'Close', { duration: 3000 });
     }
   }
 
