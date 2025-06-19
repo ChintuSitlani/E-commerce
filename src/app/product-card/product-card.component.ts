@@ -12,6 +12,8 @@ import { SellerService } from '../services/seller.service';
 import { FormGroup } from '@angular/forms';
 import { Product } from '../data-type';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatSelectModule} from '@angular/material/select';
+
 
 @Component({
   selector: 'app-product-card',
@@ -21,7 +23,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
@@ -33,6 +36,9 @@ export class ProductCardComponent implements OnInit {
   isEditMode: boolean = false;
   isSellerLoggedIn = false;
   product: Product | null = null;
+  categories: any[] = [];
+  subcategories: string[] = [];
+  filteredSubcategories: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -70,6 +76,11 @@ export class ProductCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.sellerService.isSellerLoggedIn.subscribe(status => this.isSellerLoggedIn = status);
+
+    this.loadCategories();
+    this.productForm.get('category')?.valueChanges.subscribe(categoryId => {
+      this.updateSubcategories(categoryId);
+    });
 
     this.route.queryParamMap.subscribe(params => {
       this.productId = params.get('id') || '';
@@ -116,7 +127,31 @@ export class ProductCardComponent implements OnInit {
       }
     });
   }
+  loadCategories(): void {
+    this.productService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        if (this.isEditMode && this.product?.category) {
+          this.updateSubcategories(this.product.category);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+        this.snackBar.open('Failed to load categories ' + err, 'Close', { duration: 3000 });
+      }
+    });
+  }
 
+  updateSubcategories(categoryId: string): void {
+    const selectedCategory = this.categories.find(c => c._id === categoryId);
+    this.filteredSubcategories = selectedCategory?.subcategories || [];
+
+    // Reset subcategory if it's not available in the new category
+    const currentSubcategory = this.productForm.get('subcategory')?.value;
+    if (currentSubcategory && !this.filteredSubcategories.includes(currentSubcategory)) {
+      this.productForm.get('subcategory')?.setValue('');
+    }
+  }
   calculateFinalPrice(price: number, taxRate: number, discountAmt: number): number {
     const tax = (price * taxRate) / 100;
     return parseFloat((price + tax - discountAmt).toFixed(2));

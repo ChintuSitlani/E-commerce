@@ -17,12 +17,24 @@
                 <div class="two-column-fields">
                     <mat-form-field appearance="fill">
                         <mat-label>Product Category</mat-label>
-                        <input matInput formControlName="category" required />
+                        <mat-select formControlName="category" required>
+                            <mat-option *ngFor="let category of categories" [value]="category._id">
+                                {{ category.name }}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
 
+                    <!-- Subcategory Dropdown -->
                     <mat-form-field appearance="fill">
                         <mat-label>Product Subcategory</mat-label>
-                        <input matInput formControlName="subcategory" />
+                        <mat-select formControlName="subcategory" [disabled]="!productForm.get('category')?.value">
+                            <mat-option *ngIf="filteredSubcategories.length === 0" value="" disabled>
+                                Select a category first
+                            </mat-option>
+                            <mat-option *ngFor="let subcategory of filteredSubcategories || []" [value]="subcategory">
+                                {{ subcategory }}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
 
@@ -102,7 +114,7 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label>Rating</mat-label>
-                        <input matInput type="number" formControlName="rating" min="0" max="5"  readonly="true"/>
+                        <input matInput type="number" formControlName="rating" min="0" max="5" readonly="true" />
                     </mat-form-field>
                 </div>
             </div>
