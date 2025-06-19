@@ -29,6 +29,10 @@ export class SellerService {
   }
 
   sellerSignup(data: userSignupData) {
+    this.sellerLogout();
+    localStorage.removeItem('cart');
+    localStorage.removeItem('buyer');
+    
     const url = `${this.baseUrl}/seller/signup`;
 
     return this.http
@@ -48,7 +52,11 @@ export class SellerService {
       );
   }
 
-  sellerLogin(data: buyers) {
+  sellerLogin(data: buyers) {    
+    this.sellerLogout();
+    localStorage.removeItem('cart');
+    localStorage.removeItem('buyer');
+    
     const body = {
       email: data.email,
       password: data.password
@@ -129,6 +137,19 @@ export class SellerService {
     return new Observable<sellers>((observer) => {
       observer.error('Invalid buyer data');
     });
+  }
+
+  sendResetLink(email: string) {
+    const body = {
+      email: email,
+      URL: window.location.origin + '/reset-password'
+    };
+
+    return this.http.post(`${this.baseUrl}/seller/forgot-password`, body);
+  }
+
+  resetPasswordWithToken(token: string, newPassword: string): Observable<sellerLocalStorageData> {
+    return this.http.post<sellerLocalStorageData>(`${this.baseUrl}/seller/reset-password/${token}`, { newPassword });
   }
   static getToken(): string {
     const seller = JSON.parse(localStorage.getItem('seller') || '{}');

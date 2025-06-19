@@ -30,6 +30,9 @@
         <button mat-button color="primary" class="full-width" type="submit" [disabled]="loginForm.invalid">
             Login
         </button>
+         <p class="forgot-text">
+            <a (click)="goToForgotPassword('seller')"  style="cursor: pointer;">Forgot Password?</a>
+        </p>
         <p class="signup-text">
             Do'nt have account?
             <a href="/sellerSignup">Sign Up</a>

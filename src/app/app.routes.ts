@@ -17,6 +17,9 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+
 
 export const routes: Routes = [
     { path: '', component: HomeComponent}, // Default rongute
@@ -35,6 +38,8 @@ export const routes: Routes = [
     { path: 'order-confirmation', component: OrderConfirmationComponent},
     { path: 'search-results', component: SearchResultsComponent},
     { path: 'product-detail', component: ProductDetailComponent},
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'reset-password', component: ResetPasswordComponent },
 
     { path: '**', redirectTo: 'page-not-found'} 
 ];
