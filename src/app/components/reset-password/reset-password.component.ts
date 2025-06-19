@@ -77,15 +77,27 @@ export class ResetPasswordComponent implements OnDestroy {
     if (this.userType === 'buyer') {
       this.handlePasswordReset(
         this.buyerService.resetPasswordWithToken(this.token, newPassword),
-        this.buyerService.setBuyerData.bind(this.buyerService),
-        () => this.buyerService.isBuyerLoggedIn.next(true),
+        (res: any) => {
+          const loginData = {
+            _id: '',
+            email: res.buyer.email,
+            password: newPassword
+          };
+          this.buyerService.buyerLogin(loginData);
+        },
         'buyer-home'
       );
     } else if (this.userType === 'seller') {
       this.handlePasswordReset(
         this.sellerService.resetPasswordWithToken(this.token, newPassword),
-        this.sellerService.setSellerData.bind(this.sellerService),
-        () => this.sellerService.isSellerLoggedIn.next(true),
+        (res: any) => {
+          const loginData = {
+            _id: '',
+            email: res.seller.email, 
+            password: newPassword
+          };
+          this.sellerService.sellerLogin(loginData);
+        },
         'seller-home'
       );
     } else {
@@ -95,16 +107,13 @@ export class ResetPasswordComponent implements OnDestroy {
 
   private handlePasswordReset(
     observable: Observable<any>,
-    setDataFn: (data: any) => void,
-    loginStatusFn: () => void,
+    loginFn: (res: any) => void,
     redirectRoute: string
   ): void {
     observable.subscribe({
       next: (res: any) => {
-        setDataFn(res);
-        loginStatusFn();
+        loginFn(res);
         this.showSuccessMessage();
-        this.router.navigate([redirectRoute]);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
