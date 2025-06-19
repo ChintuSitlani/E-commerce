@@ -16,6 +16,7 @@ export class ProductService {
   }
 
   saveProduct(product: Product): Observable<Product> {
+    this.token = SellerService.getToken();
     if (!this.token) {
       throw new Error('No token found. Please log in as a seller.');
     }
@@ -54,6 +55,7 @@ export class ProductService {
   }
 
   deleteProduct(productId: string): Observable<any> {
+    this.token = SellerService.getToken();
     if (!this.token) {
       throw new Error('No token found. Please log in as a seller.');
     }
