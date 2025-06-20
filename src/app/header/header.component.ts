@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
@@ -66,6 +66,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   readonly limit = 10;
 
   searchSubject = new Subject<string>();
+
+   @ViewChild('searchInput') searchInput!: ElementRef;
 
   constructor(
     private cartService: CartService,
@@ -197,6 +199,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
 
     this.filteredProducts = [];
+    this.searchInput.nativeElement.blur();
   }
 
   displayProductName(product: Product): string {

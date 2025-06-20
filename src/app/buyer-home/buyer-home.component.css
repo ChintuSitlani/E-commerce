@@ -172,7 +172,7 @@ button {
   }
 
   mat-card-title {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
   }
 
@@ -211,6 +211,8 @@ button {
     align-items: center;
     gap: 3px;
     margin-bottom: 2px;
+    justify-content: center;
+
   }
   .mat-mdc-card-content {
     padding: 0px;

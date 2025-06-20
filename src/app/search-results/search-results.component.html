@@ -1,9 +1,9 @@
 <div class="container-fluid mt-3">
-    <div class="row">
+    <div class="row gx-0">
         <!-- Filters Sidebar -->
         <div class="col-lg-3 col-md-4 mb-3">
-            <mat-card>
-                <h5>Filters</h5>
+            <mat-card class="filter-card">
+                <h5 style="text-align: center; padding-top: 5px;">Filters</h5>
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Brand</mat-label>
                     <input matInput [(ngModel)]="filters.brand" placeholder="e.g., HP" />
@@ -23,7 +23,7 @@
         <div class="col-lg-9 col-md-8">
             <p *ngIf="allProducts.length === 0">No Products found.</p>
             <div *ngFor="let product of allProducts" class="product-card d-flex mb-4 p-2 shadow-sm rounded"
-                (click)="product._id && viewProductDetail(product._id)">
+                (click)="product._id && viewProductDetail(product)">
                 <img [src]="product.imageUrl" alt="{{ product.productName }}" class="product-image me-3" />
 
                 <div class="flex-grow-1">
@@ -31,17 +31,22 @@
                     <p class="text-muted mb-2">{{ product.description | slice:0:100 }}...</p>
 
                     <div class="d-flex align-items-center gap-3 mb-1">
-                        <span class="fw-bold text-danger fs-5">₹{{ getDiscountedPrice(product.priceExclTax , product.taxRate,product.discountAmt) }}</span>
-                        <small class="text-muted text-decoration-line-through">₹{{ getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</small>
+                        <span class="fw-bold text-danger fs-5">₹{{ getDiscountedPrice(product.priceExclTax ,
+                            product.taxRate,product.discountAmt) }}</span>
+                        <small class="text-muted text-decoration-line-through">₹{{
+                            getSellingPriceInclTax(product.priceExclTax , product.taxRate) }}</small>
                         <small class="text-success">{{ getDiscountPercentage(product.discountAmt) }}% off</small>
                     </div>
 
-                    <div>
+                    <div class="rating-and-brand">
                         <span class="badge bg-warning text-dark">★ {{ product.rating || 'N/A' }}</span>
                         <small class="text-muted ms-2">Brand: {{ product.brand || 'N/A' }}</small>
                     </div>
 
-                    <button mat-stroked-button color="primary" class="mt-2">Add to Cart</button>
+                    <button mat-stroked-button color="primary" class="mt-2"
+                        (click)="addToCart(product); $event.stopPropagation()">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
