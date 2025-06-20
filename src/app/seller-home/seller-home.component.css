@@ -31,7 +31,7 @@ mat-card-actions {
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
-  justify-content: flex-start;
+  justify-content: center;
   object-fit: cover;
 }
 
@@ -93,6 +93,7 @@ mat-card-actions {
 
 .load-more-container button {
   width: 100%;
+  max-width: 256px;
 }
 
 @media (max-width: 768px) {
@@ -136,6 +137,12 @@ mat-card-actions {
     font-size: 13px;
     padding: 6px 12px;
   }
+
+  .load-more-container button {
+    width: 100%;
+    height: fit-content;
+    max-width: 256px;
+  }
 }
 
 @media (max-width: 425px) {
@@ -148,7 +155,7 @@ mat-card-actions {
 
   .product-container {
     flex-direction: row;
-    padding: 8px;
+    padding: 2px;
   }
 
   .product-card img {
@@ -162,7 +169,8 @@ mat-card-actions {
   }
 
   mat-card-title {
-    font-size: 9px;
+    font-size: 10px;
+    font-weight: 600;
   }
 
   mat-card-title,
@@ -184,28 +192,34 @@ mat-card-actions {
   }
 
   button {
-    max-width: 64px;
+    max-width: 256px;
     max-height: 25px;
     min-width: 50px;
     margin: 2px;
-    font-size: 10px;
+    font-size: fit-content;
     padding: 4px 6px;
+    border-radius: 6px;
   }
 
   .offer {
     color: green;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 500;
   }
 
   .price-info {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-bottom: 4px;
+    gap: 3px;
+    margin-bottom: 2px;
   }
 
   .mat-mdc-card-content {
     padding: 0px;
+  }
+
+  .load-more-container button {
+    width: 100%;
+    height: fit-content;
   }
 }

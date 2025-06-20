@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { SellerHomeStateService } from '../services/seller-home-state.service';
 
 @Component({
   selector: 'app-seller-home',
@@ -32,11 +32,18 @@ export class SellerHomeComponent implements OnInit {
     private productService: ProductService,
     private router: Router,
     private sellerService: SellerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private stateService: SellerHomeStateService
   ) { }
 
   ngOnInit(): void {
-    this.fetchSellerProducts();
+   if (this.stateService.products.length > 0) {
+      this.sellerProducts =this.stateService.products;
+      this.currentPage = this.stateService.currentPage;
+      this.hasMoreProducts = this.stateService.hasMoreProducts;
+    }else {
+       this.fetchSellerProducts();
+    }
   }
 
   fetchSellerProducts() {
@@ -55,6 +62,11 @@ export class SellerHomeComponent implements OnInit {
           } else {
             this.sellerProducts = [...this.sellerProducts, ...res.products];
           }
+
+          this.stateService.products = this.sellerProducts;
+          this.stateService.currentPage = this.currentPage; 
+          this.stateService.hasMoreProducts = res.hasMore;
+
           this.hasMoreProducts = res.hasMore;
           this.isLoading = false;
         },
@@ -77,7 +89,10 @@ export class SellerHomeComponent implements OnInit {
   }
 
   editProduct(product: Product) {
-    this.router.navigate(['/product-card'], { queryParams: { id: product._id } });
+    this.router.navigate(['/product-card'], {
+      queryParams: { id: product._id },
+      state: { product, isEditMode: true }
+    });
   }
 
   deleteProduct(productId: string) {

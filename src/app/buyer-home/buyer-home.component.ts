@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BuyerHomeStateService } from '../services/buyer-home-state.service';
 
 @Component({
   selector: 'app-buyer-home',
@@ -39,16 +40,30 @@ export class BuyerHomeComponent {
     private productService: ProductService,
     private router: Router,
     private cartService: CartService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private stateService: BuyerHomeStateService,
   ) {
     this.buyerData = JSON.parse(localStorage.getItem('buyer') || '{}') as buyerLocalStorageData;
   }
 
   ngOnInit() {
-    this.productService.getProductForCarousel(3).subscribe(data => {
-      this.productsCarousel = data;
-    });
-    this.fetchProducts();
+    // Restore carousel from cache if available
+    if (this.stateService.productsCarousel.length > 0) {
+      this.productsCarousel = this.stateService.productsCarousel;
+    } else {
+      this.productService.getProductForCarousel(3).subscribe(data => {
+        this.productsCarousel = data;
+        this.stateService.productsCarousel = data; // cache it
+      });
+    }
+
+    if (this.stateService.products.length > 0) {
+      this.products =this.stateService.products;
+      this.currentPage = this.stateService.currentPage;
+      this.hasMoreProducts = this.stateService.hasMoreProducts;
+    }else {
+      this.fetchProducts();
+    }
     this.updateCartCount();
   }
 
@@ -61,6 +76,11 @@ export class BuyerHomeComponent {
         } else {
           this.products = [...this.products, ...res.products];
         }
+        // Update the state service with the fetched products
+        this.stateService.products = this.products;
+        this.stateService.currentPage = this.currentPage;
+        this.stateService.hasMoreProducts = res.hasMore;
+
         this.hasMoreProducts = res.hasMore;
         this.isLoading = false;
       },
@@ -80,7 +100,10 @@ export class BuyerHomeComponent {
   }
 
   viewProduct(product: any) {
-    this.router.navigate(['/product-detail'], { queryParams: { id: product._id } });
+    this.router.navigate(['/product-detail'], { 
+      queryParams: { id: product._id },
+      state: { product }
+     });
   }
   addToCart(product: Product) {
     if (!this.buyerData || !this.buyerData?.buyer?._id) {

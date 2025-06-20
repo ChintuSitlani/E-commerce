@@ -12,7 +12,7 @@ import { SellerService } from '../services/seller.service';
 import { FormGroup } from '@angular/forms';
 import { Product } from '../data-type';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
@@ -81,15 +81,22 @@ export class ProductCardComponent implements OnInit {
     this.productForm.get('category')?.valueChanges.subscribe(categoryId => {
       this.updateSubcategories(categoryId);
     });
+    
+    const stateProduct = history.state['product'] as Product;
+    this.isEditMode = history.state['isEditMode'] || false;
+    if (stateProduct && stateProduct._id) {
+      this.product = stateProduct;
+      this.patchProductForm(stateProduct);
+    } else {
+      this.route.queryParamMap.subscribe(params => {
+        this.productId = params.get('id') || '';
+        this.isEditMode = !!this.productId;
 
-    this.route.queryParamMap.subscribe(params => {
-      this.productId = params.get('id') || '';
-      this.isEditMode = !!this.productId;
-
-      if (this.isEditMode) {
-        this.loadProductForEdit(this.productId);
-      }
-    });
+        if (this.isEditMode) {
+          this.loadProductForEdit(this.productId);
+        }
+      });
+    }
   }
 
   loadProductForEdit(id: string): void {
@@ -103,30 +110,11 @@ export class ProductCardComponent implements OnInit {
     ).subscribe(product => {
       if (product) {
         this.product = product;
-        this.productForm.patchValue({
-          productName: product.productName,
-          category: product.category,
-          subcategory: product.subcategory || '',
-          price: product.priceExclTax,
-          taxRate: product.taxRate,
-          discountAmt: product.discountAmt,
-          stock: product.stock || 0,
-          brand: product.brand || '',
-          color: product.color || '',
-          weight: product.weight || '',
-          warranty: product.warranty || '',
-          material: product.material || '',
-          features: product.features || '',
-          specifications: product.specifications || '',
-          description: product.description,
-          imageUrl: product.imageUrl,
-          videoUrl: product.videoUrl || '',
-          rating: product.rating || 0
-        });
-        this.MRP = this.calculateFinalPrice(product.priceExclTax, product.taxRate, product.discountAmt);
+        this.patchProductForm(product);
       }
     });
   }
+
   loadCategories(): void {
     this.productService.getCategories().subscribe({
       next: (categories) => {
@@ -155,6 +143,30 @@ export class ProductCardComponent implements OnInit {
   calculateFinalPrice(price: number, taxRate: number, discountAmt: number): number {
     const tax = (price * taxRate) / 100;
     return parseFloat((price + tax - discountAmt).toFixed(2));
+  }
+  patchProductForm(product: Product): void {
+    this.productForm.patchValue({
+      productName: product.productName,
+      category: product.category,
+      subcategory: product.subcategory || '',
+      price: product.priceExclTax,
+      taxRate: product.taxRate,
+      discountAmt: product.discountAmt,
+      stock: product.stock || 0,
+      brand: product.brand || '',
+      color: product.color || '',
+      weight: product.weight || '',
+      warranty: product.warranty || '',
+      material: product.material || '',
+      features: product.features || '',
+      specifications: product.specifications || '',
+      description: product.description,
+      imageUrl: product.imageUrl,
+      videoUrl: product.videoUrl || '',
+      rating: product.rating || 0
+    });
+
+    this.MRP = this.calculateFinalPrice(product.priceExclTax, product.taxRate, product.discountAmt);
   }
 
   onSubmit(): void {

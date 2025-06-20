@@ -5,19 +5,21 @@
             <img [src]="product.imageUrl" alt="Product image" />
         </div>
         <div class="carousel-caption">
-            <h3>{{product.name}}</h3>
+            <h3>{{ product.name | slice:0:28 }}</h3>
             <p>{{ product.description | slice:0:100 }}</p>
         </div>
     </ng-template>
     }
 </ngb-carousel>
 
-<h1>Trendy Products</h1>
+<h1 style="text-align: center;">Trendy Products</h1>
 
 <div class="product-container">
     <mat-card *ngFor="let product of products" class="product-card">
         <img mat-card-image [src]="product.imageUrl" alt="{{ product.productName }}" (click)="viewProduct(product)" />
-        <mat-card-title>{{ product.productName}}</mat-card-title>
+        <mat-card-title>
+            {{ product.productName.length > 25 ? (product.productName | slice:0:25) + '..' : product.productName }}
+        </mat-card-title>
         <mat-card-content>
             <div class="price-info">
                 <ng-container *ngIf="product.discountAmt == 0">

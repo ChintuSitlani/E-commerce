@@ -1,9 +1,11 @@
-<h1>Your Products</h1>
+<h1 style="text-align: center;">Your Products</h1>
 
 <div class="product-container" *ngIf="sellerProducts?.length">
     <mat-card *ngFor="let product of sellerProducts" class="product-card">
         <img mat-card-image [src]="product.imageUrl" alt="{{ product.productName }}" (click)="editProduct(product)" />
-        <mat-card-title>{{ product.productName }}</mat-card-title>
+        <mat-card-title>
+            {{ product.productName.length > 25 ? (product.productName | slice:0:25) + '..' : product.productName }}
+        </mat-card-title>
         <mat-card-content>
             <div class="price-info">
                 <ng-container *ngIf="product.discountAmt === 0">
@@ -23,7 +25,10 @@
                     </span>
                 </ng-container>
             </div>
-            <p><strong>Description:</strong> {{ product.description | slice: 0:100 }}</p>
+            <p><strong>Description:</strong>
+                {{ product.description.length > 100 ?(product.description | slice: 0:100) + '..' : product.description
+                }}
+            </p>
         </mat-card-content>
         <mat-card-actions>
             <button mat-raised-button color="primary" (click)="editProduct(product)">

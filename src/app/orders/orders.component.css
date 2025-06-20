@@ -1,29 +1,121 @@
+/* Image responsiveness */
 .cart-img {
-  max-width: 120px;
-  max-height: 120px;
-  object-fit: contain;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
 }
+
+/* Order card padding and background */
 .order-card {
-  background-color: #fff;
+    background-color: #fff;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 13px;
 }
+
+/* Responsive tweaks for mobile */
 @media (max-width: 576px) {
-    .table {
-        font-size: 9px;
+    .order-card {
+        padding: 0.75rem;
+        font-size: 14px;
     }
 
-    .mat-card-title {
-        font-size: 12px;
+    .order-card h5 {
+        font-size: 16px;
+        margin-bottom: 0.5rem;
     }
 
-    mat-form-field {
-        font-size: 9px;
+    .order-card p {
+        font-size: 13px;
+        margin-bottom: 0.4rem;
+    }
+
+    .order-card img {
+        margin-bottom: 0.5rem;
+    }
+
+    .order-card .row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .order-card .text-end {
+        text-align: center;
+        margin-top: 0.5rem;
     }
 
     button {
-        max-width: 128px;
-        max-height: 64px;
-        min-width: 64px;
-        font-size: 11px;
-        padding: 3px 3px;
+        font-size: 12px;
+        padding: 6px 12px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    mat-form-field {
+        width: 100%;
+    }
+}
+
+/* 320px-specific styling */
+@media (max-width: 360px) {
+    .order-card h5 {
+        font-size: 15px;
+        margin-bottom: 0.4rem;
+    }
+
+    .order-card p {
+        font-size: 12px;
+        margin-bottom: 0.3rem;
+    }
+
+    .order-card img {
+        margin-bottom: 0.5rem;
+    }
+
+    mat-form-field {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        font-size: 13px;
+        padding: 8px 12px;
+        margin-top: 8px;
+    }
+
+    .text-center {
+        font-size: 15px;
+    }
+
+    .mb-4,
+    .my-4 {
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+
+    .gap-2 {
+        gap: 0.5rem;
+    }
+
+    .d-flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .mat-icon {
+        font-size: 48px;
+    }
+
+    .mx-3 {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    /* Tighten form spacing */
+    .row.g-3 .col-6,
+    .row.g-3 .col-12 {
+        margin-bottom: 0.75rem;
     }
 }

@@ -101,7 +101,9 @@ button {
 }
 
 .load-more-container button {
-    padding: 10px 30px;
+    max-width: 256px;
+    width: 100%;
+    
 }
 @media (max-width: 768px) {
   .product-container {
@@ -156,7 +158,7 @@ button {
 
   .product-container {
     flex-direction: row;
-    padding: 8px;
+    padding: 2px;
   }
 
   .product-card img {
@@ -171,6 +173,7 @@ button {
 
   mat-card-title {
     font-size: 9px;
+    font-weight: 600;
   }
 
   mat-card-title,
@@ -193,21 +196,21 @@ button {
 
   button {
     width: 100%;
-    font-size: 9px;
-    padding: 2px 2px;
+    height: fit-content;
+    border-radius: 6px;
   }
 
   .offer {
     color: green;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 500;
   }
 
   .price-info {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-bottom: 4px;
+    gap: 3px;
+    margin-bottom: 2px;
   }
   .mat-mdc-card-content {
     padding: 0px;

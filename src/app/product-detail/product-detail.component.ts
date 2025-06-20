@@ -47,12 +47,20 @@ export class ProductDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
-      this.productId = params.get('id') || '';
-      if (this.productId) {
-        this.loadProduct();
-      }
-    });
+
+    const stateProduct =  history.state['product'] as Product;;
+    if (stateProduct && stateProduct._id) {
+      this.product = stateProduct;
+      this.selectedImage = stateProduct.imageUrl;
+      this.priceInclTax = this.getSellingPriceInclTax(stateProduct.priceExclTax, stateProduct.taxRate);
+    } else {
+      this.route.queryParamMap.subscribe(params => {
+        this.productId = params.get('id') || '';
+        if (this.productId) {
+          this.loadProduct();
+        }
+      });
+    }
 
     this.loadCartItems();
   }
