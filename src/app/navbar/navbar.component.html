@@ -1,0 +1,49 @@
+<header class="header">
+    <!-- Top Row: Logo + User Actions -->
+    <div class="header-top d-flex w-100 justify-content-between align-items-center">
+        <!-- Logo -->
+        <div class="flex-grow-1 logo-section">
+            <a routerLink="/" class="logo-link">
+                <img src="assets/Logo.png" alt="E-Commerce Logo" class="logo" />
+            </a>
+        </div>
+
+        <!-- Desktop Search Bar -->
+        <div class="flex-grow-5 align-items-center desktop-search">
+            <div class="search-container">
+                <app-search-bar (searchSelected)="handleSearchResult($event)"></app-search-bar>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex-grow-1 actions-section">
+            <ng-container *ngIf="!isSellerLogin">
+                <app-cart-icon></app-cart-icon>
+            </ng-container>
+
+            <button mat-icon-button [matMenuTriggerFor]="userMenu" class="account-btn">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #userMenu="matMenu">
+                <ng-container *ngIf="isBuyerLogin || isSellerLogin; else loginOption">
+                    <div class="user-info">
+                        <strong>{{ userEmail }}</strong>
+                    </div>
+                    <button mat-menu-item (click)="goToMyAccount()">My Account</button>
+                    <button mat-menu-item (click)="goToMyOrders()">My Orders</button>
+                    <button mat-menu-item (click)="logout()">Logout</button>
+                </ng-container>
+                <ng-template #loginOption>
+                    <button mat-menu-item routerLink="/buyerLogin">Login</button>
+                </ng-template>
+            </mat-menu>
+        </div>
+    </div>
+
+    <!-- Mobile Search Bar -->
+    <div class="header-bottom mobile-search">
+        <div class="search-container-mobile">
+            <app-search-bar (searchSelected)="handleSearchResult($event)"></app-search-bar>
+        </div>
+    </div>
+</header>

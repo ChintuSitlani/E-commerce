@@ -1,0 +1,8 @@
+<span class="cart-icon-wrapper">
+    <button mat-icon-button [routerLink]="'/cart'" aria-label="Shopping Cart" class="cart-btn">
+        <mat-icon class="cart-icon">shopping_cart</mat-icon>
+        <span class="cart-count-badge" *ngIf="cartItems > 0">
+            {{ cartItems > 99 ? '99+' : cartItems }}
+        </span>
+    </button>
+</span>
