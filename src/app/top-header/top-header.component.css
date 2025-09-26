@@ -1,0 +1,25 @@
+.top-header {
+  background-color: #f98316; /* your primary 500 */
+  color: white;
+  font-size: 0.85rem;
+  height: 32px;
+}
+
+.top-header .hotline {
+  font-weight: 500;
+}
+
+.top-header .offer {
+  color: #fff0d5; /* lighter tone */
+  font-size: 0.8rem;
+}
+
+.track-order {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.track-order:hover {
+  text-decoration: underline;
+}
