@@ -1,16 +1,19 @@
 <div class="top-header d-flex justify-content-between align-items-center px-3">
     <!-- Left side -->
-    <div class="d-flex align-items-center justify-content-between gap-6">
+    <div class="d-flex align-items-center gap-3">
         <span class="hotline">📞 our_hotline +80 0176 229 201</span>
     </div>
-    <div>
-        <span class="offer">🚚 free_delivery_–_40%_discount_for_next_3_orders</span>
 
+    <!-- Middle Offer -->
+    <div class="d-none d-md-block">
+        <span class="offer">🚚 free delivery – 40% discount for next 3 orders</span>
     </div>
+
     <!-- Right side -->
     <div class="d-flex align-items-center gap-3">
+        <!-- Language Dropdown -->
         <div class="dropdown">
-            <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <button class="btn btn-sm dropdown-toggle text-white" type="button" data-bs-toggle="dropdown">
                 🌐 English
             </button>
             <ul class="dropdown-menu">
@@ -18,6 +21,8 @@
                 <li><a class="dropdown-item" href="#">Hindi</a></li>
             </ul>
         </div>
+
+        <!-- Track Order -->
         <a routerLink="/track-order" class="track-order">Track Order</a>
     </div>
 </div>

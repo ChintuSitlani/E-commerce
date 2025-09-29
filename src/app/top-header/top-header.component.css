@@ -1,19 +1,26 @@
+/* Top header background */
 .top-header {
-  background-color: #f98316; /* your primary 500 */
+  background: linear-gradient(45deg, #ea680c, #f98316);
+  /* primary 500 */
   color: white;
   font-size: 0.85rem;
   height: 32px;
 }
 
+/* Hotline text */
 .top-header .hotline {
   font-weight: 500;
 }
 
+/* Offer text */
 .top-header .offer {
-  color: #fff0d5; /* lighter tone */
+  color: #fff0d5;
+  /* 100 shade */
   font-size: 0.8rem;
+  font-weight: 500;
 }
 
+/* Track order link */
 .track-order {
   color: white;
   text-decoration: none;
@@ -22,4 +29,17 @@
 
 .track-order:hover {
   text-decoration: underline;
+}
+
+/* Responsive hide on small screens */
+@media (max-width: 768px) {
+  .top-header {
+    display: none;
+  }
+  .top-header .dropdown{
+    display: none;
+  }
+  .top-header{
+    font-size:  0.64rem;
+  }
 }
