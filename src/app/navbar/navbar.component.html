@@ -1,6 +1,13 @@
 <header class="header">
     <!-- Top Row: Logo + User Actions -->
     <div class="header-top d-flex w-100 justify-content-between align-items-center">
+        <!-- Mobile Hamburger Menu -->
+        <div class="mobile-hamburger">
+            <button mat-icon-button class="hamburger-btn" (click)="toggleSideMenu()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
+
         <!-- Logo -->
         <div class="flex-grow-1 logo-section">
             <a routerLink="/" class="logo-link">
@@ -21,20 +28,46 @@
                 <app-cart-icon></app-cart-icon>
             </ng-container>
 
-            <button mat-icon-button [matMenuTriggerFor]="userMenu" class="account-btn">
-                <mat-icon>account_circle</mat-icon>
-            </button>
-            <mat-menu #userMenu="matMenu">
+            <div class="account-btn-container" (mouseenter)="onAccountBtnHover()" (mouseleave)="onAccountBtnLeave()">
+                <button mat-icon-button [matMenuTriggerFor]="userMenu" #menuTrigger="matMenuTrigger" class="account-btn"
+                    (click)="onAccountBtnClick()" [class.logged-in]="isBuyerLogin || isSellerLogin">
+                    <mat-icon class="account-icon">account_circle</mat-icon>
+                    <span class="login-text" *ngIf="!(isBuyerLogin || isSellerLogin)">Login</span>
+                </button>
+            </div>
+
+            <mat-menu #userMenu="matMenu" class="enhanced-menu" [overlapTrigger]="false"
+                (mouseenter)="onMenuMouseEnter()" (mouseleave)="onMenuMouseLeave()">
                 <ng-container *ngIf="isBuyerLogin || isSellerLogin; else loginOption">
                     <div class="user-info">
-                        <strong>{{ userEmail }}</strong>
+                        <div class="user-avatar">
+                            <mat-icon>account_circle</mat-icon>
+                        </div>
+                        <div class="user-details">
+                            <strong>{{ userEmail }}</strong>
+                            <span class="user-status">Online</span>
+                        </div>
                     </div>
-                    <button mat-menu-item (click)="goToMyAccount()">My Account</button>
-                    <button mat-menu-item (click)="goToMyOrders()">My Orders</button>
-                    <button mat-menu-item (click)="logout()">Logout</button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="goToMyAccount()" class="menu-item">
+                        <mat-icon>person</mat-icon>
+                        <span>My Account</span>
+                    </button>
+                    <button mat-menu-item (click)="goToMyOrders()" class="menu-item">
+                        <mat-icon>shopping_bag</mat-icon>
+                        <span>My Orders</span>
+                    </button>
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="logout()" class="menu-item logout-btn">
+                        <mat-icon>logout</mat-icon>
+                        <span>Logout</span>
+                    </button>
                 </ng-container>
                 <ng-template #loginOption>
-                    <button mat-menu-item routerLink="/buyerLogin">Login</button>
+                    <button mat-menu-item routerLink="/buyerSignup" class="menu-item login-menu-btn">
+                        <mat-icon>person</mat-icon>
+                        <span>New Customer?</span>
+                    </button>
                 </ng-template>
             </mat-menu>
         </div>
@@ -47,3 +80,74 @@
         </div>
     </div>
 </header>
+
+<!-- Mobile Side Menu Overlay -->
+<div class="side-menu-overlay" [class.active]="isSideMenuOpen" (click)="closeSideMenu()"></div>
+
+<!-- Mobile Side Menu -->
+<div class="side-menu" [class.active]="isSideMenuOpen">
+    <div class="side-menu-header">
+        <button mat-icon-button class="close-btn" (click)="closeSideMenu()">
+            <mat-icon>close</mat-icon>
+        </button>
+        <h3>Menu</h3>
+    </div>
+
+    <div class="side-menu-content">
+        <div class="side-menu-user" *ngIf="isBuyerLogin || isSellerLogin">
+            <div class="user-avatar-side">
+                <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-details-side">
+                <strong>{{ userEmail }}</strong>
+                <span class="user-status">Online</span>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <nav class="side-menu-nav">
+            <a class="side-menu-item" (click)="navigateTo('/become-seller'); closeSideMenu()">
+                <mat-icon>storefront</mat-icon>
+                <span>Become Seller</span>
+            </a>
+
+            <a class="side-menu-item" (click)="navigateTo('/top-offers'); closeSideMenu()">
+                <mat-icon>local_offer</mat-icon>
+                <span>Top Offers</span>
+            </a>
+
+            <ng-container *ngIf="isBuyerLogin || isSellerLogin">
+                <a class="side-menu-item" (click)="goToMyAccount(); closeSideMenu()">
+                    <mat-icon>person</mat-icon>
+                    <span>My Account</span>
+                </a>
+
+                <a class="side-menu-item" (click)="goToMyOrders(); closeSideMenu()">
+                    <mat-icon>shopping_bag</mat-icon>
+                    <span>My Orders</span>
+                </a>
+            </ng-container>
+
+            <ng-container *ngIf="!(isBuyerLogin || isSellerLogin)">
+                <a class="side-menu-item" (click)="navigateTo('/buyerLogin'); closeSideMenu()">
+                    <mat-icon>login</mat-icon>
+                    <span>Login</span>
+                </a>
+
+                <a class="side-menu-item" (click)="navigateTo('/buyerSignup'); closeSideMenu()">
+                    <mat-icon>person_add</mat-icon>
+                    <span>New Customer?</span>
+                </a>
+            </ng-container>
+
+            <ng-container *ngIf="isBuyerLogin || isSellerLogin">
+                <mat-divider></mat-divider>
+                <a class="side-menu-item logout-side" (click)="logout(); closeSideMenu()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Logout</span>
+                </a>
+            </ng-container>
+        </nav>
+    </div>
+</div>

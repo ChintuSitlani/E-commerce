@@ -24,7 +24,8 @@
 /* Cart icon styling */
 .cart-icon {
     font-size: 28px;
-    color: #333;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #333;
 }
 
 .mat-icon {
