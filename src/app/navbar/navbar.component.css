@@ -507,7 +507,13 @@ mat-divider {
 .logout-side:hover {
     background: rgba(211, 47, 47, 0.1);
 }
+.add-product-text{
+    font-size: 16px;
+    font-weight: 400;
+    color: white;
+    transition: all 0.3s ease;
 
+}
 /* ================= Responsive Styles ================= */
 @media (max-width: 768px) {
     .header-top {
@@ -575,6 +581,16 @@ mat-divider {
     .side-menu {
         width: 100%;
     }
+    .add-product-text{
+    font-size: 12px;
+    font-weight: 400;
+    color: white;
+    transition: all 0.3s ease;
+
+}
+.hideForMobile{
+    display: none;
+}
 }
 
 /* Ripple Effect Enhancement */

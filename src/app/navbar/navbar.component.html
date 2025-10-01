@@ -24,6 +24,20 @@
 
         <!-- Actions -->
         <div class="flex-grow-1 actions-section">
+            <div *ngIf="isSellerLogin" class="account-btn-container" >
+                <button mat-icon-button class="account-btn" 
+                routerLink="/product-card">
+                    <span class="add-product-text" >Add Product</span>
+                </button>
+            </div>
+            <div *ngIf="!(isBuyerLogin || isSellerLogin)" class="account-btn-container hideForMobile" >
+                <button mat-icon-button class="account-btn" [class.logged-in]="isBuyerLogin || isSellerLogin"
+                routerLink="/sellerSignup">
+                    <mat-icon class="account-icon">account_circle</mat-icon>
+                    <span class="login-text" *ngIf="!(isBuyerLogin || isSellerLogin)">Become Seller</span>
+                </button>
+            </div>
+
             <ng-container *ngIf="!isSellerLogin">
                 <app-cart-icon></app-cart-icon>
             </ng-container>
