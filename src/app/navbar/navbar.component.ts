@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,7 +8,7 @@ import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { SellerService } from '../services/seller.service';
 import { BuyerService } from '../services/buyer.service';
@@ -33,7 +33,7 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, RouterLink, SearchBarComponent, CartIconComponent, ...MATERIAL_MODULES],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -54,29 +54,51 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private buyerService: BuyerService,
     private productService: ProductService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {
     const buyerData = this.buyerService.getBuyerData();
     this.userEmail = buyerData?.buyer?.email || '';
+    
   }
 
   ngOnInit(): void {
+    // Use distinctUntilChanged to prevent unnecessary updates
     this.sellerService.isSellerLoggedIn
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(status => this.isSellerLogin = status);
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged()
+      )
+      .subscribe(status => {
+        this.isSellerLogin = status;
+        this.cdr.markForCheck(); // Trigger change detection
+      });
 
     this.buyerService.isBuyerLoggedIn
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged()
+      )
       .subscribe(status => {
         this.isBuyerLogin = status;
-        if (status) this.updateCartCount();
+        if (status) {
+          this.updateCartCount();
+        } else {
+          this.cartItems = 0; // Reset cart when buyer logs out
+        }
+        this.cdr.markForCheck(); // Trigger change detection
       });
 
     this.cartService.getCartCount()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(count => this.cartItems = count);
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged()
+      )
+      .subscribe(count => {
+        this.cartItems = count;
+        this.cdr.markForCheck(); // Trigger change detection
+      });
   }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -196,13 +218,29 @@ export class NavbarComponent implements OnInit, OnDestroy {
     );
 
     snackBarRef.onAction().subscribe(() => {
+      // Reset component state immediately
+      this.resetComponentState();
+
+      // Perform logout
       this.isSellerLogin ? this.sellerService.sellerLogout() : this.buyerService.buyerLogout();
+
       this.closeSideMenu();
       this.snackBar.open('Logged out successfully!', 'Close', {
         duration: 2000,
         panelClass: ['success-snackbar']
       });
+
+      // Navigate to home
+      this.router.navigate(['/']);
     });
+  }
+
+  private resetComponentState(): void {
+    this.isSellerLogin = false;
+    this.isBuyerLogin = false;
+    this.cartItems = 0;
+    this.userEmail = '';
+    this.isHovered = false;
   }
 
   updateCartCount(): void {
