@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectionStrategy, HostListener, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, ViewChild,
+  HostListener, ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,16 +18,12 @@ import { BuyerService } from '../services/buyer.service';
 import { ProductService } from '../services/product.service';
 import { CartService } from '../cart.service';
 import { Product } from '../data-type';
-
 import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
 import { CartIconComponent } from '../shared/cart-icon/cart-icon.component';
 
 const MATERIAL_MODULES = [
-  MatToolbarModule,
-  MatButtonModule,
-  MatIconModule,
-  MatMenuModule,
-  MatDividerModule
+  MatToolbarModule, MatButtonModule, MatIconModule,
+  MatMenuModule, MatDividerModule
 ];
 
 @Component({
@@ -33,7 +32,6 @@ const MATERIAL_MODULES = [
   imports: [CommonModule, RouterLink, SearchBarComponent, CartIconComponent, ...MATERIAL_MODULES],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -57,210 +55,141 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) {
-    const buyerData = this.buyerService.getBuyerData();
-    this.userEmail = buyerData?.buyer?.email || '';
-    
+    this.userEmail = this.buyerService.getBuyerData()?.buyer?.email || '';
   }
 
   ngOnInit(): void {
-    // Use distinctUntilChanged to prevent unnecessary updates
     this.sellerService.isSellerLoggedIn
-      .pipe(
-        takeUntil(this.destroy$),
-        distinctUntilChanged()
-      )
+      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe(status => {
         this.isSellerLogin = status;
-        this.cdr.markForCheck(); // Trigger change detection
+        this.cdr.markForCheck();
       });
 
     this.buyerService.isBuyerLoggedIn
-      .pipe(
-        takeUntil(this.destroy$),
-        distinctUntilChanged()
-      )
+      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe(status => {
         this.isBuyerLogin = status;
-        if (status) {
-          this.updateCartCount();
-        } else {
-          this.cartItems = 0; // Reset cart when buyer logs out
-        }
-        this.cdr.markForCheck(); // Trigger change detection
+        this.cartItems = status ? this.cartItems : 0;
+        if (status) this.updateCartCount();
+        this.cdr.markForCheck();
       });
 
     this.cartService.getCartCount()
-      .pipe(
-        takeUntil(this.destroy$),
-        distinctUntilChanged()
-      )
+      .pipe(takeUntil(this.destroy$), distinctUntilChanged())
       .subscribe(count => {
         this.cartItems = count;
-        this.cdr.markForCheck(); // Trigger change detection
+        this.cdr.markForCheck();
       });
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.clearHoverTimer();
   }
 
-  /** ----------------- Side Menu Methods ----------------- */
-
+  /** ----------------- Side Menu ----------------- */
   toggleSideMenu(): void {
     this.isSideMenuOpen = !this.isSideMenuOpen;
-    // Prevent body scroll when menu is open
-    if (this.isSideMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    this.setBodyScroll(!this.isSideMenuOpen);
   }
 
   closeSideMenu(): void {
     this.isSideMenuOpen = false;
-    document.body.style.overflow = '';
+    this.setBodyScroll(true);
+  }
+
+  private setBodyScroll(enable: boolean): void {
+    document.body.style.overflow = enable ? '' : 'hidden';
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    // Close side menu on desktop screens
     if (event.target.innerWidth > 768 && this.isSideMenuOpen) {
       this.closeSideMenu();
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
-    if (this.isSideMenuOpen) {
-      this.closeSideMenu();
-    }
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.isSideMenuOpen) this.closeSideMenu();
   }
 
-  /** ----------------- Navigation Methods ----------------- */
-
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
-  }
-
-  /** ----------------- Account Button Handlers ----------------- */
-
+  /** ----------------- Account Menu ----------------- */
   onAccountBtnHover(): void {
+    if (window.innerWidth <= 786) return;
     this.isHovered = true;
-    if (this.isBuyerLogin || this.isSellerLogin) {
-      this.hoverTimer = setTimeout(() => {
-        if (this.isHovered && this.menuTrigger && !this.menuTrigger.menuOpen) {
-          this.menuTrigger.openMenu();
-        }
-      }, 500);
-    } else {
-      this.hoverTimer = setTimeout(() => {
-        if (this.isHovered && this.menuTrigger && !this.menuTrigger.menuOpen) {
-          this.menuTrigger.openMenu();
-        }
-      }, 500);
-    }
+    this.hoverTimer = setTimeout(() => {
+      if (this.isHovered && this.menuTrigger && !this.menuTrigger.menuOpen) {
+        this.menuTrigger.openMenu();
+      }
+    }, 500);
   }
 
   onAccountBtnLeave(): void {
+    if (window.innerWidth <= 786) return;
     this.isHovered = false;
     this.clearHoverTimer();
-
     if (this.menuTrigger?.menuOpen) {
-      setTimeout(() => {
-        if (!this.isHovered && this.menuTrigger.menuOpen) {
-          this.menuTrigger.closeMenu();
-        }
-      }, 3000);
+      setTimeout(() => !this.isHovered && this.menuTrigger.closeMenu(), 3000);
     }
   }
 
   onAccountBtnClick(): void {
     this.clearHoverTimer();
-
     if (!this.isBuyerLogin && !this.isSellerLogin) {
       this.router.navigate(['/buyerLogin']);
       this.menuTrigger.closeMenu();
-    } else if (this.menuTrigger) {
-      this.menuTrigger.menuOpen ? this.menuTrigger.closeMenu() : this.menuTrigger.openMenu();
+      return;
     }
+    if (window.innerWidth <= 786) return;
+    this.menuTrigger.menuOpen ? this.menuTrigger.closeMenu() : this.menuTrigger.openMenu();
   }
 
-  onMenuMouseEnter(): void {
-    this.isHovered = true;
-  }
-
+  onMenuMouseEnter(): void { this.isHovered = true; }
   onMenuMouseLeave(): void {
     this.isHovered = false;
-    setTimeout(() => {
-      if (!this.isHovered && this.menuTrigger?.menuOpen) {
-        this.menuTrigger.closeMenu();
-      }
-    }, 5000);
+    setTimeout(() => !this.isHovered && this.menuTrigger?.closeMenu(), 5000);
   }
 
   /** ----------------- User Actions ----------------- */
-
   logout(): void {
     if (!this.isSellerLogin && !this.isBuyerLogin) {
       this.snackBar.open('No user is currently logged in.', 'Close', { duration: 2500 });
       return;
     }
 
-    const snackBarRef = this.snackBar.open(
-      'Are you sure you want to logout?',
-      'Confirm',
-      {
-        duration: 5000,
-        verticalPosition: 'top',
-        panelClass: ['logout-snackbar']
-      }
-    );
-
-    snackBarRef.onAction().subscribe(() => {
-      // Reset component state immediately
+    this.snackBar.open('Are you sure you want to logout?', 'Confirm', {
+      duration: 5000, verticalPosition: 'top', panelClass: ['logout-snackbar']
+    }).onAction().subscribe(() => {
       this.resetComponentState();
-
-      // Perform logout
       this.isSellerLogin ? this.sellerService.sellerLogout() : this.buyerService.buyerLogout();
-
       this.closeSideMenu();
-      this.snackBar.open('Logged out successfully!', 'Close', {
-        duration: 2000,
-        panelClass: ['success-snackbar']
-      });
-
-      // Navigate to home
+      this.snackBar.open('Logged out successfully!', 'Close', { duration: 2000, panelClass: ['success-snackbar'] });
       this.router.navigate(['/']);
     });
   }
 
   private resetComponentState(): void {
-    this.isSellerLogin = false;
-    this.isBuyerLogin = false;
+    this.isSellerLogin = this.isBuyerLogin = false;
     this.cartItems = 0;
     this.userEmail = '';
     this.isHovered = false;
   }
 
-  updateCartCount(): void {
+  private updateCartCount(): void {
     const buyerId = this.buyerService.getBuyerData()?.buyer?._id;
     if (!buyerId) return;
-
     this.productService.getCartItems(buyerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => this.cartService.setCartCount(items.length));
   }
 
   /** ----------------- Navigation ----------------- */
-
-  goToMyAccount(): void {
-    this.router.navigate(['/my-account']);
-  }
-
-  goToMyOrders(): void {
-    this.router.navigate(['/orders']);
-  }
+  navigateTo(route: string): void { this.router.navigate([route]); }
+  goToMyAccount(): void { this.router.navigate(['/my-account']); }
+  goToMyOrders(): void { this.router.navigate(['/orders']); }
 
   handleSearchResult(product: Product | string): void {
     if (typeof product === 'string') {
@@ -271,7 +200,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   /** ----------------- Helpers ----------------- */
-
   private clearHoverTimer(): void {
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer);

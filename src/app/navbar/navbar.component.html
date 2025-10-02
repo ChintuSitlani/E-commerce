@@ -24,15 +24,14 @@
 
         <!-- Actions -->
         <div class="flex-grow-1 actions-section">
-            <div *ngIf="isSellerLogin" class="account-btn-container" >
-                <button mat-icon-button class="account-btn" 
-                routerLink="/product-card">
-                    <span class="add-product-text" >Add Product</span>
+            <div *ngIf="isSellerLogin" class="account-btn-container">
+                <button mat-icon-button class="account-btn" routerLink="/product-card">
+                    <span class="add-product-text">Add Product</span>
                 </button>
             </div>
-            <div *ngIf="!(isBuyerLogin || isSellerLogin)" class="account-btn-container hideForMobile" >
+            <div *ngIf="!(isBuyerLogin || isSellerLogin)" class="account-btn-container hideForMobile">
                 <button mat-icon-button class="account-btn" [class.logged-in]="isBuyerLogin || isSellerLogin"
-                routerLink="/sellerSignup">
+                    routerLink="/sellerSignup">
                     <mat-icon class="account-icon">account_circle</mat-icon>
                     <span class="login-text" *ngIf="!(isBuyerLogin || isSellerLogin)">Become Seller</span>
                 </button>
@@ -121,11 +120,14 @@
         <mat-divider></mat-divider>
 
         <nav class="side-menu-nav">
-            <a class="side-menu-item" (click)="navigateTo('/become-seller'); closeSideMenu()">
+            <a class="side-menu-item" (click)="navigateTo('/sellerSignup'); closeSideMenu()">
                 <mat-icon>storefront</mat-icon>
                 <span>Become Seller</span>
             </a>
-
+            <a *ngIf="isSellerLogin" class="side-menu-item" (click)="navigateTo('/product-card'); closeSideMenu()">
+                <mat-icon>add_box</mat-icon>
+                <span>Add Product</span>
+            </a>
             <a class="side-menu-item" (click)="navigateTo('/top-offers'); closeSideMenu()">
                 <mat-icon>local_offer</mat-icon>
                 <span>Top Offers</span>
