@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { CommonModule } from '@angular/common';
-import { NgbCarousel, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Product, buyers, CartItems, buyerLocalStorageData } from '../data-type';
@@ -10,17 +9,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BuyerHomeStateService } from '../services/buyer-home-state.service';
-
+import { CarouselComponent } from '../shared/carousel/carousel.component';
 @Component({
   selector: 'app-buyer-home',
   imports: [
-    NgbCarousel,
-    NgbCarouselModule,
     CommonModule,
-    NgbCarouselModule,
     FormsModule,
     MatCardModule,
     MatButtonModule,
+    CarouselComponent
   ],
   templateUrl: './buyer-home.component.html',
   styleUrl: './buyer-home.component.css'
@@ -29,7 +26,7 @@ export class BuyerHomeComponent {
   cartCount = 0;
   buyerData: buyerLocalStorageData;
   products: Product[] = [];
-  productsCarousel: any[] = [];
+  
   priceInclTax: GLfloat = 0;
   currentPage = 1;
   itemsPerPage = 6;
@@ -47,15 +44,6 @@ export class BuyerHomeComponent {
   }
 
   ngOnInit() {
-    // Restore carousel from cache if available
-    if (this.stateService.productsCarousel.length > 0) {
-      this.productsCarousel = this.stateService.productsCarousel;
-    } else {
-      this.productService.getProductForCarousel(3).subscribe(data => {
-        this.productsCarousel = data;
-        this.stateService.productsCarousel = data; // cache it
-      });
-    }
 
     if (this.stateService.products.length > 0) {
       this.products =this.stateService.products;

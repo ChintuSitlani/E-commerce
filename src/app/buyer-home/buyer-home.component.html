@@ -1,18 +1,9 @@
-<ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true">
-    @for (product of productsCarousel; track product; let i = $index) {
-    <ng-template ngbSlide>
-        <div class="picsum-img-wrapper" (click)="viewProduct(product)">
-            <img [src]="product.imageUrl" alt="Product image" />
-        </div>
-        <div class="carousel-caption">
-            <h3>{{ product.name | slice:0:28 }}</h3>
-            <p>{{ product.description | slice:0:100 }}</p>
-        </div>
-    </ng-template>
-    }
-</ngb-carousel>
+<app-carousel 
+(veiwCarouselProduct)="viewProduct($event)"
+>
+</app-carousel>
 
-<h1 style="text-align: center;">Trendy Products</h1>
+<h1 class="section-title">Trendy Products</h1>
 
 <div class="product-container">
     <mat-card *ngFor="let product of products" class="product-card">

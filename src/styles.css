@@ -16,12 +16,20 @@ html {
 }
 
 /* carousel CSS */
-.carousel-caption{
+.carousel-caption {
     background-color: #00000082;
     border-radius: 5px;
 }
+
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     background-color: black;
     border-radius: 5px;
+}
+
+@media (max-width: 480px) {
+    .carousel-caption {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
 }

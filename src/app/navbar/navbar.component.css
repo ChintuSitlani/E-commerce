@@ -123,12 +123,11 @@
 }
 
 .login-text {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    font-weight: 400;
     color: white;
     transition: all 0.3s ease;
 }
-
 .account-btn.logged-in .login-text {
     display: none;
 }
@@ -507,12 +506,23 @@ mat-divider {
 .logout-side:hover {
     background: rgba(211, 47, 47, 0.1);
 }
-.add-product-text{
+
+.add-product-text {
     font-size: 16px;
     font-weight: 400;
     color: white;
     transition: all 0.3s ease;
 
+}
+
+@media (max-width: 1260px) {
+    .mobile-hamburger{
+        display: block;
+    }
+    
+    .hideForMobile {
+        display: none;
+    }
 }
 /* ================= Responsive Styles ================= */
 @media (max-width: 768px) {
@@ -520,9 +530,7 @@ mat-divider {
         padding: 12px 8px 0px 8px;
     }
 
-    .mobile-hamburger {
-        display: block;
-    }
+    
 
     .logo-section {
         flex-grow: 1;
@@ -575,23 +583,24 @@ mat-divider {
     .side-menu {
         width: 280px;
     }
+
 }
 
 @media (max-width: 480px) {
     .side-menu {
         width: 100%;
     }
-    .add-product-text{
-    font-size: 12px;
-    font-weight: 400;
-    color: white;
-    transition: all 0.3s ease;
 
+    .add-product-text {
+        font-size: 12px;
+        font-weight: 400;
+        color: white;
+        transition: all 0.3s ease;
+
+    }
+ 
 }
-.hideForMobile{
-    display: none;
-}
-}
+
 /* Ripple Effect Enhancement */
 .mat-mdc-menu-item .mat-mdc-menu-item-ripple {
     border-radius: 8px;
