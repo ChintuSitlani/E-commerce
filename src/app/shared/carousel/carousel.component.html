@@ -2,9 +2,10 @@
     @for (product of productsCarousel; track product; let i = $index) {
     <ng-template ngbSlide>
         <div class="picsum-img-wrapper" (click)="viewProduct(product)">
-            <img [src]="product.imageUrl" alt="Product image" />
+            <img [src]="product.imageUrl" alt="Product image" (error)="handleImageError($event, product)"
+                [attr.loading]="i < 2 ? 'eager' : 'lazy'" />
         </div>
-        <div *ngIf="(product.name || product.description)" class="carousel-caption">
+        <div class="carousel-caption">
             <h3>{{ product.name | slice:0:28 }}</h3>
             <p>{{ product.description | slice:0:100 }}</p>
         </div>
